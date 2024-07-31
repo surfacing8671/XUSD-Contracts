@@ -1,0 +1,95 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "caller",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "FunctionCalled",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "exampleFunction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "This is an example of a class contract.",
+			"events": {
+				"FunctionCalled(address,uint256)": {
+					"details": "Event emitted when a function in ClassA is called."
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"exampleFunction(uint256)": {
+					"params": {
+						"value": "Some value to process."
+					}
+				}
+			},
+			"title": "ClassA",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"exampleFunction(uint256)": {
+					"notice": "Example function in ClassA."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Classes/NormUserClass.sol": "ClassA"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Classes/NormUserClass.sol": {
+			"keccak256": "0xc40b57d9070351fd9bcbbebb3e1fee9077c88538cab648f3b40049b008a0d1cd",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3e266e6b4c251ae2a26dc1bae6133259cd6318bc2851fc708b6cbd9a62f1409b",
+				"dweb:/ipfs/QmTAaWmzvx5T639wsBUFf6NjLwhGrvxczEkWQEV1tj1xdC"
+			]
+		}
+	},
+	"version": 1
+}

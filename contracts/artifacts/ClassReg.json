@@ -1,0 +1,297 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"ClassIsClass(address,uint8)": "455cd0b9",
+			"ClassRegistryContains(address)": "f94458a8",
+			"ClassRegistryCount()": "30e67af7",
+			"ClassesIndexed(uint256)": "3910cae3",
+			"GetClassByAddress(address)": "c3d5f869",
+			"GetClassByIndex(uint256)": "33bb6db9",
+			"RegisterClass(address,int256,bool,uint8)": "36488665",
+			"RemoveClass(address)": "e306c33c",
+			"getBasisFeeByClass(address)": "0d018171"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "key",
+					"type": "address"
+				},
+				{
+					"internalType": "enum ClassReg.ClassType",
+					"name": "class",
+					"type": "uint8"
+				}
+			],
+			"name": "ClassIsClass",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "key",
+					"type": "address"
+				}
+			],
+			"name": "ClassRegistryContains",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "ClassRegistryCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "ClassesIndexed",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "classAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "int256",
+					"name": "basisFee",
+					"type": "int256"
+				},
+				{
+					"internalType": "bool",
+					"name": "upOrDown",
+					"type": "bool"
+				},
+				{
+					"internalType": "enum ClassReg.ClassType",
+					"name": "Class",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "key",
+					"type": "address"
+				}
+			],
+			"name": "GetClassByAddress",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "address",
+							"name": "classAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "int256",
+							"name": "basisFee",
+							"type": "int256"
+						},
+						{
+							"internalType": "bool",
+							"name": "upOrDown",
+							"type": "bool"
+						},
+						{
+							"internalType": "enum ClassReg.ClassType",
+							"name": "Class",
+							"type": "uint8"
+						}
+					],
+					"internalType": "struct ClassReg.Class",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "i",
+					"type": "uint256"
+				}
+			],
+			"name": "GetClassByIndex",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "address",
+							"name": "classAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "int256",
+							"name": "basisFee",
+							"type": "int256"
+						},
+						{
+							"internalType": "bool",
+							"name": "upOrDown",
+							"type": "bool"
+						},
+						{
+							"internalType": "enum ClassReg.ClassType",
+							"name": "Class",
+							"type": "uint8"
+						}
+					],
+					"internalType": "struct ClassReg.Class",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "classAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "int256",
+					"name": "basisFee",
+					"type": "int256"
+				},
+				{
+					"internalType": "bool",
+					"name": "upOrDown",
+					"type": "bool"
+				},
+				{
+					"internalType": "enum ClassReg.ClassType",
+					"name": "class",
+					"type": "uint8"
+				}
+			],
+			"name": "RegisterClass",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "key",
+					"type": "address"
+				}
+			],
+			"name": "RemoveClass",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "key",
+					"type": "address"
+				}
+			],
+			"name": "getBasisFeeByClass",
+			"outputs": [
+				{
+					"internalType": "int256",
+					"name": "",
+					"type": "int256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}

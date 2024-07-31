@@ -1,0 +1,294 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					},
+					{
+						"internalType": "enum ClassReg.ClassType",
+						"name": "class",
+						"type": "uint8"
+					}
+				],
+				"name": "ClassIsClass",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					}
+				],
+				"name": "ClassRegistryContains",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "ClassRegistryCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "ClassesIndexed",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "int256",
+						"name": "basisFee",
+						"type": "int256"
+					},
+					{
+						"internalType": "bool",
+						"name": "upOrDown",
+						"type": "bool"
+					},
+					{
+						"internalType": "enum ClassReg.ClassType",
+						"name": "Class",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					}
+				],
+				"name": "GetClassByAddress",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "int256",
+								"name": "basisFee",
+								"type": "int256"
+							},
+							{
+								"internalType": "bool",
+								"name": "upOrDown",
+								"type": "bool"
+							},
+							{
+								"internalType": "enum ClassReg.ClassType",
+								"name": "Class",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct ClassReg.Class",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "i",
+						"type": "uint256"
+					}
+				],
+				"name": "GetClassByIndex",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "int256",
+								"name": "basisFee",
+								"type": "int256"
+							},
+							{
+								"internalType": "bool",
+								"name": "upOrDown",
+								"type": "bool"
+							},
+							{
+								"internalType": "enum ClassReg.ClassType",
+								"name": "Class",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct ClassReg.Class",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "int256",
+						"name": "basisFee",
+						"type": "int256"
+					},
+					{
+						"internalType": "bool",
+						"name": "upOrDown",
+						"type": "bool"
+					},
+					{
+						"internalType": "enum ClassReg.ClassType",
+						"name": "class",
+						"type": "uint8"
+					}
+				],
+				"name": "RegisterClass",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					}
+				],
+				"name": "RemoveClass",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					}
+				],
+				"name": "getBasisFeeByClass",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/ClassRegistry.sol": "ClassReg"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/ClassRegistry.sol": {
+			"keccak256": "0xd7ba3d2a783e826cfbcd42b78db3e20584b99dd3efab9492d801a3f692736922",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://9d3424759286a780ae4f88cd4aa0224eb51f7a11537f72cf32bedd94dcfd81b7",
+				"dweb:/ipfs/QmZxBWgUiU4oPjVV2HDdTtEW49dM4WrncXRQKbGwRpfK1z"
+			]
+		},
+		"contracts/RegistryLibrary.sol": {
+			"keccak256": "0xc9410f72214e0a42f858b7d47a1cb4afa707358c0cdba2eeeec87ee1a2055cb1",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://0ee09e59cf699b0292acef0868dd4f734dae6ac188ea8b5730107fb43e4e576d",
+				"dweb:/ipfs/QmetLrLwKF2PPvaX1bZVjWw9ucccsx4GhafPSUssFcMKBH"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0x4eb5633aeb6b6bff89bfc4f98a44d744ccb995cc0001ea0e5ea0bd736d8e5512",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://f818f67b9160018c16a31331341d07780332a2815caceb8dff84341deb7d68a9",
+				"dweb:/ipfs/QmesyX25uHB9aLVf4a6Pdwzv4uvSxsUPa3aSqcKP8YXoJr"
+			]
+		}
+	},
+	"version": 1
+}
