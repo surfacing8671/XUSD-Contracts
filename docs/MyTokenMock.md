@@ -10,6 +10,23 @@
 
 ## Methods
 
+### RigistryBurn
+
+```solidity
+function RigistryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 ### allowance
 
 ```solidity
@@ -94,6 +111,28 @@ function burn() external view returns (address)
 | Name | Type | Description |
 |---|---|---|
 | _0 | address | undefined |
+
+### burnBalance
+
+```solidity
+function burnBalance(address user) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### decimals
 
@@ -290,7 +329,7 @@ function owner() external view returns (address)
 ### registry
 
 ```solidity
-function registry() external view returns (contract TUSDRegistry)
+function registry() external view returns (contract ClassRegistry)
 ```
 
 
@@ -302,7 +341,7 @@ function registry() external view returns (contract TUSDRegistry)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | contract TUSDRegistry | undefined |
+| _0 | contract ClassRegistry | undefined |
 
 ### renounceOwnership
 
@@ -312,7 +351,7 @@ function renounceOwnership() external nonpayable
 
 
 
-*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.*
+*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.*
 
 
 ### setFeeRecipient
@@ -339,13 +378,13 @@ function setRegistry(address reg) external nonpayable
 
 
 
-*Sets the registry address.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| reg | address | The address of the registry contract. |
+| reg | address | undefined |
 
 ### symbol
 
@@ -390,6 +429,23 @@ function taxFeePerMille() external view returns (uint256)
 
 
 *Returns the per mille rate for taxable mechanism.*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### totalBurned
+
+```solidity
+function totalBurned() external view returns (uint256)
+```
+
+
+
+
 
 
 #### Returns
@@ -567,5 +623,40 @@ event Transfer(address indexed from, address indexed to, uint256 value)
 | to `indexed` | address | undefined |
 | value  | uint256 | undefined |
 
+
+
+## Errors
+
+### OwnableInvalidOwner
+
+```solidity
+error OwnableInvalidOwner(address owner)
+```
+
+
+
+*The owner is not a valid owner account. (eg. `address(0)`)*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| owner | address | undefined |
+
+### OwnableUnauthorizedAccount
+
+```solidity
+error OwnableUnauthorizedAccount(address account)
+```
+
+
+
+*The caller account is not authorized to perform an operation.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
 
 

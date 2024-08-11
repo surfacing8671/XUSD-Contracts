@@ -3,7 +3,7 @@
 
 pragma solidity ^0.8.24;
 
-import "./Context.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where

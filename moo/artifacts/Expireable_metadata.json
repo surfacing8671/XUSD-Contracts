@@ -1,0 +1,125 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "int256",
+								"name": "votes",
+								"type": "int256"
+							}
+						],
+						"internalType": "struct ClassRegistry.ProposedClass",
+						"name": "A",
+						"type": "tuple"
+					}
+				],
+				"name": "PassedVote",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/ClassRegistry.sol": "Expireable"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"contracts/ClassRegistry.sol": {
+			"keccak256": "0xd4b9f52fa95b9893d0c58ecb7df851e8894da9b88bfc7c507c709c5bdf5ad85c",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://7aae9056e0e67251914c8c8ed55125dfaf4fa0fb3c1b91b4ed02c1ebf2844269",
+				"dweb:/ipfs/QmSszgeKFuMu1p7NPy2C9SBu5HhFhqqgJdgZormaZME8CZ"
+			]
+		},
+		"contracts/GovAccessRegistry.sol": {
+			"keccak256": "0xac6b30c0497cb668606593dbb4ac96adb8f9659adaa64da2338d465c95184cb1",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://e20b57fcebb949f7ebeeb09ee126f2590e104bcf52cf170a3b4d9d0765b33a42",
+				"dweb:/ipfs/QmVLcB2LB6MyNDekVDf63N9zuzk4Gv7tBvis4CSrFHca1Q"
+			]
+		},
+		"contracts/IClassBase.sol": {
+			"keccak256": "0x88ef1d599e3335351eb8512582324f321a7d4091e920c35b6d16c7ce7efac36f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://179aa3da6ae1697db5ff6603b080ef6a028a14b56a7d641c9978e1153acb5a74",
+				"dweb:/ipfs/QmYaPxwELK5wNBZeGvtg24Z1jjooZcLmKsePinYDBThpk4"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0x365c30cf78f36f94a54d23a8d3f34678b50d75912b4e1ca3009109735374f1a2",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://e732c87b095e501d8f3503571da6ae4188fbc7852d1a8e22cfded9939a5d432e",
+				"dweb:/ipfs/QmRhcoybn8ZS89x7Xumfiugrbc5YbmvTG3MDKwSznPkfD7"
+			]
+		},
+		"contracts/registry.sol": {
+			"keccak256": "0x2de243fc397b804f42152434e979ab88e432744d228ada062511445c5f18d173",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://e791dcd3795c5b9d75f987e9381823be6b580a7aa8223f51709a7791ba420ca6",
+				"dweb:/ipfs/QmQ78wzcrtorMPUEjTRxPEFjx8uMPEQveNr7RfbzbvxfHr"
+			]
+		}
+	},
+	"version": 1
+}

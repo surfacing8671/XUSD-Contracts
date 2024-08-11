@@ -10,6 +10,23 @@
 
 ## Methods
 
+### RigistryBurn
+
+```solidity
+function RigistryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 ### allowance
 
 ```solidity
@@ -71,6 +88,28 @@ function balanceOf(address account) external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### burnBalance
+
+```solidity
+function burnBalance(address user) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
 
 #### Returns
 
@@ -158,6 +197,23 @@ function name() external view returns (string)
 |---|---|---|
 | _0 | string | undefined |
 
+### registry
+
+```solidity
+function registry() external view returns (contract ClassRegistry)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract ClassRegistry | undefined |
+
 ### symbol
 
 ```solidity
@@ -174,6 +230,23 @@ function symbol() external view returns (string)
 | Name | Type | Description |
 |---|---|---|
 | _0 | string | undefined |
+
+### totalBurned
+
+```solidity
+function totalBurned() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### totalSupply
 

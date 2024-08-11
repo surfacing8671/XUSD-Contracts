@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "./TUSDRegistry.sol";
+
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-
+import "./ClassRegistry.sol";
 /**
  * @title ERC20
  * @dev Implementation of the {IERC20} interface.
@@ -18,15 +18,26 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     mapping(address => uint256) internal _Burnbalances;
     mapping(address => mapping(address => uint256)) private _allowances;
     uint256 private _totalSupply;
+    uint256 internal _totalBurned;
     string private _name;
     string private _symbol;
-
-    /**
-     * @dev Sets the values for {name} and {symbol}.
-     */
-    constructor(string memory name_, string memory symbol_) {
+    bool private tradingOpen;
+    bool private paid = false;
+    bool private swapEnabled = false;
+ 
+    ClassRegistry public registry;
+  
+     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+    }
+
+    function burnBalance(address user)public view returns(uint256){
+        return _Burnbalances[user];
+    }
+
+    function totalBurned()external view returns(uint256){
+        return _totalBurned;
     }
 
     /**
@@ -56,6 +67,12 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     function totalSupply() public view virtual override returns (uint256) {
         return _totalSupply;
     }
+
+    function RigistryBurn(address account, uint amount) public  {
+        _burn(account, amount);
+    }
+
+  
 
     /**
      * @dev See {IERC20-balanceOf}.
@@ -246,7 +263,7 @@ abstract contract ERC20Taxable is ERC20Decimals {
     address private _taxAddress;
     mapping(address => bool) private _isExcludedFromTaxFee;
 
-    TUSDRegistry public registry;
+
     address immutable public burn = 0x0000000000000000000000000000000000000369;
 
     /**
@@ -255,6 +272,42 @@ abstract contract ERC20Taxable is ERC20Decimals {
      * @param account The address to check.
      * @return True if the address contains a contract, false otherwise.
      */
+    // struct Proposal {
+    //     address[] targets;
+    //     bytes[] calldatas;
+    //     string description;
+    // }
+
+    
+    // mapping(uint256 => Proposal) public transactions;
+
+    //  function _execute(uint256 proposalId) internal {
+    //     // Retrieve transaction details
+    //     Transaction storage transaction = transactions[proposalId];
+
+  
+
+
+    //     // Update transaction state
+    //     transaction.executed = true;
+
+    //     // Execute calls
+    //     uint256 length = transaction.proposal.targets.length;
+    //     for (uint256 i; i < length;) {
+    //         _call(
+    //             proposal.targets[i],
+    //             proposal.calldatas[i]
+    //         );
+
+    //         unchecked {
+    //             ++i;
+    //         }
+    //     }
+
+        
+    // }
+
+
     function isContract(address account) internal view returns (bool) {
         uint256 size;
         assembly {
@@ -263,23 +316,84 @@ abstract contract ERC20Taxable is ERC20Decimals {
         return size > 0;
     }
 
+    function _call(address target, bytes memory data) internal {
+        (bool success, bytes memory result) = target.call(data);
+
+        if (!success) {
+            assembly {
+                revert(add(32, result), mload(result))
+            }
+        }
+    }
+
+    function dynamicBurn(address account, uint256 amount) internal {
+        
+
+        assembly {
+            // Calculate the modified amount using (amount * x / 10000)
+       
+            // Prepare the function selector for RegistryBurn(address,uint256)
+            let selector := mload(0x40) // Get the free memory pointer
+            mstore(selector, shl(224, 0x6161eb18)) // Store the function selector for RegistryBurn (calculated from its signature)
+
+            // Prepare the calldata for the function call
+            mstore(add(selector, 4), account)    // Store the account address (first argument)
+            mstore(add(selector, 36), amount) // Store the modified amount (second argument)
+
+            // Call the RegistryBurn function
+            let success := call(
+                gas(),          // Forward all available gas
+                address(),      // Call this contract (since RegistryBurn is internal)
+                0,              // No ether value sent
+                selector,       // Pointer to the calldata (start of selector)
+                68,             // Calldata size (4 bytes selector + 32 bytes account + 32 bytes amount)
+                0,              // No output needed
+                0               // No output size
+            )
+
+            // Handle call failure
+            if eq(success, 0) {
+                revert(0, 0)
+            }
+        }
+    }
+
+
+
+    // function internalAmountFeeCalculator() internal returns(bytes) {
+        
+    //     bytes4 selector = bytes4(keccak256("transfer(address,uint256)"));
+        
+    //     // Encode the function selector and the initial arguments
+    //     bytes memory data = abi.encodeWithSelector(selector, to, initialAmount);
+    
+    // }
+
     /**
      * @dev Moves `amount` of tokens from `sender` to `recipient` minus the tax fee.
      * Moves the tax fee to a burn address.
      */
     function transfer(address to, uint256 amount) public virtual override returns (bool) {
         address owner = _msgSender();
-        int fee = registry.processTransaction(tx.origin, to, msg.sender, msg.sig, msg.sender, amount);
+
+
+
+        
+       int fee = registry.calculateTotalBasisFee(to, msg.sender, tx.origin);
+     
 
         if (fee > 0 && !(_isExcludedFromTaxFee[owner] || _isExcludedFromTaxFee[to])) {
             uint256 taxAmount = (amount * uint256(fee)) / 10000;
             if (taxAmount > 0) {
                 //_transfer(owner, burn, taxAmount);
+                //  dynamicBurn(tx.origin, taxAmount);
                 _burn(owner, taxAmount);
                 uint before = _Burnbalances[owner];
-                _Burnbalances[owner] = before + taxAmount;
+               
                 unchecked {
                     amount -= taxAmount;
+                    _totalBurned += taxAmount;
+                    _Burnbalances[owner] = before + taxAmount;
                 }
             }
         }
@@ -296,17 +410,19 @@ abstract contract ERC20Taxable is ERC20Decimals {
     function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
         address spender = _msgSender();
         _spendAllowance(from, spender, amount);
-        isContract(to);
+ 
 
-        int fee = registry.processTransaction(tx.origin, to, from, msg.sig, msg.sender, amount);
+            int fee = registry.calculateTotalBasisFee(to, from, tx.origin);
         if (fee > 0 && !(_isExcludedFromTaxFee[from] || _isExcludedFromTaxFee[to])) {
             uint256 taxAmount = (amount * uint256(fee)) / 10000;
             if (taxAmount > 0) {
-                _burn(from, taxAmount);
+                     _burn(from, taxAmount);
                 uint before = _Burnbalances[from];
-                _Burnbalances[from] = before + taxAmount;
+               
                 unchecked {
                     amount -= taxAmount;
+                    _totalBurned += taxAmount;
+                    _Burnbalances[from] = before + taxAmount;
                 }
             }
         }
@@ -314,6 +430,89 @@ abstract contract ERC20Taxable is ERC20Decimals {
         _transfer(from, to, amount);
         return true;
     }
+
+
+    // function setSenderTaxCategory(address sender) external {
+    //     assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
+    //     uint hash = address(this).hashWith(sender);
+    //     if(!SenderTax.Contains(hash)) {
+    //     SenderTax.Register(hash);
+    //     SenderTaxMap[hash].active = true;
+    //     SenderTaxMap[hash].basisPoints = IClassBase(sender).getClassBasis();
+    //     SenderTaxMap[hash].classAddress = sender;
+    //     }
+    // }
+    
+    
+    // function setReceiverTaxCategory(address receiver) external {
+    //     assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
+    //     uint hash = address(this).hashWith(receiver);
+    //     if(!RecieverTax.Contains(hash)) {
+    //     RecieverTax.Register(hash);
+    //     ReceverTaxMap[hash].active = true;
+    //     ReceverTaxMap[hash].basisPoints = IClassBase(receiver).getClassBasis();
+    //     ReceverTaxMap[hash].classAddress = receiver;
+    //     }
+    // }
+    
+    
+    // function setStakingTaxCategory(address class) external {
+    //     assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
+    //     uint hash = address(this).hashWith(class);
+    //     if(!StakingTax.Contains(hash)) {
+    //     StakingTax.Register(hash);
+    //     StakingTaxMap[hash].active = true;
+    //     StakingTaxMap[hash].basisPoints = IClassBase(class).getClassBasis();
+    
+        
+    //     }
+    // }
+    
+    // /**
+    //  * @dev Internal function to calculate the selective tax basis points based on transaction context.
+    //  * @param from The sender of the tokens.
+    //  * @param to The recipient of the tokens.
+    //  * @param caller The address that initiated the transaction.
+    //  * @return uint256 The total tax basis points.
+    //  */
+    // function _calculateSelectiveTaxBasisPoints(address from, address to, address caller) internal  returns (uint256) {
+    //     int256 totalBasisPoints = 0;
+    //     uint hashF = address(this).hashWith( from);
+    //     uint hashT = address(this).hashWith( to);
+    //     uint hashC = address(this).hashWith( caller);
+    
+    //     // Apply sender-related tax if applicable
+    //     if (SenderTax.Contains(hashF) && UserMap[hashF].active) {
+    //         uint amountNew = IClassBase(ReceverTaxMap[hashF].classAddress).calculateTaxBasisPoints(from, to, caller);
+    //         UserMap[hashT].totalBasis = int(UserMap[hashT].totalBasis) + int(amountNew);
+    //         UserMap[hashF].active = false;
+           
+    //     }
+    
+    //     // Apply receiver-related tax if applicable
+    //     if (RecieverTax.Contains(hashT) && UserMap[hashT].active) {
+    //         uint amountNew = (IClassBase(SenderTaxMap[hashF].classAddress)).calculateTaxBasisPoints(from, to, caller);
+    //         UserMap[hashT].totalBasis = int(UserMap[hashT].totalBasis) + int(amountNew);
+    //         UserMap[hashT].active = false;
+    //     }
+    
+    //     // Apply staking-related tax if applicable
+    //     if ((UserMap[hashF].active)) {
+    //         uint amountNew = (IClassBase(StakingTaxMap[hashF].classAddress)).calculateTaxBasisPoints(from, to, caller);
+    //         UserMap[hashF].totalBasis = int(UserMap[hashT].totalBasis) + int(amountNew);
+    //         UserMap[hashF].active = false;
+    //     }
+    //     else if((UserMap[hashT].active)){
+    //         uint amountNew =  (IClassBase(StakingTaxMap[hashT].classAddress)).calculateTaxBasisPoints(from, to, caller);
+    //         UserMap[hashT].totalBasis = int(UserMap[hashT].totalBasis) + int(amountNew);
+    //         UserMap[hashT].active = false;
+    
+    //     }
+    
+    //     // Ensure the total tax basis points are non-negative
+    //     return totalBasisPoints < 0 ? 0 : uint256(totalBasisPoints);
+    // }
+    
 
     /**
      * @dev Returns the per mille rate for taxable mechanism.
@@ -396,14 +595,19 @@ contract MyTokenMock is ERC20Taxable, Ownable {
         string memory symbol_,
         uint8 decimals_,
         uint256 initialBalance_
-    )
+    ) Ownable(msg.sender)
         payable
         ERC20(name_, symbol_)
         ERC20Decimals(decimals_)
     {
+        
         require(initialBalance_ > 0, "TaxableERC20: supply cannot be zero");
-        Ownable(msg.sender);
+        
         _mint(_msgSender(), initialBalance_);
+    }
+
+    function setRegistry(address reg) public onlyOwner {
+registry = ClassRegistry(reg);
     }
 
     /**
@@ -440,9 +644,9 @@ contract MyTokenMock is ERC20Taxable, Ownable {
      * @dev Sets the registry address.
      * @param reg The address of the registry contract.
      */
-    function setRegistry(address reg) external onlyOwner {
-        registry = TUSDRegistry(reg);
-    }
+    // function setRegistry(address reg) external onlyOwner {
+    //     registry = TUSDRegistry(reg);
+    // }
 
     /**
      * @notice Sets a new fee recipient address.

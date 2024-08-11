@@ -22,7 +22,7 @@
     "@openzeppelin/contracts": "^5.0.2",
     "@openzeppelin/contracts-upgradeable": "5.0.2",
     "@openzeppelin/hardhat-upgrades": "^3.2.1",
-    "hardhat": "^2.22.6"
+    "hardhat": "^2.22.8"
   },
   "devDependencies": {
     "@float-capital/ds-test": "^0.0.1",

@@ -10,6 +10,23 @@
 
 ## Methods
 
+### RigistryBurn
+
+```solidity
+function RigistryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 ### allowance
 
 ```solidity
@@ -94,6 +111,28 @@ function burn() external view returns (address)
 | Name | Type | Description |
 |---|---|---|
 | _0 | address | undefined |
+
+### burnBalance
+
+```solidity
+function burnBalance(address user) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### decimals
 
@@ -222,7 +261,7 @@ function name() external view returns (string)
 ### registry
 
 ```solidity
-function registry() external view returns (contract TUSDRegistry)
+function registry() external view returns (contract ClassRegistry)
 ```
 
 
@@ -234,7 +273,7 @@ function registry() external view returns (contract TUSDRegistry)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | contract TUSDRegistry | undefined |
+| _0 | contract ClassRegistry | undefined |
 
 ### symbol
 
@@ -279,6 +318,23 @@ function taxFeePerMille() external view returns (uint256)
 
 
 *Returns the per mille rate for taxable mechanism.*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### totalBurned
+
+```solidity
+function totalBurned() external view returns (uint256)
+```
+
+
+
+
 
 
 #### Returns

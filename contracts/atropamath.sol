@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Sharia
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.26;
 
 
 
@@ -25,19 +25,33 @@ library AtropaMath  {
     //         _mint(address(this), 1 * 10 ** decimals());
     //     return RandomNumberGeneratorToken.Random();
     // }
-    function hashWithD(address a, address b, address c) public pure returns (uint256 hash) {        
+    function hashWithD(address a, address b, address c, address g) public pure returns (uint256 hash) {        
         hash = 0;
     
         uint160 _b = uint160(b) / 15;
         unchecked {
             while(hash == 0) {
-                hash = (hashWith(a,b)**hashWith(a,c))%MotzkinPrime;
+                hash = (hashWith(a,b)**hashWith(c,g))%MotzkinPrime;
                 _b = _b/2;
             }
         }
         //return modExp(uint256(uint160(a)), uint256(uint160(b)), MotzkinPrime);
     }
     function hashWith(address a, address b) public pure returns (uint256 hash) {        
+        hash = 0;
+        uint160 _a = uint160(a);
+        uint160 _b = uint160(b) / 15;
+        unchecked {
+            while(hash == 0) {
+                hash = (_a**_b)%MotzkinPrime;
+                _b = _b/2;
+            }
+        }
+        //return modExp(uint256(uint160(a)), uint256(uint160(b)), MotzkinPrime);
+    }
+
+
+    function hashWithHash(address a, uint b) public pure returns (uint256 hash) {        
         hash = 0;
         uint160 _a = uint160(a);
         uint160 _b = uint160(b) / 15;
@@ -86,4 +100,52 @@ library AtropaMath  {
             result := mload(value)
         }
     }
+
+
+
+
+
+    function sortThree(uint64 a, uint64 b, uint64 c) public pure returns (uint64, uint64, uint64) {
+        // Check if all three are equal
+        if (a == b && b == c) {
+            return (0, 0, a); // All are equal
+        }
+
+        // Handling pairs of equal values
+        if (a == b) {
+            return (0, a, c > a ? c : a); // a == b
+        }
+        if (a == c) {
+            return (0, a, b > a ? b : a); // a == c
+        }
+        if (b == c) {
+            return (0, b, a > b ? a : b); // b == c
+        }
+
+        // All values are distinct
+        if (a <= b && a <= c) {
+            if (b <= c) {
+                return (a, b, c); // a < b < c
+            } else {
+                return (a, c, b); // a < c < b
+            }
+        } else if (b <= a && b <= c) {
+            if (a <= c) {
+                return (b, a, c); // b < a < c
+            } else {
+                return (b, c, a); // b < c < a
+            }
+        } else {
+            if (a <= b) {
+                return (c, a, b); // c < a < b
+            } else {
+                return (c, b, a); // c < b < a
+            }
+        }
+    }
+
+
+
+
+
 }
