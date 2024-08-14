@@ -10,10 +10,10 @@
 
 ## Methods
 
-### calculateTaxBasisPoints
+### calculateTotalBasisFee
 
 ```solidity
-function calculateTaxBasisPoints(address addy) external view returns (int256)
+function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256)
 ```
 
 
@@ -25,6 +25,7 @@ function calculateTaxBasisPoints(address addy) external view returns (int256)
 | Name | Type | Description |
 |---|---|---|
 | addy | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
@@ -35,7 +36,7 @@ function calculateTaxBasisPoints(address addy) external view returns (int256)
 ### flatRateBasisPoints
 
 ```solidity
-function flatRateBasisPoints() external view returns (uint256)
+function flatRateBasisPoints() external view returns (int256)
 ```
 
 
@@ -47,7 +48,7 @@ function flatRateBasisPoints() external view returns (uint256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | int256 | undefined |
 
 
 

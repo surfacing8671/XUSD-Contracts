@@ -1,0 +1,198 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_classReg",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "Points",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "UserWatchMap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "firstTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int256",
+						"name": "points",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokensFrom",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokensTo",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Holders.HolderType",
+						"name": "Holder",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "_data",
+						"type": "bytes"
+					}
+				],
+				"name": "calculateTaxBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "currentHashedAddy",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "months",
+						"type": "uint256"
+					}
+				],
+				"name": "getTimeFrameEnum",
+				"outputs": [
+					{
+						"internalType": "enum Holders.HolderType",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A tax calculator that reduces the tax rate (negative basis points) when interacting with a specific staking contract.",
+			"kind": "dev",
+			"methods": {},
+			"title": "StakingIncentiveTaxCalculator",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Classes/Holders.sol": "Holders"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Classes/Holders.sol": {
+			"keccak256": "0xa9f9e7b0809742ce5602155a1425a3cbd990ce215bc4d9b5c6ea245601f55c69",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://48747f66327db75cf21534e78c0e3270979fd942e9f4ccea50d3af9711b71b5d",
+				"dweb:/ipfs/QmTHGcyrUWbT4TZ62punhBSwJnc2Hi7NJLByoZNxDcUoHu"
+			]
+		},
+		"contracts/Classes/ITaxCalculatorContract.sol": {
+			"keccak256": "0x223f4a790bb645780de846d894617ac7aacf9600ff9f2c855510d2006e27c888",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://16b1334b48a0854a7c9c29647d47095baaea33945379b03cda8357accf4213de",
+				"dweb:/ipfs/QmWYEyuSmaKVYvUHUCicH83PFRWfvVEPS19RBcBTYp499c"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0x40c04fc6e6870caa6d91fefd2d7f5f1f9fe1d3d60d585e3afd1cc8d892e28291",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://3569ae5182334276c9cea393ccc32adc0a51db01e7cf9d20ca1273b7e9d790de",
+				"dweb:/ipfs/QmX8NMKWmbYW71qAn1dc2WVqGYDc8rgBTefrBqv84xvX4Y"
+			]
+		},
+		"contracts/registry.sol": {
+			"keccak256": "0x2de243fc397b804f42152434e979ab88e432744d228ada062511445c5f18d173",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://e791dcd3795c5b9d75f987e9381823be6b580a7aa8223f51709a7791ba420ca6",
+				"dweb:/ipfs/QmQ78wzcrtorMPUEjTRxPEFjx8uMPEQveNr7RfbzbvxfHr"
+			]
+		}
+	},
+	"version": 1
+}

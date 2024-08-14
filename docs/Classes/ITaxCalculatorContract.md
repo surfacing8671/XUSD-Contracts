@@ -10,10 +10,10 @@
 
 ## Methods
 
-### calculateTaxBasisPoints
+### calculateTotalBasisFee
 
 ```solidity
-function calculateTaxBasisPoints(address to, address from) external view returns (int256)
+function calculateTotalBasisFee(address origin, uint256 amount) external nonpayable returns (int256)
 ```
 
 
@@ -24,31 +24,14 @@ function calculateTaxBasisPoints(address to, address from) external view returns
 
 | Name | Type | Description |
 |---|---|---|
-| to | address | undefined |
-| from | address | undefined |
+| origin | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
-
-### getContract
-
-```solidity
-function getContract() external view returns (address[])
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address[] | undefined |
 
 
 

@@ -33,6 +33,13 @@ abstract contract AccessRegistry is Ownable {
     LibRegistry.Registry private Registry;
     mapping(uint256 => Accessor) internal Accessors;
 
+
+  
+
+
+
+
+
     function _hasAccess(address user, AccessType min, address dom) private view returns (bool) {    
         if(user == owner()) return true;    
         uint256 hash = user.hashWith(dom);

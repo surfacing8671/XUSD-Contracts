@@ -1,0 +1,178 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "int256",
+						"name": "_peakRateBasisPoints",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "_offPeakRateBasisPoints",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_peakStartHour",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_peakEndHour",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "origin",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "calculateTotalBasisFee",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "offPeakRateBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "peakEndHour",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "peakRateBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "peakStartHour",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A tax calculator that imposes different tax rates based on the time of day.",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "Constructor to set the peak/off-peak tax rates and peak hours.",
+					"params": {
+						"_offPeakRateBasisPoints": "The tax rate during off-peak hours in basis points.",
+						"_peakEndHour": "The ending hour for peak time.",
+						"_peakRateBasisPoints": "The tax rate during peak hours in basis points.",
+						"_peakStartHour": "The starting hour for peak time."
+					}
+				}
+			},
+			"title": "TimeBasedTaxCalculator",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Classes/TimeBasedTax.sol": "TimeBasedTaxCalculator"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Classes/ITaxCalculator.sol": {
+			"keccak256": "0xb44cd1d397e4f2092068094cc107947a7d1648dff5eca04618529f4a26da6782",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://012c92966c3727b56c6af0087a23341ad40b3649e20a1b768f49aa12e96ec4af",
+				"dweb:/ipfs/Qmdi2QZTHCzxwKNR9oc3h9udTb1Ba77icEStKh9RNVTPAN"
+			]
+		},
+		"contracts/Classes/TimeBasedTax.sol": {
+			"keccak256": "0xf318116c2a48f358f68a35efd62725225144ed38f252f5064e8434ffd45c5ede",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://baf34e5bb66ad8b57cd4d2b7232c2cc438ddeec5032412818c66ff2f76e404ef",
+				"dweb:/ipfs/QmUjMdWD4uuPqCawhv7uqFhqgdz9uqcztKCAK7Hr2SGV1H"
+			]
+		}
+	},
+	"version": 1
+}

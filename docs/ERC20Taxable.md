@@ -368,7 +368,7 @@ function transfer(address to, uint256 amount) external nonpayable returns (bool)
 
 
 
-*Moves `amount` of tokens from `sender` to `recipient` minus the tax fee. Moves the tax fee to a burn address.*
+*See {IERC20-transfer}.*
 
 #### Parameters
 

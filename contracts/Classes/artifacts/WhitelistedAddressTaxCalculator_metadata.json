@@ -1,0 +1,165 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "addToWhitelist",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "origin",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "calculateTotalBasisFee",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "taxRateBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "whitelistedAddresses",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A tax calculator that imposes a tax unless both the sender and recipient are whitelisted.",
+			"kind": "dev",
+			"methods": {
+				"addToWhitelist(address)": {
+					"details": "Add an address to the whitelist.",
+					"params": {
+						"addr": "The address to whitelist."
+					}
+				},
+				"constructor": {
+					"details": "Constructor to set the tax rate and optionally initial whitelisted addresses.",
+					"params": {
+						"_initialWhitelistedAddresses": "An array of addresses to initially whitelist.",
+						"_taxRateBasisPoints": "The tax rate for non-whitelisted addresses in basis points."
+					}
+				}
+			},
+			"title": "WhitelistedAddressTaxCalculator",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Classes/WhitelistedTax.sol": "WhitelistedAddressTaxCalculator"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Classes/ITaxCalculator.sol": {
+			"keccak256": "0xb44cd1d397e4f2092068094cc107947a7d1648dff5eca04618529f4a26da6782",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://012c92966c3727b56c6af0087a23341ad40b3649e20a1b768f49aa12e96ec4af",
+				"dweb:/ipfs/Qmdi2QZTHCzxwKNR9oc3h9udTb1Ba77icEStKh9RNVTPAN"
+			]
+		},
+		"contracts/Classes/WhitelistedTax.sol": {
+			"keccak256": "0xbd71b7ef50e591609229adfa18d2ed3b15e8666ee79554dba8f66a3a3d91bea2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://80939de53a3863be0acb5a1626c390c93391aeeef1bcac699ca6990abd679465",
+				"dweb:/ipfs/QmddhPF5LTBdxcaRF9j5qVeSg4XqkcP7k8qk7aehvzC12F"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0x40c04fc6e6870caa6d91fefd2d7f5f1f9fe1d3d60d585e3afd1cc8d892e28291",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://3569ae5182334276c9cea393ccc32adc0a51db01e7cf9d20ca1273b7e9d790de",
+				"dweb:/ipfs/QmX8NMKWmbYW71qAn1dc2WVqGYDc8rgBTefrBqv84xvX4Y"
+			]
+		},
+		"contracts/registry.sol": {
+			"keccak256": "0x2de243fc397b804f42152434e979ab88e432744d228ada062511445c5f18d173",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://e791dcd3795c5b9d75f987e9381823be6b580a7aa8223f51709a7791ba420ca6",
+				"dweb:/ipfs/QmQ78wzcrtorMPUEjTRxPEFjx8uMPEQveNr7RfbzbvxfHr"
+			]
+		}
+	},
+	"version": 1
+}

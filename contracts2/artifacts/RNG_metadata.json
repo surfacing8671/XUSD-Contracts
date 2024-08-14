@@ -1,0 +1,59 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "Random",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "",
+						"type": "uint64"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/atropamath.sol": "RNG"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/atropamath.sol": {
+			"keccak256": "0x40c04fc6e6870caa6d91fefd2d7f5f1f9fe1d3d60d585e3afd1cc8d892e28291",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://3569ae5182334276c9cea393ccc32adc0a51db01e7cf9d20ca1273b7e9d790de",
+				"dweb:/ipfs/QmX8NMKWmbYW71qAn1dc2WVqGYDc8rgBTefrBqv84xvX4Y"
+			]
+		}
+	},
+	"version": 1
+}

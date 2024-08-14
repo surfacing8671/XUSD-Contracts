@@ -21,6 +21,10 @@ library LibRegistry {
         return _registry.inserted[key];
     }
 
+        function ReturnAllKeys(Registry storage _registry) public view returns(uint256 [] storage) {
+        return _registry.keys;
+    }  
+
     function Register(Registry storage _registry, uint256 key) public {
         if(!_registry.inserted[key])
         {

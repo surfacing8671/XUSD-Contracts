@@ -1,0 +1,72 @@
+{
+	"id": "d950e15e2b4642431ca5515a85f133b3",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.26",
+	"solcLongVersion": "0.8.26+commit.8a97fa7a",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"contracts/Classes/Holders.sol": {
+				"content": "// // SPDX-License-Identifier: MIT\n// pragma solidity ^0.8.26;\n\n// import \"./ITaxCalculatorContract.sol\";\n// import \"../atropamath.sol\";\n// import \"../registry.sol\";\n// /**\n//  * @title StakingIncentiveTaxCalculator\n//  * @dev A tax calculator that reduces the tax rate (negative basis points) when interacting with a specific staking contract.\n//  */\n// contract Holders {\n//         using AtropaMath for address;\n//             using LibRegistry for LibRegistry.Registry;\n//     enum HolderType {       \n//         PAPERHANDS,\n//         NOOBS,\n//         HODLER,\n//         DIOMANDHANDS\n//     }\n\n//             struct _contractsPoints {\n//                 uint256 firstTime;\n//                 int points;\n//                 uint tokensFrom;\n//                 uint tokensTo;\n//                 HolderType Holder;\n//                             }\n\n\n\n\n//       LibRegistry.Registry internal tokenAddyToWatch;\n//       mapping(uint => _contractsPoints) public UserWatchMap;\n//     mapping(address => uint) public currentHashedAddy;\n//     mapping(uint => int) public Points;\n//    address private classReg;\n\n\n\n\n//     constructor(address _classReg) {\n//         classReg = _classReg;\n//                     Points[0] = 5;\n//                     Points[1] = 10;\n//                     Points[2] = 20;\n//                     Points[3] = 40;\n \n//     }\n\n//     function processBasisPoints(uint amount) internal returns(int) {\n//         if(tokenAddyToWatch.Contains(currentHashedAddy[2])){\n//         UserWatchMap[currentHashedAddy[2]].tokensTo += amount;\n        \n//         }\n//         else{\n//             tokenAddyToWatch.Register(currentHashedAddy[2]);\n//             UserWatchMap[currentHashedAddy[2]].tokensTo += amount;\n    \n//                  UserWatchMap[currentHashedAddy[2]].firstTime = block.timestamp;\n//         }\n//         if(tokenAddyToWatch.Contains(currentHashedAddy[3]))\n\n//         UserWatchMap[currentHashedAddy[3]].tokensFrom += amount;\n \n//     }\n\n//     //   //  calculateResult();\n        \n\n\n     \n\n//      function getTimeFrameEnum(uint months) public pure returns (HolderType) {\n//         if (months < 1) {\n//             return HolderType.PAPERHANDS;\n//         } else if (months <= 4) {\n//             return HolderType.NOOBS;\n//         } else if (months <= 8) {\n//             return HolderType.HODLER;\n//         } else  {\n//             return HolderType.DIOMANDHANDS;\n//         } \n//     }\n\n//     // Function to calculate the result based on the enum, time difference, and multiplying by 4\n//     function calculateResult()  external {\n//         uint256 timePassed = block.timestamp - UserWatchMap[currentHashedAddy[2]].firstTime;\n//         uint256 timePassed2 = block.timestamp - UserWatchMap[currentHashedAddy[3]].firstTime;\n//         uint256 monthsPassed = timePassed / 30 days;\n//           uint256 monthsPassed2 = timePassed2 / 30 days;\n//         UserWatchMap[currentHashedAddy[2]].Holder = getTimeFrameEnum(monthsPassed);\n//         UserWatchMap[currentHashedAddy[3]].Holder = getTimeFrameEnum(monthsPassed2);\n//         uint balance =  UserWatchMap[currentHashedAddy[2]].tokensTo -  UserWatchMap[currentHashedAddy[2]].tokensFrom;\n//         uint balance2 =  UserWatchMap[currentHashedAddy[3]].tokensTo -  UserWatchMap[currentHashedAddy[3]].tokensFrom;\n//         if(balance < 200){\n//             UserWatchMap[currentHashedAddy[2]].points = 0;\n//             UserWatchMap[currentHashedAddy[2]].Holder = HolderType.PAPERHANDS;\n//         }\n//         if(balance2 < 200){\n//             UserWatchMap[currentHashedAddy[3]].points = 0;\n//             UserWatchMap[currentHashedAddy[3]].Holder = HolderType.PAPERHANDS;\n//         }\n//         UserWatchMap[currentHashedAddy[2]].points = Points[uint256(UserWatchMap[currentHashedAddy[2]].Holder)];\n//         UserWatchMap[currentHashedAddy[3]].points = Points[uint256(UserWatchMap[currentHashedAddy[3]].Holder)];\n//        //return int256(timePassed);\n    \n\n\n\n    \n\n//     function hashMaps(address[4] memory addyList) internal returns(uint) {\n\n//         for(uint i; i < 4;){\n//             currentHashedAddy[i] = address(this).hashWith(addyList[i]);\n//             return currentHashedAddy[addyList[i]].timeframe;\n//             unchecked {\n//                 i ++;\n//             }\n//         }        \n\n\n//     }\n//   function calculateTotalBasisFee(address origin, address from, address to, uint amount) external returns(int) {\n//        require(msg.sender == classReg, \"not authorized\");\n\n//         address[4] memory addy;\n//         addy[0] = origin;\n   \n//         addy[1] = to;\n//         addy[2] = from;\n//         hashMaps(addy);\n\n//         processBasisPoints(amount);\n     \n//         return   -(UserWatchMap[currentHashedAddy[2]].points +  UserWatchMap[currentHashedAddy[3]].points);\n  \n\n//     }\n\n\n// }\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": true,
+				"runs": 100
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"errors": [
+			{
+				"component": "general",
+				"errorCode": "3420",
+				"formattedMessage": "Warning: Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.26;\"\n--> contracts/Classes/Holders.sol\n\n",
+				"message": "Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.26;\"",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "contracts/Classes/Holders.sol",
+					"start": -1
+				},
+				"type": "Warning"
+			}
+		],
+		"sources": {
+			"contracts/Classes/Holders.sol": {
+				"ast": {
+					"absolutePath": "contracts/Classes/Holders.sol",
+					"exportedSymbols": {},
+					"id": 1,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [],
+					"src": "4814:0:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

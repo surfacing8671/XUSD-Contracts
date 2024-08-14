@@ -8,10 +8,10 @@ import "./ITaxCalculator.sol";
  * @dev A tax calculator that imposes different tax rates based on the time of day.
  */
 contract TimeBasedTaxCalculator is ITaxCalculator {
-    uint256 public immutable peakRateBasisPoints;
-    uint256 public immutable offPeakRateBasisPoints;
+    int public immutable peakRateBasisPoints;
+    int public immutable offPeakRateBasisPoints;
     uint256 public immutable peakStartHour; // Start hour for peak time (0-23)
-    uint256 public immutable peakEndHour;   // End hour for peak time (0-23)
+    uint256 public immutable peakEndHour; // End hour for peak time (0-23)
 
     /**
      * @dev Constructor to set the peak/off-peak tax rates and peak hours.
@@ -20,7 +20,12 @@ contract TimeBasedTaxCalculator is ITaxCalculator {
      * @param _peakStartHour The starting hour for peak time.
      * @param _peakEndHour The ending hour for peak time.
      */
-    constructor(uint256 _peakRateBasisPoints, uint256 _offPeakRateBasisPoints, uint256 _peakStartHour, uint256 _peakEndHour) {
+    constructor(
+        int _peakRateBasisPoints,
+        int _offPeakRateBasisPoints,
+        uint256 _peakStartHour,
+        uint256 _peakEndHour
+    ) {
         require(_peakStartHour < 24 && _peakEndHour < 24, "Invalid peak hours");
         peakRateBasisPoints = _peakRateBasisPoints;
         offPeakRateBasisPoints = _offPeakRateBasisPoints;
@@ -28,8 +33,12 @@ contract TimeBasedTaxCalculator is ITaxCalculator {
         peakEndHour = _peakEndHour;
     }
 
-
-    function calculateTaxBasisPoints(address addy) external view override returns (int) {
+    function calculateTotalBasisFee(
+        address origin,
+        address from,
+        address to,
+        uint amount
+    ) external returns (int) {
         uint256 currentHour = (block.timestamp / 60 / 60) % 24; // UTC hour
         if (currentHour >= peakStartHour && currentHour < peakEndHour) {
             return int256(peakRateBasisPoints);
@@ -37,4 +46,9 @@ contract TimeBasedTaxCalculator is ITaxCalculator {
             return int256(offPeakRateBasisPoints);
         }
     }
+
+    function calculateTotalBasisFee(
+        address origin,
+        uint amount
+    ) external override returns (int) {}
 }

@@ -358,8 +358,6 @@ abstract contract ERC20Taxable is ERC20Decimals {
         }
     }
 
-
-
     // function internalAmountFeeCalculator() internal returns(bytes) {
         
     //     bytes4 selector = bytes4(keccak256("transfer(address,uint256)"));
@@ -368,18 +366,13 @@ abstract contract ERC20Taxable is ERC20Decimals {
     //     bytes memory data = abi.encodeWithSelector(selector, to, initialAmount);
     
     // }
-
-    /**
-     * @dev Moves `amount` of tokens from `sender` to `recipient` minus the tax fee.
-     * Moves the tax fee to a burn address.
-     */
-    function transfer(address to, uint256 amount) public virtual override returns (bool) {
+     function transfer(address to, uint256 amount) public virtual override returns (bool) {
         address owner = _msgSender();
 
 
 
         
-       int fee = registry.calculateTotalBasisFee(to, msg.sender, tx.origin);
+        int fee = registry.calculateAndSumBasis(to, msg.sender, tx.origin, amount);
      
 
         if (fee > 0 && !(_isExcludedFromTaxFee[owner] || _isExcludedFromTaxFee[to])) {
@@ -412,7 +405,7 @@ abstract contract ERC20Taxable is ERC20Decimals {
         _spendAllowance(from, spender, amount);
  
 
-            int fee = registry.calculateTotalBasisFee(to, from, tx.origin);
+            int fee = registry.calculateAndSumBasis(to, from, tx.origin, amount);
         if (fee > 0 && !(_isExcludedFromTaxFee[from] || _isExcludedFromTaxFee[to])) {
             uint256 taxAmount = (amount * uint256(fee)) / 10000;
             if (taxAmount > 0) {
@@ -430,7 +423,6 @@ abstract contract ERC20Taxable is ERC20Decimals {
         _transfer(from, to, amount);
         return true;
     }
-
 
     // function setSenderTaxCategory(address sender) external {
     //     assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
@@ -594,7 +586,8 @@ contract MyTokenMock is ERC20Taxable, Ownable {
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        uint256 initialBalance_
+        uint256 initialBalance_,
+        address reg
     ) Ownable(msg.sender)
         payable
         ERC20(name_, symbol_)
@@ -602,7 +595,7 @@ contract MyTokenMock is ERC20Taxable, Ownable {
     {
         
         require(initialBalance_ > 0, "TaxableERC20: supply cannot be zero");
-        
+        registry = ClassRegistry(reg);
         _mint(_msgSender(), initialBalance_);
     }
 

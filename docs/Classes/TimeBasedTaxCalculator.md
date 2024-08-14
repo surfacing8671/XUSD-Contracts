@@ -10,10 +10,10 @@
 
 ## Methods
 
-### calculateTaxBasisPoints
+### calculateTotalBasisFee
 
 ```solidity
-function calculateTaxBasisPoints(address addy) external view returns (int256)
+function calculateTotalBasisFee(address origin, address from, address to, uint256 amount) external nonpayable returns (int256)
 ```
 
 
@@ -24,7 +24,33 @@ function calculateTaxBasisPoints(address addy) external view returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| addy | address | undefined |
+| origin | address | undefined |
+| from | address | undefined |
+| to | address | undefined |
+| amount | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | int256 | undefined |
+
+### calculateTotalBasisFee
+
+```solidity
+function calculateTotalBasisFee(address origin, uint256 amount) external nonpayable returns (int256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| origin | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
@@ -35,7 +61,7 @@ function calculateTaxBasisPoints(address addy) external view returns (int256)
 ### offPeakRateBasisPoints
 
 ```solidity
-function offPeakRateBasisPoints() external view returns (uint256)
+function offPeakRateBasisPoints() external view returns (int256)
 ```
 
 
@@ -47,7 +73,7 @@ function offPeakRateBasisPoints() external view returns (uint256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | int256 | undefined |
 
 ### peakEndHour
 
@@ -69,7 +95,7 @@ function peakEndHour() external view returns (uint256)
 ### peakRateBasisPoints
 
 ```solidity
-function peakRateBasisPoints() external view returns (uint256)
+function peakRateBasisPoints() external view returns (int256)
 ```
 
 
@@ -81,7 +107,7 @@ function peakRateBasisPoints() external view returns (uint256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | int256 | undefined |
 
 ### peakStartHour
 

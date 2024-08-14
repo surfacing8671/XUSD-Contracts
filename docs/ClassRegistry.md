@@ -51,23 +51,6 @@ function AccessRegistryCount() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### BATCH_SIZE
-
-```solidity
-function BATCH_SIZE() external view returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
 ### GetAccess
 
 ```solidity
@@ -137,10 +120,10 @@ function HasAccess(address user, enum AccessRegistry.AccessType min, address dom
 |---|---|---|
 | _0 | bool | undefined |
 
-### MasterAddressMap
+### MasteClassMap
 
 ```solidity
-function MasterAddressMap(uint256) external view returns (address)
+function MasteClassMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
 ```
 
 
@@ -157,12 +140,14 @@ function MasterAddressMap(uint256) external view returns (address)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
 
-### MasterFeeMap
+### MasterClassCallerMap
 
 ```solidity
-function MasterFeeMap(uint256) external view returns (int256)
+function MasterClassCallerMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
 ```
 
 
@@ -179,12 +164,14 @@ function MasterFeeMap(uint256) external view returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | int256 | undefined |
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
 
-### MasterFeeMapContractCaller
+### MasterClassContractMap
 
 ```solidity
-function MasterFeeMapContractCaller(uint256) external view returns (int256)
+function MasterClassContractMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
 ```
 
 
@@ -201,12 +188,14 @@ function MasterFeeMapContractCaller(uint256) external view returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | int256 | undefined |
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
 
-### MasterFeeMapContractFrom
+### MasterClassFromMap
 
 ```solidity
-function MasterFeeMapContractFrom(uint256) external view returns (int256)
+function MasterClassFromMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
 ```
 
 
@@ -223,12 +212,14 @@ function MasterFeeMapContractFrom(uint256) external view returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | int256 | undefined |
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
 
-### MasterFeeMapContractTo
+### MasterClassToMap
 
 ```solidity
-function MasterFeeMapContractTo(uint256) external view returns (int256)
+function MasterClassToMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
 ```
 
 
@@ -245,7 +236,9 @@ function MasterFeeMapContractTo(uint256) external view returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | int256 | undefined |
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
 
 ### RegisterAccess
 
@@ -282,10 +275,10 @@ function RemoveAccess(address user, address dom) external nonpayable
 | user | address | undefined |
 | dom | address | undefined |
 
-### addressList
+### addClass
 
 ```solidity
-function addressList(uint256) external view returns (address)
+function addClass(address class, bool active, uint256 classType) external nonpayable
 ```
 
 
@@ -296,18 +289,14 @@ function addressList(uint256) external view returns (address)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| class | address | undefined |
+| active | bool | undefined |
+| classType | uint256 | undefined |
 
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### calculateTotalBasisFee
+### calculateAndSumBasis
 
 ```solidity
-function calculateTotalBasisFee(address to, address from, address caller) external nonpayable returns (int256)
+function calculateAndSumBasis(address to, address from, address _caller, uint256 amount) external nonpayable returns (int256)
 ```
 
 
@@ -320,123 +309,14 @@ function calculateTotalBasisFee(address to, address from, address caller) extern
 |---|---|---|
 | to | address | undefined |
 | from | address | undefined |
-| caller | address | undefined |
+| _caller | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
-
-### classCallerFee
-
-```solidity
-function classCallerFee(uint256) external view returns (address)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### classCallerFeeNow
-
-```solidity
-function classCallerFeeNow(uint256) external view returns (address)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### classContractFee
-
-```solidity
-function classContractFee(uint256) external view returns (address)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### classFromFee
-
-```solidity
-function classFromFee(uint256) external view returns (address)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### classToFee
-
-```solidity
-function classToFee(uint256) external view returns (address)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
 
 ### isWhitelistedCaller
 
@@ -499,34 +379,6 @@ function owner() external view returns (address)
 |---|---|---|
 | _0 | address | undefined |
 
-### previousBatchIndex
-
-```solidity
-function previousBatchIndex() external view returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### recalculateFees
-
-```solidity
-function recalculateFees() external nonpayable
-```
-
-
-
-
-
-
 ### referralCodes
 
 ```solidity
@@ -560,91 +412,6 @@ function renounceOwnership() external nonpayable
 *Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.*
 
 
-### setWhitelistedClassCallerFee
-
-```solidity
-function setWhitelistedClassCallerFee(address class, bool isApproved) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| class | address | undefined |
-| isApproved | bool | undefined |
-
-### setWhitelistedClassContractFee
-
-```solidity
-function setWhitelistedClassContractFee(address class, bool isApproved) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| class | address | undefined |
-| isApproved | bool | undefined |
-
-### setWhitelistedClassFromFee
-
-```solidity
-function setWhitelistedClassFromFee(address class, bool isApproved) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| class | address | undefined |
-| isApproved | bool | undefined |
-
-### setWhitelistedClassNowFee
-
-```solidity
-function setWhitelistedClassNowFee(address class, bool isApproved) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| class | address | undefined |
-| isApproved | bool | undefined |
-
-### setWhitelistedClassToFee
-
-```solidity
-function setWhitelistedClassToFee(address class, bool isApproved) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| class | address | undefined |
-| isApproved | bool | undefined |
-
 ### transferOwnership
 
 ```solidity
@@ -660,17 +427,6 @@ function transferOwnership(address newOwner) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | newOwner | address | undefined |
-
-### updateContractFees
-
-```solidity
-function updateContractFees() external nonpayable
-```
-
-
-
-
-
 
 
 

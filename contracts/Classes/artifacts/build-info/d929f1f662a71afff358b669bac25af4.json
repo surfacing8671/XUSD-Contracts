@@ -1,0 +1,72 @@
+{
+	"id": "d929f1f662a71afff358b669bac25af4",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.26",
+	"solcLongVersion": "0.8.26+commit.8a97fa7a",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"contracts/Classes/TimeBasedTax.sol": {
+				"content": "// // SPDX-License-Identifier: MIT\n// pragma solidity ^0.8.26;\n\n// import \"./ITaxCalculator.sol\";\n\n// /**\n//  * @title TimeBasedTaxCalculator\n//  * @dev A tax calculator that imposes different tax rates based on the time of day.\n//  */\n// contract TimeBasedTaxCalculator is ITaxCalculator {\n//     int public immutable peakRateBasisPoints;\n//     int public immutable offPeakRateBasisPoints;\n//     uint256 public immutable peakStartHour; // Start hour for peak time (0-23)\n//     uint256 public immutable peakEndHour;   // End hour for peak time (0-23)\n\n//     /**\n//      * @dev Constructor to set the peak/off-peak tax rates and peak hours.\n//      * @param _peakRateBasisPoints The tax rate during peak hours in basis points.\n//      * @param _offPeakRateBasisPoints The tax rate during off-peak hours in basis points.\n//      * @param _peakStartHour The starting hour for peak time.\n//      * @param _peakEndHour The ending hour for peak time.\n//      */\n//     constructor(int _peakRateBasisPoints, int _offPeakRateBasisPoints, uint256 _peakStartHour, uint256 _peakEndHour) {\n//         require(_peakStartHour < 24 && _peakEndHour < 24, \"Invalid peak hours\");\n//         peakRateBasisPoints = _peakRateBasisPoints;\n//         offPeakRateBasisPoints = _offPeakRateBasisPoints;\n//         peakStartHour = _peakStartHour;\n//         peakEndHour = _peakEndHour;\n//     }\n\n\n//    function calculateTotalBasisFee(address origin, address from, address to, uint amount) external returns(int) {\n//         uint256 currentHour = (block.timestamp / 60 / 60) % 24; // UTC hour\n//         if (currentHour >= peakStartHour && currentHour < peakEndHour) {\n//             return int256(peakRateBasisPoints);\n//         } else {\n//             return int256(offPeakRateBasisPoints);\n//         }\n//     }\n// }\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": true,
+				"runs": 100
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"errors": [
+			{
+				"component": "general",
+				"errorCode": "3420",
+				"formattedMessage": "Warning: Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.26;\"\n--> contracts/Classes/TimeBasedTax.sol\n\n",
+				"message": "Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.26;\"",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "contracts/Classes/TimeBasedTax.sol",
+					"start": -1
+				},
+				"type": "Warning"
+			}
+		],
+		"sources": {
+			"contracts/Classes/TimeBasedTax.sol": {
+				"ast": {
+					"absolutePath": "contracts/Classes/TimeBasedTax.sol",
+					"exportedSymbols": {},
+					"id": 1,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [],
+					"src": "1799:0:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}
