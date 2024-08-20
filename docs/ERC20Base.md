@@ -1,31 +1,14 @@
-# ERC20Decimals
+# ERC20Base
 
 
 
-> ERC20Decimals
+> ERC20Base
 
 
 
-*Extension of {ERC20} that adds decimals storage slot.*
+*Basic ERC20 implementation with burn functionality and registry integration.*
 
 ## Methods
-
-### RigistryBurn
-
-```solidity
-function RigistryBurn(address account, uint256 amount) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| amount | uint256 | undefined |
 
 ### allowance
 
@@ -35,7 +18,7 @@ function allowance(address owner, address spender) external view returns (uint25
 
 
 
-*See {IERC20-allowance}.*
+*Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called.*
 
 #### Parameters
 
@@ -58,7 +41,7 @@ function approve(address spender, uint256 amount) external nonpayable returns (b
 
 
 
-*See {IERC20-approve}.*
+
 
 #### Parameters
 
@@ -81,7 +64,7 @@ function balanceOf(address account) external view returns (uint256)
 
 
 
-*See {IERC20-balanceOf}.*
+*Returns the value of tokens owned by `account`.*
 
 #### Parameters
 
@@ -125,7 +108,7 @@ function decimals() external view returns (uint8)
 
 
 
-*Returns the number of decimals used to get its user representation.*
+*Returns the decimals places of the token.*
 
 
 #### Returns
@@ -142,7 +125,7 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 
 
 
-*Atomically decreases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -165,7 +148,7 @@ function increaseAllowance(address spender, uint256 addedValue) external nonpaya
 
 
 
-*Atomically increases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -214,6 +197,23 @@ function registry() external view returns (contract ClassRegistry)
 |---|---|---|
 | _0 | contract ClassRegistry | undefined |
 
+### registryBurn
+
+```solidity
+function registryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 ### symbol
 
 ```solidity
@@ -256,7 +256,7 @@ function totalSupply() external view returns (uint256)
 
 
 
-*See {IERC20-totalSupply}.*
+*Returns the value of tokens in existence.*
 
 
 #### Returns
@@ -273,7 +273,7 @@ function transfer(address to, uint256 amount) external nonpayable returns (bool)
 
 
 
-*See {IERC20-transfer}.*
+
 
 #### Parameters
 
@@ -296,7 +296,7 @@ function transferFrom(address from, address to, uint256 amount) external nonpaya
 
 
 
-*See {IERC20-transferFrom}.*
+
 
 #### Parameters
 

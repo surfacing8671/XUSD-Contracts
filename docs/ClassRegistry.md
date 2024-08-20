@@ -10,34 +10,10 @@
 
 ## Methods
 
-### AccessIsClass
+### MAX_AMOUNT
 
 ```solidity
-function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType class) external view returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| dom | address | undefined |
-| class | enum AccessRegistry.AccessType | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
-
-### AccessRegistryCount
-
-```solidity
-function AccessRegistryCount() external view returns (uint256)
+function MAX_AMOUNT() external view returns (uint256)
 ```
 
 
@@ -50,75 +26,6 @@ function AccessRegistryCount() external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
-
-### GetAccess
-
-```solidity
-function GetAccess(address user, address dom) external view returns (struct AccessRegistry.Accessor)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| dom | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | AccessRegistry.Accessor | undefined |
-
-### GetAccessByIndex
-
-```solidity
-function GetAccessByIndex(uint256 i) external view returns (struct AccessRegistry.Accessor)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| i | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | AccessRegistry.Accessor | undefined |
-
-### HasAccess
-
-```solidity
-function HasAccess(address user, enum AccessRegistry.AccessType min, address dom) external view returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| min | enum AccessRegistry.AccessType | undefined |
-| dom | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
 
 ### MasteClassMap
 
@@ -240,10 +147,10 @@ function MasterClassToMap(uint256) external view returns (address classAddress, 
 | updatedTimestamp | uint256 | undefined |
 | active | bool | undefined |
 
-### RegisterAccess
+### RegisterContracts
 
 ```solidity
-function RegisterAccess(address addr, enum AccessRegistry.AccessType class, address dom) external nonpayable
+function RegisterContracts(address contracts) external nonpayable
 ```
 
 
@@ -254,26 +161,24 @@ function RegisterAccess(address addr, enum AccessRegistry.AccessType class, addr
 
 | Name | Type | Description |
 |---|---|---|
-| addr | address | undefined |
-| class | enum AccessRegistry.AccessType | undefined |
-| dom | address | undefined |
+| contracts | address | undefined |
 
-### RemoveAccess
+### RewardBalance
 
 ```solidity
-function RemoveAccess(address user, address dom) external nonpayable
+function RewardBalance() external view returns (uint256)
 ```
 
 
 
 
 
-#### Parameters
+
+#### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
-| dom | address | undefined |
+| _0 | uint256 | undefined |
 
 ### addClass
 
@@ -317,6 +222,44 @@ function calculateAndSumBasis(address to, address from, address _caller, uint256
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+
+### depositRewards
+
+```solidity
+function depositRewards(uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| amount | uint256 | undefined |
+
+### hasVibes
+
+```solidity
+function hasVibes(address user) external nonpayable returns (bool)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
 
 ### isWhitelistedCaller
 
@@ -362,23 +305,6 @@ Tracks the contracts that can be called through Sickle multicall
 |---|---|---|
 | _0 | bool | True if the contract is a whitelisted target |
 
-### owner
-
-```solidity
-function owner() external view returns (address)
-```
-
-
-
-*Returns the address of the current owner.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
 ### referralCodes
 
 ```solidity
@@ -401,32 +327,71 @@ Keeps track of the referrers and their associated code
 |---|---|---|
 | _0 | address | undefined |
 
-### renounceOwnership
+### setGov
 
 ```solidity
-function renounceOwnership() external nonpayable
+function setGov(address gove) external nonpayable
 ```
 
 
 
-*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.*
 
-
-### transferOwnership
-
-```solidity
-function transferOwnership(address newOwner) external nonpayable
-```
-
-
-
-*Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| newOwner | address | undefined |
+| gove | address | undefined |
+
+### turnOnRewards
+
+```solidity
+function turnOnRewards() external nonpayable
+```
+
+
+
+
+
+
+### viewUser
+
+```solidity
+function viewUser(address user) external nonpayable returns (int256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | int256 | undefined |
+
+### xusd
+
+```solidity
+function xusd() external view returns (contract XUSD)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract XUSD | undefined |
 
 
 
@@ -448,23 +413,6 @@ event CallerStatusChanged(address caller, bool isWhitelisted)
 |---|---|---|
 | caller  | address | undefined |
 | isWhitelisted  | bool | undefined |
-
-### OwnershipTransferred
-
-```solidity
-event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| previousOwner `indexed` | address | undefined |
-| newOwner `indexed` | address | undefined |
 
 ### TargetStatusChanged
 
@@ -592,37 +540,5 @@ error NotAllowedAccess()
 
 
 
-
-### OwnableInvalidOwner
-
-```solidity
-error OwnableInvalidOwner(address owner)
-```
-
-
-
-*The owner is not a valid owner account. (eg. `address(0)`)*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| owner | address | undefined |
-
-### OwnableUnauthorizedAccount
-
-```solidity
-error OwnableUnauthorizedAccount(address account)
-```
-
-
-
-*The caller account is not authorized to perform an operation.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
 
 

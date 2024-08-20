@@ -1,14 +1,31 @@
-# TimeBasedTaxCalculator
+# TieredRateTaxCalculator
 
 
 
-> TimeBasedTaxCalculator
+> TieredRateTaxCalculator
 
 
 
-*A tax calculator that imposes different tax rates based on the time of day.*
+*A tax calculator that imposes a tiered tax rate based on the transaction amount.*
 
 ## Methods
+
+### baseRateBasisPoints
+
+```solidity
+function baseRateBasisPoints() external view returns (int256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | int256 | undefined |
 
 ### calculateTotalBasisFee
 
@@ -33,10 +50,10 @@ function calculateTotalBasisFee(address addy, uint256 amount) external view retu
 |---|---|---|
 | _0 | int256 | undefined |
 
-### offPeakRateBasisPoints
+### highTierRateBasisPoints
 
 ```solidity
-function offPeakRateBasisPoints() external view returns (int256)
+function highTierRateBasisPoints() external view returns (int256)
 ```
 
 
@@ -50,10 +67,10 @@ function offPeakRateBasisPoints() external view returns (int256)
 |---|---|---|
 | _0 | int256 | undefined |
 
-### peakEndHour
+### highTierThreshold
 
 ```solidity
-function peakEndHour() external view returns (uint256)
+function highTierThreshold() external view returns (uint256)
 ```
 
 
@@ -67,10 +84,10 @@ function peakEndHour() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### peakRateBasisPoints
+### middleTierRateBasisPoints
 
 ```solidity
-function peakRateBasisPoints() external view returns (int256)
+function middleTierRateBasisPoints() external view returns (int256)
 ```
 
 
@@ -84,10 +101,10 @@ function peakRateBasisPoints() external view returns (int256)
 |---|---|---|
 | _0 | int256 | undefined |
 
-### peakStartHour
+### middleTierThreshold
 
 ```solidity
-function peakStartHour() external view returns (uint256)
+function middleTierThreshold() external view returns (uint256)
 ```
 
 

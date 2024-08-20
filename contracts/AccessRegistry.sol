@@ -5,20 +5,20 @@ import "./registry.sol";
 import "./atropamath.sol";
 
 
-abstract contract AccessRegistry is Ownable {
+abstract contract  AccessRegistry is Ownable {
     using LibRegistry for LibRegistry.Registry;
     using AtropaMath for address;
 
  
 
     enum AccessType {
-        PRESEDENT,
-        CONGRESS,
-        KING,
-        SOLDIER,
-        PARTICIPANT,
-        CONTRACT,
-        USER
+        PREATORMAXIMUS,
+        CONSUL,
+        SENATOR,
+        LEGATUS,
+        GLADIATOR,
+        PRINCEPS
+        
     }
 
 
@@ -35,12 +35,12 @@ abstract contract AccessRegistry is Ownable {
 
 
   
+constructor() Ownable(msg.sender) {}
 
 
 
 
-
-    function _hasAccess(address user, AccessType min, address dom) private view returns (bool) {    
+    function _hasAccess(address user, AccessType min, address dom) private  returns (bool) {    
         if(user == owner()) return true;    
         uint256 hash = user.hashWith(dom);
         if(Registry.Contains(hash)) {
@@ -56,9 +56,9 @@ abstract contract AccessRegistry is Ownable {
         return false;
     }
 
-    function HasAccess(address user, AccessType min, address dom) public view returns (bool) {                
+    function HasAccess(address user, AccessType min, address dom) public  returns (bool) {                
         if(user == owner()) return true;
-        assert(_hasAccess(msg.sender, AccessType.CONTRACT, user));
+        assert(_hasAccess(msg.sender, AccessType.CONSUL, user));
         uint256 hash = user.hashWith(dom);
         if(Registry.Contains(hash)) {
             assert(_hasAccess(msg.sender, Accessors[hash].Class, user));
@@ -68,7 +68,7 @@ abstract contract AccessRegistry is Ownable {
     }
 
     function RegisterAccess(address addr, AccessType class, address dom) public {
-        assert(HasAccess(msg.sender, AccessType.CONGRESS, address(this)));
+        assert(HasAccess(msg.sender, AccessType.SENATOR, address(this)));
        
         uint256 hash = addr.hashWith(dom);
         if(Registry.Contains(hash)) {
@@ -80,27 +80,27 @@ abstract contract AccessRegistry is Ownable {
         SetAccess(addr, class, dom);
     }
 
-    function GetAccess(address user, address dom) public view returns (Accessor memory) {
-        assert(HasAccess(msg.sender, AccessType.CONTRACT, user));
+    function GetAccess(address user, address dom) public  returns (Accessor memory) {
+        assert(HasAccess(msg.sender, AccessType.CONSUL, user));
         uint256 hash = user.hashWith(dom);
         return Accessors[hash];
     }
 
 
-    function AccessIsClass(address user, address dom, AccessType class) public view returns(bool) {
-        assert(HasAccess(msg.sender, AccessType.CONTRACT, user));
+    function AccessIsClass(address user, address dom, AccessType class) public  returns(bool) {
+        assert(HasAccess(msg.sender, AccessType.CONSUL, user));
         uint256 hash = user.hashWith(dom);
         return Accessors[hash].Class == class;
     }
 
-    function AccessRegistryCount() public view returns(uint256) {
-        assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
+    function AccessRegistryCount() public  returns(uint256) {
+        assert(HasAccess(msg.sender, AccessType.GLADIATOR, address(this)));
         return Registry.Count();
     }
 
-    function GetAccessByIndex(uint256 i) public view returns(Accessor memory) {
+    function GetAccessByIndex(uint256 i) public  returns(Accessor memory) {
         uint256 hash = Registry.GetHashByIndex(i);
-        assert(HasAccess(msg.sender, AccessType.SOLDIER, address(this)));
+        assert(HasAccess(msg.sender, AccessType.GLADIATOR, address(this)));
         return Accessors[hash];
     }
 
@@ -112,10 +112,19 @@ abstract contract AccessRegistry is Ownable {
         Accessors[hash].Domain = dom;
 
     }
+    
 
+    function SetAccessOwner(address user, AccessType Class, address dom) public onlyOwner {
+        uint256 hash = user.hashWith(dom);
+        Registry.Register(hash);
+        Accessors[hash].Address = user;
+        Accessors[hash].Class = Class;
+        Accessors[hash].Domain = dom;
+
+    }
     function RemoveAccess(address user, address dom) public {
         Accessor memory A = GetAccess(user, dom);
-        assert(HasAccess(msg.sender, AccessType.PRESEDENT, A.Domain));
+        assert(HasAccess(msg.sender, AccessType.PREATORMAXIMUS, A.Domain));
         uint256 hash = user.hashWith(dom);
         Registry.Remove(hash);
         delete Accessors[hash];

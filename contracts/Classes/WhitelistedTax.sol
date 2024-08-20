@@ -14,7 +14,7 @@ interface ITaxCalculator {
  * @title WhitelistedAddressTaxCalculator
  * @dev A tax calculator that imposes a tax unless both the sender and recipient are whitelisted.
  */
-abstract contract WhitelistedAddressTaxCalculator is ITaxCalculator {
+ contract WhitelistedAddressTaxCalculator is ITaxCalculator {
     using AtropaMath for address;
     int public immutable taxRateBasisPoints;
     mapping(uint => bool) public whitelistedAddresses;
@@ -42,11 +42,11 @@ abstract contract WhitelistedAddressTaxCalculator is ITaxCalculator {
     }
 
 
-   function calculateTotalBasisFee(address origin, address from, address to, uint amount) external returns(int) {
-        // uint hash = address(this).hashWith(addy);
-        // if (whitelistedAddresses[hash]) {
-        //     return 0; // No tax if both are whitelisted
-        // }
-        // return int256(taxRateBasisPoints);
+  function calculateTotalBasisFee(address addy, uint amount) external   returns (int) {
+        uint hash = address(this).hashWith(addy);
+        if (!whitelistedAddresses[hash]) {
+            return int256(taxRateBasisPoints); // No tax if both are whitelisted
+        }
+        return 0;
     }
 }

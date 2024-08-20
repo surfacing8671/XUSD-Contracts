@@ -6,26 +6,9 @@
 
 
 
-*Extension of {ERC20Decimals} that adds tax functionalities.*
+*Extension of {ERC20Base} that adds tax functionalities.*
 
 ## Methods
-
-### RigistryBurn
-
-```solidity
-function RigistryBurn(address account, uint256 amount) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| amount | uint256 | undefined |
 
 ### allowance
 
@@ -35,7 +18,7 @@ function allowance(address owner, address spender) external view returns (uint25
 
 
 
-*See {IERC20-allowance}.*
+*Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called.*
 
 #### Parameters
 
@@ -58,7 +41,7 @@ function approve(address spender, uint256 amount) external nonpayable returns (b
 
 
 
-*See {IERC20-approve}.*
+
 
 #### Parameters
 
@@ -81,7 +64,7 @@ function balanceOf(address account) external view returns (uint256)
 
 
 
-*See {IERC20-balanceOf}.*
+*Returns the value of tokens owned by `account`.*
 
 #### Parameters
 
@@ -95,10 +78,10 @@ function balanceOf(address account) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### burn
+### burnAddress
 
 ```solidity
-function burn() external view returns (address)
+function burnAddress() external view returns (address)
 ```
 
 
@@ -142,7 +125,7 @@ function decimals() external view returns (uint8)
 
 
 
-*Returns the number of decimals used to get its user representation.*
+*Returns the decimals places of the token.*
 
 
 #### Returns
@@ -159,7 +142,7 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 
 
 
-*Atomically decreases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -174,21 +157,33 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 |---|---|---|
 | _0 | bool | undefined |
 
-### getUserBurn
+### getTaxAddress
 
 ```solidity
-function getUserBurn(address user) external view returns (uint256)
+function getTaxAddress() external view returns (address)
 ```
 
 
 
 
 
-#### Parameters
+
+#### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
+| _0 | address | undefined |
+
+### getTaxRate
+
+```solidity
+function getTaxRate() external view returns (uint256)
+```
+
+
+
+
+
 
 #### Returns
 
@@ -204,7 +199,7 @@ function increaseAllowance(address spender, uint256 addedValue) external nonpaya
 
 
 
-*Atomically increases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -219,15 +214,15 @@ function increaseAllowance(address spender, uint256 addedValue) external nonpaya
 |---|---|---|
 | _0 | bool | undefined |
 
-### isExcludedFromTaxFee
+### isExcludedFromTax
 
 ```solidity
-function isExcludedFromTaxFee(address account) external view returns (bool)
+function isExcludedFromTax(address account) external view returns (bool)
 ```
 
 
 
-*Returns the status of exclusion from tax fee mechanism for a given account.*
+
 
 #### Parameters
 
@@ -275,6 +270,23 @@ function registry() external view returns (contract ClassRegistry)
 |---|---|---|
 | _0 | contract ClassRegistry | undefined |
 
+### registryBurn
+
+```solidity
+function registryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 ### symbol
 
 ```solidity
@@ -291,40 +303,6 @@ function symbol() external view returns (string)
 | Name | Type | Description |
 |---|---|---|
 | _0 | string | undefined |
-
-### taxAddress
-
-```solidity
-function taxAddress() external view returns (address)
-```
-
-
-
-*Returns the deposit address for tax.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### taxFeePerMille
-
-```solidity
-function taxFeePerMille() external view returns (uint256)
-```
-
-
-
-*Returns the per mille rate for taxable mechanism.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
 
 ### totalBurned
 
@@ -351,7 +329,7 @@ function totalSupply() external view returns (uint256)
 
 
 
-*See {IERC20-totalSupply}.*
+*Returns the value of tokens in existence.*
 
 
 #### Returns
@@ -368,7 +346,7 @@ function transfer(address to, uint256 amount) external nonpayable returns (bool)
 
 
 
-*See {IERC20-transfer}.*
+
 
 #### Parameters
 
@@ -391,7 +369,7 @@ function transferFrom(address from, address to, uint256 amount) external nonpaya
 
 
 
-*Moves `amount` tokens from `from` to `to` minus the tax fee using the allowance mechanism. `amount` is then deducted from the caller&#39;s allowance. Moves the tax fee to a burn address.*
+
 
 #### Parameters
 

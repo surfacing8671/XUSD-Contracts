@@ -33,12 +33,7 @@ contract TimeBasedTaxCalculator is ITaxCalculator {
         peakEndHour = _peakEndHour;
     }
 
-    function calculateTotalBasisFee(
-        address origin,
-        address from,
-        address to,
-        uint amount
-    ) external returns (int) {
+    function calculateTotalBasisFee(address addy, uint amount) external view  returns (int) {
         uint256 currentHour = (block.timestamp / 60 / 60) % 24; // UTC hour
         if (currentHour >= peakStartHour && currentHour < peakEndHour) {
             return int256(peakRateBasisPoints);
@@ -47,8 +42,5 @@ contract TimeBasedTaxCalculator is ITaxCalculator {
         }
     }
 
-    function calculateTotalBasisFee(
-        address origin,
-        uint amount
-    ) external override returns (int) {}
+
 }

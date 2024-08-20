@@ -13,7 +13,7 @@
 ### AccessIsClass
 
 ```solidity
-function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType class) external view returns (bool)
+function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType class) external nonpayable returns (bool)
 ```
 
 
@@ -37,7 +37,7 @@ function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType
 ### AccessRegistryCount
 
 ```solidity
-function AccessRegistryCount() external view returns (uint256)
+function AccessRegistryCount() external nonpayable returns (uint256)
 ```
 
 
@@ -54,7 +54,7 @@ function AccessRegistryCount() external view returns (uint256)
 ### GetAccess
 
 ```solidity
-function GetAccess(address user, address dom) external view returns (struct AccessRegistry.Accessor)
+function GetAccess(address user, address dom) external nonpayable returns (struct AccessRegistry.Accessor)
 ```
 
 
@@ -77,7 +77,7 @@ function GetAccess(address user, address dom) external view returns (struct Acce
 ### GetAccessByIndex
 
 ```solidity
-function GetAccessByIndex(uint256 i) external view returns (struct AccessRegistry.Accessor)
+function GetAccessByIndex(uint256 i) external nonpayable returns (struct AccessRegistry.Accessor)
 ```
 
 
@@ -99,7 +99,7 @@ function GetAccessByIndex(uint256 i) external view returns (struct AccessRegistr
 ### HasAccess
 
 ```solidity
-function HasAccess(address user, enum AccessRegistry.AccessType min, address dom) external view returns (bool)
+function HasAccess(address user, enum AccessRegistry.AccessType min, address dom) external nonpayable returns (bool)
 ```
 
 
@@ -153,6 +153,24 @@ function RemoveAccess(address user, address dom) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | user | address | undefined |
+| dom | address | undefined |
+
+### SetAccessOwner
+
+```solidity
+function SetAccessOwner(address user, enum AccessRegistry.AccessType Class, address dom) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+| Class | enum AccessRegistry.AccessType | undefined |
 | dom | address | undefined |
 
 ### owner

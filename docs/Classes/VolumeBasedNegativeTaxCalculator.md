@@ -1,12 +1,12 @@
-# TimeBasedTaxCalculator
+# VolumeBasedNegativeTaxCalculator
 
 
 
-> TimeBasedTaxCalculator
+> VolumeBasedNegativeTaxCalculator
 
 
 
-*A tax calculator that imposes different tax rates based on the time of day.*
+*A tax calculator that provides increasing rewards based on the transaction volume.*
 
 ## Methods
 
@@ -33,10 +33,10 @@ function calculateTotalBasisFee(address addy, uint256 amount) external view retu
 |---|---|---|
 | _0 | int256 | undefined |
 
-### offPeakRateBasisPoints
+### highVolumeRewardBasisPoints
 
 ```solidity
-function offPeakRateBasisPoints() external view returns (int256)
+function highVolumeRewardBasisPoints() external view returns (int256)
 ```
 
 
@@ -50,27 +50,10 @@ function offPeakRateBasisPoints() external view returns (int256)
 |---|---|---|
 | _0 | int256 | undefined |
 
-### peakEndHour
+### lowVolumeRewardBasisPoints
 
 ```solidity
-function peakEndHour() external view returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### peakRateBasisPoints
-
-```solidity
-function peakRateBasisPoints() external view returns (int256)
+function lowVolumeRewardBasisPoints() external view returns (int256)
 ```
 
 
@@ -84,10 +67,10 @@ function peakRateBasisPoints() external view returns (int256)
 |---|---|---|
 | _0 | int256 | undefined |
 
-### peakStartHour
+### volumeThreshold
 
 ```solidity
-function peakStartHour() external view returns (uint256)
+function volumeThreshold() external view returns (uint256)
 ```
 
 

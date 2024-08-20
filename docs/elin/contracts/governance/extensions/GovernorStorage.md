@@ -1,4 +1,4 @@
-# GovernorSettings
+# GovernorStorage
 
 
 
@@ -6,7 +6,7 @@
 
 
 
-*Extension of {Governor} for settings updatable through governance.*
+*Extension of {Governor} that implements storage of proposal details. This modules also provides primitives for the enumerability of proposals. Use cases for this module include: - UIs that explore the proposal state without relying on event indexing. - Using only the proposalId as an argument in the {Governor-queue} and {Governor-execute} functions for L2 chains   where storage is cheap compared to calldata.*
 
 ## Methods
 
@@ -77,6 +77,22 @@ function EXTENDED_BALLOT_TYPEHASH() external view returns (bytes32)
 | Name | Type | Description |
 |---|---|---|
 | _0 | bytes32 | undefined |
+
+### cancel
+
+```solidity
+function cancel(uint256 proposalId) external nonpayable
+```
+
+
+
+*ProposalId version of {IGovernor-cancel}.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| proposalId | uint256 | undefined |
 
 ### cancel
 
@@ -292,6 +308,22 @@ function execute(address[] targets, uint256[] values, bytes[] calldatas, bytes32
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### execute
+
+```solidity
+function execute(uint256 proposalId) external payable
+```
+
+
+
+*Version of {IGovernor-execute} with only `proposalId` as an argument.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| proposalId | uint256 | undefined |
+
 ### getVotes
 
 ```solidity
@@ -503,6 +535,23 @@ function onERC721Received(address, address, uint256, bytes) external nonpayable 
 |---|---|---|
 | _0 | bytes4 | undefined |
 
+### proposalCount
+
+```solidity
+function proposalCount() external view returns (uint256)
+```
+
+
+
+*Returns the number of stored proposals.*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
 ### proposalDeadline
 
 ```solidity
@@ -524,6 +573,57 @@ function proposalDeadline(uint256 proposalId) external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
+
+### proposalDetails
+
+```solidity
+function proposalDetails(uint256 proposalId) external view returns (address[], uint256[], bytes[], bytes32)
+```
+
+
+
+*Returns the details of a proposalId. Reverts if `proposalId` is not a known proposal.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| proposalId | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address[] | undefined |
+| _1 | uint256[] | undefined |
+| _2 | bytes[] | undefined |
+| _3 | bytes32 | undefined |
+
+### proposalDetailsAt
+
+```solidity
+function proposalDetailsAt(uint256 index) external view returns (uint256, address[], uint256[], bytes[], bytes32)
+```
+
+
+
+*Returns the details (including the proposalId) of a proposal given its sequential index.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| index | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+| _1 | address[] | undefined |
+| _2 | uint256[] | undefined |
+| _3 | bytes[] | undefined |
+| _4 | bytes32 | undefined |
 
 ### proposalEta
 
@@ -621,7 +721,7 @@ function proposalThreshold() external view returns (uint256)
 
 
 
-*See {Governor-proposalThreshold}.*
+*See {IGovernor-proposalThreshold}.*
 
 
 #### Returns
@@ -680,6 +780,22 @@ function queue(address[] targets, uint256[] values, bytes[] calldatas, bytes32 d
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### queue
+
+```solidity
+function queue(uint256 proposalId) external nonpayable
+```
+
+
+
+*Version of {IGovernorTimelock-queue} with only `proposalId` as an argument.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| proposalId | uint256 | undefined |
+
 ### quorum
 
 ```solidity
@@ -719,54 +835,6 @@ function relay(address target, uint256 value, bytes data) external payable
 | target | address | undefined |
 | value | uint256 | undefined |
 | data | bytes | undefined |
-
-### setProposalThreshold
-
-```solidity
-function setProposalThreshold(uint256 newProposalThreshold) external nonpayable
-```
-
-
-
-*Update the proposal threshold. This operation can only be performed through a governance proposal. Emits a {ProposalThresholdSet} event.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newProposalThreshold | uint256 | undefined |
-
-### setVotingDelay
-
-```solidity
-function setVotingDelay(uint48 newVotingDelay) external nonpayable
-```
-
-
-
-*Update the voting delay. This operation can only be performed through a governance proposal. Emits a {VotingDelaySet} event.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newVotingDelay | uint48 | undefined |
-
-### setVotingPeriod
-
-```solidity
-function setVotingPeriod(uint32 newVotingPeriod) external nonpayable
-```
-
-
-
-*Update the voting period. This operation can only be performed through a governance proposal. Emits a {VotingPeriodSet} event.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newVotingPeriod | uint32 | undefined |
 
 ### state
 
@@ -835,9 +903,9 @@ function version() external view returns (string)
 function votingDelay() external view returns (uint256)
 ```
 
+module:user-config
 
-
-*See {IGovernor-votingDelay}.*
+*Delay, between the proposal is created and the vote starts. The unit this duration is expressed in depends on the clock (see EIP-6372) this contract uses. This can be increased to leave time for users to buy voting power, or delegate it, before the voting of a proposal starts. NOTE: While this interface returns a uint256, timepoints are stored as uint48 following the ERC-6372 clock type. Consequently this value must fit in a uint48 (when added to the current clock). See {IERC6372-clock}.*
 
 
 #### Returns
@@ -852,9 +920,9 @@ function votingDelay() external view returns (uint256)
 function votingPeriod() external view returns (uint256)
 ```
 
+module:user-config
 
-
-*See {IGovernor-votingPeriod}.*
+*Delay between the vote start and vote end. The unit this duration is expressed in depends on the clock (see EIP-6372) this contract uses. NOTE: The {votingDelay} can delay the start of the vote. This must be considered when setting the voting duration compared to the voting delay. NOTE: This value is stored when the proposal is submitted so that possible changes to the value do not affect proposals that have already been submitted. The type used to save it is a uint32. Consequently, while this interface returns a uint256, the value it returns should fit in a uint32.*
 
 
 #### Returns
@@ -951,23 +1019,6 @@ event ProposalQueued(uint256 proposalId, uint256 etaSeconds)
 | proposalId  | uint256 | undefined |
 | etaSeconds  | uint256 | undefined |
 
-### ProposalThresholdSet
-
-```solidity
-event ProposalThresholdSet(uint256 oldProposalThreshold, uint256 newProposalThreshold)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| oldProposalThreshold  | uint256 | undefined |
-| newProposalThreshold  | uint256 | undefined |
-
 ### VoteCast
 
 ```solidity
@@ -1008,40 +1059,6 @@ event VoteCastWithParams(address indexed voter, uint256 proposalId, uint8 suppor
 | weight  | uint256 | undefined |
 | reason  | string | undefined |
 | params  | bytes | undefined |
-
-### VotingDelaySet
-
-```solidity
-event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| oldVotingDelay  | uint256 | undefined |
-| newVotingDelay  | uint256 | undefined |
-
-### VotingPeriodSet
-
-```solidity
-event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| oldVotingPeriod  | uint256 | undefined |
-| newVotingPeriod  | uint256 | undefined |
 
 
 

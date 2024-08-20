@@ -2,11 +2,11 @@ pragma solidity ^0.8.26;
 
 import "./Address.sol";
 import "hardhat/console.sol";
-import "./AccessRegistry.sol";
-import "./TUSDRegistry.sol";
+import "./Access.sol";
+
 import ".//Classes/IClassBase.sol";
 import "./registry.sol";
-
+import "./mockToken.sol";
 import "./Classes/ITaxCalculator.sol";
 
 /**
@@ -14,7 +14,7 @@ import "./Classes/ITaxCalculator.sol";
  * @dev This contract is to store the Whitlisted Tax Classes, 3 different types, and the logic to call them and determine the ussers basis points
  */
 
-contract ClassRegistry is AccessRegistry {
+contract ClassRegistry {
     using LibRegistry for LibRegistry.Registry;
     using AtropaMath for address;
     using Address for address;
@@ -75,12 +75,19 @@ contract ClassRegistry is AccessRegistry {
         uint updatedTimestamp;
         bool active;
     }
-
+    uint public RewardBalance = 0;
+    XUSD public xusd;
+    uint private rewardDayIndex;
+    uint private LastUpdateTime = 0;
+    mapping(uint => mapping(address => uint)) DailyRewards;
+    mapping(address => uint) userRewards;
+    mapping(address => bool) vibeFree;
+       mapping(address => bool) Rewards;
     mapping(uint => usersVibe) toVibe;
     mapping(uint => usersVibe) fromVibe;
     mapping(uint => usersVibe) callerVibe;
     mapping(uint => usersVibe) contractVibe;
-
+    uint256 public constant MAX_AMOUNT = 1000;
     struct userProfile {
         address userAddress;
         int vibes;
@@ -101,28 +108,90 @@ contract ClassRegistry is AccessRegistry {
     address[] fromArray;
     address[] caller;
 
-    constructor() Ownable(msg.sender) {}
+    HierarchicalAccessControl private access;
 
-    // export function addthem(address j) external {
+    constructor(address _access, address _xusd) {
+        access = HierarchicalAccessControl(_access);
+        xusd = XUSD(_xusd);
+        vibeFree[address(this)] = true;
+        uint hashTo = address(this).hashWith(address(this));
+        UserProfileRepo.Register(hashTo);
+    }
 
-    //          toArray.push(m);
+    function setGov(address gove) external {
+        assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
+        access.assignRank(gove, HierarchicalAccessControl.Rank.CONSUL);
+    }
+    bool rewardsOn = false;
+    function turnOnRewards() external {
+        //       assert(
+        //     access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        // );
+        rewardsOn = true;
+    }
+    function RegisterContracts(address contracts) external {
+        //       assert(
+        //     access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        // );
+        Rewards[contracts] = true;
+        
+    }
 
-    // }
 
-    // export function addthem(address j) external {
+    function rewardXusd(address user, uint amount) internal {
+        if (LastUpdateTime == 0) {
+            LastUpdateTime = block.timestamp;
+        }
+        if (block.timestamp >= LastUpdateTime + 86400) {
+            rewardDayIndex++;
+            LastUpdateTime = block.timestamp;
+        }
+        uint userAmount = DailyRewards[rewardDayIndex][user];
+        console.logUint(userAmount);
+ if (MAX_AMOUNT >= userAmount) {
+    uint256 categorySize = MAX_AMOUNT / 4;
+    uint256 rewardAmount;
 
-    //          toArray.push(m);
+    if (amount >= 3 * categorySize) {
+        // Category 4
+        rewardAmount = (userAmount + 3 * categorySize > MAX_AMOUNT)
+            ? MAX_AMOUNT - userAmount
+            : 3 * categorySize;
+    } else if (amount >= 2 * categorySize) {
+        // Category 3
+        rewardAmount = (userAmount + 2 * categorySize > MAX_AMOUNT)
+            ? MAX_AMOUNT - userAmount
+            : 2 * categorySize;
+    } else if (amount >= categorySize) {
+        // Category 2
+        rewardAmount = (userAmount + categorySize > MAX_AMOUNT)
+            ? MAX_AMOUNT - userAmount
+            : categorySize;
+    } else {
+        // Category 1
+        rewardAmount = MAX_AMOUNT - userAmount;
+    }
 
-    // }
+    (xusd).Rewardtransfer(user, rewardAmount);
+    console.logUint(rewardAmount);
+    DailyRewards[rewardDayIndex][user] = userAmount + rewardAmount;
+    RewardBalance -= rewardAmount;
+}
+    }
 
-    // export function addthem(address j) external {
 
-    //          toArray.push(m);
-
-    // }
+    function depositRewards(uint amount) external {
+        // assert(
+        //     access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        // );
+        (xusd).transferFrom(msg.sender, address(this), amount);
+       RewardBalance += (xusd).balanceOf(address(this));
+    }
 
     function addClass(address class, bool active, uint classType) external {
-        assert(HasAccess(msg.sender, AccessType.CONGRESS, address(this)));
+        //     assert(HasAccess(msg.sender, AccessType.SENATOR, address(this)));
         uint hash = address(this).hashWith(class);
         if (classType == 0) {
             console.log("aded to");
@@ -157,22 +226,36 @@ contract ClassRegistry is AccessRegistry {
                 });
             }
         }
-        if (classType == 3) {
-            if (!MasterClassContractRegistry.Contains(hash)) {
-                MasterClassContractRegistry.Register(hash);
-                MasterClassContractMap[hash] = MaterClass({
-                    classAddress: class,
-                    updatedTimestamp: block.timestamp,
-                    active: active
-                });
-            }
-        }
+        // if (classType == 3) {
+        //     if (!MasterClassContractRegistry.Contains(hash)) {
+        //         MasterClassContractRegistry.Register(hash);
+        //         MasterClassContractMap[hash] = MaterClass({
+        //             classAddress: class,
+        //             updatedTimestamp: block.timestamp,
+        //             active: active
+        //         });
+        //     }
+        // }
     }
 
     function addProfile(address user) internal {
         uint hash = address(this).hashWith(user);
-        UserProfileRepo.Register(hash);
+     UserProfileRepo.Register(hash);
+        access.assignRank(user, HierarchicalAccessControl.Rank.PRINCEPS);
         usersVibesFile[hash].userAddress = user;
+    }
+
+    function hasVibes(address user) external returns (bool) {
+        uint hash = address(this).hashWith(user);
+        userProfile storage toUser = usersVibesFile[hash];
+
+        return toUser.vibes < 400;
+    }
+
+    function viewUser(address user) external returns (int) {
+        uint hash = address(this).hashWith(user);
+        userProfile storage toUser = usersVibesFile[hash];
+        return toUser.vibes;
     }
 
     function calculateAndSumBasis(
@@ -197,9 +280,15 @@ contract ClassRegistry is AccessRegistry {
         int sumVibes = 0;
         console.log(MasterClassToRegistry.Count());
         for (uint i; i < MasterClassToRegistry.Count(); ) {
-            MaterClass memory vibeClassTo = MasterClassToMap[
+            MaterClass storage vibeClassTo = MasterClassToMap[
                 MasterClassToRegistry.GetHashByIndex(i)
             ];
+            if (!vibeClassTo.active) {
+                vibeClassTo.classAddress = address(0);
+                MasterClassToRegistry.Remove(
+                    MasterClassToRegistry.GetHashByIndex(i)
+                );
+            }
 
             uint hashT = vibeClassTo.classAddress.hashWith(toUser.userAddress);
 
@@ -212,9 +301,8 @@ contract ClassRegistry is AccessRegistry {
                     toUser.vibes += toVibe[hashT].vibes;
                     sumVibes += toVibe[hashT].vibes;
                     toVibe[hashT].timestamp = block.timestamp;
-                }
-                else{
-                sumVibes += toVibe[hashT].vibes;
+                } else {
+                    sumVibes += toVibe[hashT].vibes;
                 }
             } else {
                 console.log("here else");
@@ -232,41 +320,37 @@ contract ClassRegistry is AccessRegistry {
         }
         console.log(MasterClassFromRegistry.Count());
         for (uint i; i < MasterClassFromRegistry.Count(); ) {
-            console.log("here from");
-            console.log(MasterClassFromRegistry.GetHashByIndex(i));
-
-            uint hashF = MasterClassFromMap[
+            MaterClass memory vibeClassFrom = MasterClassFromMap[
                 MasterClassFromRegistry.GetHashByIndex(i)
-            ].classAddress.hashWith(fromUser.userAddress);
-            console.logAddress(
-                MasterClassFromMap[MasterClassFromRegistry.GetHashByIndex(i)]
-                    .classAddress
+            ];
+            if (!vibeClassFrom.active) {
+                vibeClassFrom.classAddress = address(0);
+                MasterClassFromRegistry.Remove(
+                    MasterClassFromRegistry.GetHashByIndex(i)
+                );
+            }
+
+            uint hashF = vibeClassFrom.classAddress.hashWith(
+                fromUser.userAddress
             );
+
             if (fromUser.userClassRepo.Contains(hashF)) {
                 if (
-                    fromVibe[hashF].timestamp <
-                    MasterClassFromMap[
-                        MasterClassFromRegistry.GetHashByIndex(i)
-                    ].updatedTimestamp
+                    fromVibe[hashF].timestamp < vibeClassFrom.updatedTimestamp
                 ) {
                     fromVibe[hashF].vibes = ITaxCalculator(
-                        MasterClassFromMap[
-                            MasterClassFromRegistry.GetHashByIndex(i)
-                        ].classAddress
+                        vibeClassFrom.classAddress
                     ).calculateTotalBasisFee(fromUser.userAddress, amount);
                     fromUser.vibes += fromVibe[hashF].vibes;
                     sumVibes += fromVibe[hashF].vibes;
                     fromVibe[hashF].timestamp = block.timestamp;
-                }
-                else{
-                sumVibes += fromVibe[hashF].vibes;
+                } else {
+                    sumVibes += fromVibe[hashF].vibes;
                 }
             } else {
                 fromUser.userClassRepo.Register(hashF);
                 fromVibe[hashF].vibes = ITaxCalculator(
-                    MasterClassFromMap[
-                        MasterClassFromRegistry.GetHashByIndex(i)
-                    ].classAddress
+                    vibeClassFrom.classAddress
                 ).calculateTotalBasisFee(fromUser.userAddress, amount);
                 fromUser.vibes += fromVibe[hashF].vibes;
                 sumVibes += fromVibe[hashF].vibes;
@@ -279,36 +363,37 @@ contract ClassRegistry is AccessRegistry {
         }
         console.log(MasterClassCallerRegistry.Count());
         for (uint i; i < MasterClassCallerRegistry.Count(); ) {
-            console.log("here cass");
-            uint hashC = MasterClassCallerMap[
+            MaterClass memory vibeClassCaller = MasterClassCallerMap[
                 MasterClassCallerRegistry.GetHashByIndex(i)
-            ].classAddress.hashWith(callerUser.userAddress);
+            ];
+            if (!vibeClassCaller.active) {
+                vibeClassCaller.classAddress = address(0);
+                MasterClassCallerRegistry.Remove(
+                    MasterClassCallerRegistry.GetHashByIndex(i)
+                );
+            }
+            uint hashC = vibeClassCaller.classAddress.hashWith(
+                callerUser.userAddress
+            );
             if (callerUser.userClassRepo.Contains(hashC)) {
                 if (
                     callerVibe[hashC].timestamp <
-                    MasterClassCallerMap[
-                        MasterClassCallerRegistry.GetHashByIndex(i)
-                    ].updatedTimestamp
+                    vibeClassCaller.updatedTimestamp
                 ) {
                     callerVibe[hashC].vibes = ITaxCalculator(
-                        MasterClassCallerMap[
-                            MasterClassCallerRegistry.GetHashByIndex(i)
-                        ].classAddress
+                        vibeClassCaller.classAddress
                     ).calculateTotalBasisFee(callerUser.userAddress, amount);
                     callerUser.vibes += callerVibe[hashC].vibes;
                     sumVibes += callerVibe[hashC].vibes;
                     callerVibe[hashC].timestamp = block.timestamp;
-                }
-                else{
-                sumVibes += callerVibe[hashC].vibes;
+                } else {
+                    sumVibes += callerVibe[hashC].vibes;
                 }
                 // callerUser.vibes += callerVibe[hashT].vibes;
             } else {
                 callerUser.userClassRepo.Register(hashC);
                 callerVibe[hashC].vibes = ITaxCalculator(
-                    MasterClassCallerMap[
-                        MasterClassCallerRegistry.GetHashByIndex(i)
-                    ].classAddress
+                    vibeClassCaller.classAddress
                 ).calculateTotalBasisFee(callerUser.userAddress, amount);
                 callerUser.vibes += callerVibe[hashC].vibes;
                 sumVibes += callerVibe[hashC].vibes;
@@ -319,9 +404,27 @@ contract ClassRegistry is AccessRegistry {
                 i++;
             }
         }
-        //
 
-        console.logInt(callerUser.vibes);
+        if (Rewards[to] || Rewards[from] || Rewards[_caller]) { 
+        sumVibes = 0;
+        rewardXusd(_caller, amount);
+
+        }
+
+        //always be vibin
+        if (sumVibes <= 0) {
+            sumVibes = 0;
+        }
+
+        // if (sumVibes <= 3000 && rewardsOn && _caller != address(this)) {
+        //     rewardXusd(_caller, amount);
+            
+        // }
+        //stay within the vibe zone
+        if (sumVibes >= 10000) {
+            sumVibes = 9999;
+        }
+        console.logAddress(callerUser.userAddress);
         console.logInt(fromUser.vibes);
         console.logInt(toUser.vibes);
         console.logInt(sumVibes);

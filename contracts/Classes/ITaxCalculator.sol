@@ -8,14 +8,17 @@ function calculateTotalBasisFee(address origin, uint amount) external returns(in
 
 pragma solidity ^0.8.26;
 
-interface ITaxCalculatorContract {
-function calculateTotalBasisFee(address origin, uint amount) external returns(int);
+
+interface IVibeCalculatorContract{
+function calculateTotalBasisFeeContract(address to, address from, address caller, uint amount) external  returns (int);
 }
-
-
+interface IVibeCalculatorNow{
+function calculateTotalBasisFeeNow(address to, address from, address caller, uint amount) external  returns (int);
+}
+      
 
 
 interface ITaxCalculator{
-function calculateTotalBasisFee(address origin, uint amount) external returns(int);
+function calculateTotalBasisFee(address addy, uint amount) external  returns (int); 
 
 }

@@ -1,4 +1,4 @@
-# MyTokenMock
+# XUSD
 
 
 
@@ -6,14 +6,14 @@
 
 
 
-*Implementation of a mock token with tax functionalities.*
+*A mock token contract inheriting ERC20Taxable with voting and delegate functionalities.*
 
 ## Methods
 
-### RigistryBurn
+### Rewardtransfer
 
 ```solidity
-function RigistryBurn(address account, uint256 amount) external nonpayable
+function Rewardtransfer(address to, uint256 amount) external nonpayable returns (bool)
 ```
 
 
@@ -24,8 +24,30 @@ function RigistryBurn(address account, uint256 amount) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
+| to | address | undefined |
 | amount | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
+
+### addWhitelistedContract
+
+```solidity
+function addWhitelistedContract(address contractAddr) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| contractAddr | address | undefined |
 
 ### allowance
 
@@ -35,7 +57,7 @@ function allowance(address owner, address spender) external view returns (uint25
 
 
 
-*See {IERC20-allowance}.*
+*Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called.*
 
 #### Parameters
 
@@ -58,7 +80,7 @@ function approve(address spender, uint256 amount) external nonpayable returns (b
 
 
 
-*See {IERC20-approve}.*
+
 
 #### Parameters
 
@@ -81,7 +103,7 @@ function balanceOf(address account) external view returns (uint256)
 
 
 
-*See {IERC20-balanceOf}.*
+*Returns the value of tokens owned by `account`.*
 
 #### Parameters
 
@@ -95,10 +117,10 @@ function balanceOf(address account) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### burn
+### burnAddress
 
 ```solidity
-function burn() external view returns (address)
+function burnAddress() external view returns (address)
 ```
 
 
@@ -142,7 +164,7 @@ function decimals() external view returns (uint8)
 
 
 
-*Returns the number of decimals used to get its user representation.*
+*Returns the decimals places of the token.*
 
 
 #### Returns
@@ -159,7 +181,7 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 
 
 
-*Atomically decreases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -174,13 +196,29 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 |---|---|---|
 | _0 | bool | undefined |
 
+### delegate
+
+```solidity
+function delegate(address delegatee) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| delegatee | address | undefined |
+
 ### feeBasisPoints
 
 ```solidity
 function feeBasisPoints() external view returns (uint256)
 ```
 
-The fee rate in basis points (1 basis point = 0.01%).
+
 
 
 
@@ -197,7 +235,7 @@ The fee rate in basis points (1 basis point = 0.01%).
 function feeRecipient() external view returns (address)
 ```
 
-The address that will receive the collected fees.
+
 
 
 
@@ -208,10 +246,44 @@ The address that will receive the collected fees.
 |---|---|---|
 | _0 | address | undefined |
 
-### getUserBurn
+### getTaxAddress
 
 ```solidity
-function getUserBurn(address user) external view returns (uint256)
+function getTaxAddress() external view returns (address)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
+### getTaxRate
+
+```solidity
+function getTaxRate() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### getVotes
+
+```solidity
+function getVotes(address account) external view returns (uint256)
 ```
 
 
@@ -222,7 +294,29 @@ function getUserBurn(address user) external view returns (uint256)
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
+| account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### getVotesContracts
+
+```solidity
+function getVotesContracts(address account) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
 
 #### Returns
 
@@ -238,7 +332,7 @@ function increaseAllowance(address spender, uint256 addedValue) external nonpaya
 
 
 
-*Atomically increases the allowance granted to `spender` by the caller.*
+
 
 #### Parameters
 
@@ -253,21 +347,43 @@ function increaseAllowance(address spender, uint256 addedValue) external nonpaya
 |---|---|---|
 | _0 | bool | undefined |
 
-### isExcludedFromTaxFee
+### isExcludedFromTax
 
 ```solidity
-function isExcludedFromTaxFee(address account) external view returns (bool)
+function isExcludedFromTax(address account) external view returns (bool)
 ```
 
 
 
-*Returns the status of exclusion from tax fee mechanism for a given account.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
 | account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
+
+### isWhitelistedContract
+
+```solidity
+function isWhitelistedContract(address contractAddr) external view returns (bool)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| contractAddr | address | undefined |
 
 #### Returns
 
@@ -283,14 +399,14 @@ function mint(address to, uint256 amount) external nonpayable
 
 
 
-*Mints new tokens.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| to | address | The address to mint the tokens to. |
-| amount | uint256 | The amount of tokens to mint. |
+| to | address | undefined |
+| amount | uint256 | undefined |
 
 ### name
 
@@ -343,6 +459,39 @@ function registry() external view returns (contract ClassRegistry)
 |---|---|---|
 | _0 | contract ClassRegistry | undefined |
 
+### registryBurn
+
+```solidity
+function registryBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
+### removeWhitelistedContract
+
+```solidity
+function removeWhitelistedContract(address contractAddr) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| contractAddr | address | undefined |
+
 ### renounceOwnership
 
 ```solidity
@@ -351,24 +500,8 @@ function renounceOwnership() external nonpayable
 
 
 
-*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.*
+*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.*
 
-
-### setFeeRecipient
-
-```solidity
-function setFeeRecipient(address _feeRecipient) external nonpayable
-```
-
-Sets a new fee recipient address.
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _feeRecipient | address | The new address that will receive the collected fees. |
 
 ### setRegistry
 
@@ -403,40 +536,6 @@ function symbol() external view returns (string)
 |---|---|---|
 | _0 | string | undefined |
 
-### taxAddress
-
-```solidity
-function taxAddress() external view returns (address)
-```
-
-
-
-*Returns the deposit address for tax.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### taxFeePerMille
-
-```solidity
-function taxFeePerMille() external view returns (uint256)
-```
-
-
-
-*Returns the per mille rate for taxable mechanism.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
 ### totalBurned
 
 ```solidity
@@ -462,7 +561,7 @@ function totalSupply() external view returns (uint256)
 
 
 
-*See {IERC20-totalSupply}.*
+*Returns the value of tokens in existence.*
 
 
 #### Returns
@@ -479,14 +578,14 @@ function transfer(address to, uint256 amount) external nonpayable returns (bool)
 
 
 
-*Transfers tokens to `to`. Overrides the base implementation to include tax processing.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| to | address | The address to transfer tokens to. |
-| amount | uint256 | The amount of tokens to transfer. |
+| to | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
@@ -502,15 +601,15 @@ function transferFrom(address from, address to, uint256 amount) external nonpaya
 
 
 
-*Transfers tokens from `from` to `to` using the allowance mechanism. Overrides the base implementation to include tax processing.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| from | address | The address to transfer tokens from. |
-| to | address | The address to transfer tokens to. |
-| amount | uint256 | The amount of tokens to transfer. |
+| from | address | undefined |
+| to | address | undefined |
+| amount | uint256 | undefined |
 
 #### Returns
 
@@ -534,6 +633,23 @@ function transferOwnership(address newOwner) external nonpayable
 |---|---|---|
 | newOwner | address | undefined |
 
+### whitelistBurn
+
+```solidity
+function whitelistBurn(address account, uint256 amount) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| amount | uint256 | undefined |
+
 
 
 ## Events
@@ -556,13 +672,13 @@ event Approval(address indexed owner, address indexed spender, uint256 value)
 | spender `indexed` | address | undefined |
 | value  | uint256 | undefined |
 
-### FeeBasisPointsUpdated
+### DelegateChanged
 
 ```solidity
-event FeeBasisPointsUpdated(uint256 newFeeBasisPoints)
+event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate)
 ```
 
-Event emitted when the fee basis points are updated.
+
 
 
 
@@ -570,15 +686,17 @@ Event emitted when the fee basis points are updated.
 
 | Name | Type | Description |
 |---|---|---|
-| newFeeBasisPoints  | uint256 | undefined |
+| delegator `indexed` | address | undefined |
+| fromDelegate `indexed` | address | undefined |
+| toDelegate `indexed` | address | undefined |
 
-### FeeRecipientUpdated
+### DelegateVotesChanged
 
 ```solidity
-event FeeRecipientUpdated(address newFeeRecipient)
+event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint256 newVotes)
 ```
 
-Event emitted when the fee recipient is updated.
+
 
 
 
@@ -586,7 +704,9 @@ Event emitted when the fee recipient is updated.
 
 | Name | Type | Description |
 |---|---|---|
-| newFeeRecipient  | address | undefined |
+| delegate `indexed` | address | undefined |
+| previousVotes  | uint256 | undefined |
+| newVotes  | uint256 | undefined |
 
 ### OwnershipTransferred
 
@@ -623,40 +743,22 @@ event Transfer(address indexed from, address indexed to, uint256 value)
 | to `indexed` | address | undefined |
 | value  | uint256 | undefined |
 
-
-
-## Errors
-
-### OwnableInvalidOwner
+### WhitelistContract
 
 ```solidity
-error OwnableInvalidOwner(address owner)
+event WhitelistContract(address indexed contractAddr, bool status)
 ```
 
 
 
-*The owner is not a valid owner account. (eg. `address(0)`)*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| owner | address | undefined |
+| contractAddr `indexed` | address | undefined |
+| status  | bool | undefined |
 
-### OwnableUnauthorizedAccount
-
-```solidity
-error OwnableUnauthorizedAccount(address account)
-```
-
-
-
-*The caller account is not authorized to perform an operation.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
 
 

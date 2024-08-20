@@ -25,19 +25,8 @@ library AtropaMath  {
     //         _mint(address(this), 1 * 10 ** decimals());
     //     return RandomNumberGeneratorToken.Random();
     // }
-    function hashWithD(address a, address b, address c, address g) public pure returns (uint256 hash) {        
-        hash = 0;
-    
-        uint160 _b = uint160(b) / 15;
-        unchecked {
-            while(hash == 0) {
-                hash = (hashWith(a,b)**hashWith(c,g))%MotzkinPrime;
-                _b = _b/2;
-            }
-        }
-        //return modExp(uint256(uint160(a)), uint256(uint160(b)), MotzkinPrime);
-    }
-    function hashWith(address a, address b) public pure returns (uint256 hash) {        
+
+ function hashWith(address a, address b) public returns (uint256 hash) {        
         hash = 0;
         uint160 _a = uint160(a);
         uint160 _b = uint160(b) / 15;
@@ -47,7 +36,7 @@ library AtropaMath  {
                 _b = _b/2;
             }
         }
-        //return modExp(uint256(uint160(a)), uint256(uint160(b)), MotzkinPrime);
+        return modExp(uint256(uint160(a)), uint256(uint160(b)), MotzkinPrime);
     }
 
 
