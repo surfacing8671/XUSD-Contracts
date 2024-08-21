@@ -2,7 +2,7 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-
+import "./VibeBase.sol";
 /**
  * @title ReferralBasedTaxCalculator
  * @dev A tax calculator that provides a discount for referred addresses.
@@ -11,6 +11,7 @@ contract ReferralBasedTaxCalculator is ITaxCalculator {
     int public immutable baseRateBasisPoints;
     int public immutable referralDiscountBasisPoints;
     mapping(address => address) public referrals;
+       string public Description;
 
     /**
      * @dev Constructor to set the base rate and referral discount.
@@ -19,10 +20,12 @@ contract ReferralBasedTaxCalculator is ITaxCalculator {
      */
     constructor(
         int _baseRateBasisPoints,
-        int _referralDiscountBasisPoints
+        int _referralDiscountBasisPoints,
+        string memory _description
     ) {
         baseRateBasisPoints = _baseRateBasisPoints;
         referralDiscountBasisPoints = _referralDiscountBasisPoints;
+        Description = _description;
     }
 
     /**
@@ -32,6 +35,10 @@ contract ReferralBasedTaxCalculator is ITaxCalculator {
      */
     function registerReferral(address referrer, address referred) external {
         referrals[referred] = referrer;
+    }
+
+        function getDescription() external view returns(string memory){
+        return Description;
     }
 
     function calculateTotalBasisFee(address addy, uint amount) external view override returns (int) {

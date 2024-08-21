@@ -2,16 +2,16 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-
+import "./VibeBase.sol";
 /**
  * @title HoldingPeriodBasedTaxCalculator
  * @dev A tax calculator that imposes different tax rates based on the holding period of an asset.
  */
-contract HoldingPeriodBasedTaxCalculator is ITaxCalculator {
+contract HoldingPeriodBasedTaxCalculator is VibeBase {
     int public immutable shortTermRateBasisPoints;
     int public immutable longTermRateBasisPoints;
     uint256 public immutable holdingPeriodThreshold; // Time in seconds for the threshold between short and long term
-
+       string public Description;
     mapping(address => uint256) public purchaseTimestamps;
 
     /**
@@ -23,8 +23,9 @@ contract HoldingPeriodBasedTaxCalculator is ITaxCalculator {
     constructor(
         int _shortTermRateBasisPoints,
         int _longTermRateBasisPoints,
-        uint256 _holdingPeriodThreshold
-    ) {
+        uint256 _holdingPeriodThreshold,
+ string memory _description
+    )  VibeBase(_description) {
         shortTermRateBasisPoints = _shortTermRateBasisPoints;
         longTermRateBasisPoints = _longTermRateBasisPoints;
         holdingPeriodThreshold = _holdingPeriodThreshold;

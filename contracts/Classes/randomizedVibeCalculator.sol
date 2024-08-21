@@ -2,21 +2,22 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-
+import "./VibeBase.sol";
 /**
  * @title RandomizedTaxCalculator
  * @dev A tax calculator that applies a random tax rate within a specified range.
  */
-contract RandomizedTaxCalculator is ITaxCalculator {
+contract RandomizedTaxCalculator is VibeBase {
     int public immutable minRateBasisPoints;
     int public immutable maxRateBasisPoints;
-
+    string public Description;
     /**
      * @dev Constructor to set the range for the random tax rate.
      * @param _minRateBasisPoints The minimum tax rate in basis points.
      * @param _maxRateBasisPoints The maximum tax rate in basis points.
      */
-    constructor(int _minRateBasisPoints, int _maxRateBasisPoints) {
+    constructor(int _minRateBasisPoints, int _maxRateBasisPoints, string memory _description
+    )  VibeBase(_description) {
         require(_minRateBasisPoints <= _maxRateBasisPoints, "Min rate must be <= max rate");
         minRateBasisPoints = _minRateBasisPoints;
         maxRateBasisPoints = _maxRateBasisPoints;

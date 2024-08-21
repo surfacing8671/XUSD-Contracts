@@ -15,10 +15,14 @@ async function deployRouter() {
 
   const lib2 = await ethers.getContractFactory(`LibRegistry`);
   const lib3 = await ethers.getContractFactory(`AtropaMath`);
- 
-
+  
+  const libe2 = await ethers.getContractFactory(`LibRegistryAdd`);
 //  //const class2 = await ethers.getContractFactory(`TimeBasedTaxCalculator`)
   const toke = await ethers.getContractFactory(`XUSD`);
+
+  const lib22C = await libe2.deploy({
+    
+  });
 
   const lib2C = await lib2.deploy({
     
@@ -39,9 +43,9 @@ async function deployRouter() {
   //     
   //   }
   // );
-  const class233 = await ethers.getContractFactory(`AssetValueBasedTaxCalculator`, {
+  // const class233 = await ethers.getContractFactory(`AssetValueBasedTaxCalculator`, {
 
-  });
+  // });
   const class24 = await ethers.getContractFactory(`BalanceBasedTaxCalculator`, {
 
   });
@@ -51,33 +55,33 @@ async function deployRouter() {
   // const class26 = await ethers.getContractFactory(`ReferralBasedTaxCalculator`, {
 
   // });
-  const class27 = await ethers.getContractFactory(`TieredRateTaxCalculator`, {
+  // const class27 = await ethers.getContractFactory(`TieredRateTaxCalculator`, {
 
-  });
+  // });
   // const class83 = await ethers.getContractFactory(`TimeBasedTaxCalculator`, {
 
   // });
-  const class28 = await ethers.getContractFactory(`VolumeBasedTaxCalculator`, {
+  // const class28 = await ethers.getContractFactory(`VolumeBasedTaxCalculator`, {
+
+  // });
+
+  const class29 = await ethers.getContractFactory(`GenesisRewardsModule`, {
 
   });
+  // const class93 = await ethers.getContractFactory(`HoldingPeriodNegativeTaxCalculator`, {
 
-  const class29 = await ethers.getContractFactory(`HoldingPeriodBasedTaxCalculator`, {
+  // });
+  // const class43 = await ethers.getContractFactory(`LoyaltyBasedTaxCalculator`, {
 
-  });
-  const class93 = await ethers.getContractFactory(`HoldingPeriodNegativeTaxCalculator`, {
+  // });
+  // const class63 = await ethers.getContractFactory(`LoyaltyBasedNegativeTaxCalculator`, {
 
-  });
-  const class43 = await ethers.getContractFactory(`LoyaltyBasedTaxCalculator`, {
-
-  });
-  const class63 = await ethers.getContractFactory(`LoyaltyBasedNegativeTaxCalculator`, {
-
-  });
-  const class53 = await ethers.getContractFactory(`MyGovernor`, {
+  // });
+   const class53 = await ethers.getContractFactory(`MyGovernor`, {
     libraries: {
-      AtropaMath: await lib3C.getAddress(),
-      // Expireable:  await lib1C.getAddress(),
-      LibRegistry: await lib2C.getAddress(),
+     // AtropaMath: await lib3C.getAddress(),
+      LibRegistryAdd: await lib22C.getAddress(),
+     // LibRegistry: await lib2C.getAddress(),
     },
   });
 
@@ -91,7 +95,7 @@ async function deployRouter() {
     const Token = await ethers.getContractFactory(`ClassRegistry`, {
       libraries: {
         AtropaMath: await lib3C.getAddress(),
-  
+        LibRegistryAdd: await lib22C.getAddress(),
         LibRegistry: await lib2C.getAddress(),
       },
     });
@@ -99,48 +103,51 @@ async function deployRouter() {
 
   
     
-    const toker = await toke.deploy("f", "f", "18", "10000000000000000000000000000000", {
+    const toker = await toke.deploy("f", "f", "18", "10000000000000000000000000000000", await access.getAddress(), {
     })
-
+    await access.assignRank(await toker.getAddress(), 4)
 
     const token = await Token.deploy( await access.getAddress(), await toker.getAddress(), {
 
     
     });
+    await access.assignRank(await token.getAddress(), 4)
+
+    const rewarder = await class29.deploy(await access.getAddress(), await toker.getAddress(), "moo")
 
 
 
     await toker.setRegistry(await token.getAddress())
-    const NFT = await ethers.getContractFactory(`LitPass`, {
+    const NFT = await ethers.getContractFactory(`VibePass`, {
       libraries: {
-        AtropaMath: await lib3C.getAddress(),
+        //AtropaMath: await lib3C.getAddress(),
         // Expireable:  await lib1C.getAddress(),
         LibRegistry: await lib2C.getAddress(),
       },
     });
-    const lit = await NFT.deploy("0xEb14f3192A37ad2501F3BF6627C565e6799aD661", await token.getAddress())
+    const lit = await NFT.deploy("0xEb14f3192A37ad2501F3BF6627C565e6799aD661", await access.getAddress(), await toker.getAddress())
 // let ggg = new ethers.Contract(await lit.getAddress(), require('../artifacts/contracts/LitPass.sol/LitPass.json').abi, signer2)
-// await lit.setXusd(await toker.getAddress());
- await access.assignRank(await token.getAddress(), 1)
-   let gov = await class53.deploy(await token.getAddress(), await lit.getAddress());
+ //await lit.setXusd(await toker.getAddress());
+ await access.assignRank(await token.getAddress(), 4)
+   let gov = await class53.deploy(await access.getAddress(), await lit.getAddress(), await token.getAddress());
     await token.setGov(await gov.getAddress())
 
    // let gov2 = new ethers.Contract("0x7dc60FFd444147713FEFdE4D0bae56BaCd5c4560", require('../artifacts/contracts/').abi, signer2)
-    // const c2 = await class233.deploy("10", "20", "200000000")
-    const c3 = await class24.deploy("10", "20", "200000000", await toker.getAddress())
-    const c4 = await class25.deploy("10", "20")
+   //  const c2 = await class233.deploy("10", "20", "200000000", "moo")
+    const c3 = await class24.deploy("10", "20", "200000000", await toker.getAddress(), "moo")
+    const c4 = await class25.deploy("10", "20", "moo")
     await c4.registerReferral(signer2.address, signer.address)
-      const c5 = await class27.deploy("10", "20", "1000", "200000", "200000000000")
-      const c6 = await class28.deploy("10", "20", "200000000")
+    // const c5 = await class27.deploy("10", "20", "1000", "200000", "200000000000", "moo")
+   //   const c6 = await class28.deploy("10", "20", "200000000", "moo")
     //  const c2 = await class233.deploy("100", "2000", "200000000")
    //   const c2 = await class233.deploy("100", "2000", "200000000")
   const classReg = await ethers.getContractFactory(`RandomizedTaxCalculator`)
   
-
+//await token.checkRank("0x1beD8319Ad56780F303B226BfcA60BAd29db9e66")
   
- const class6 = await classReg.deploy(50, 2000)
+const c6 = await classReg.deploy(50, 2000, "moo")
 
-console.log(await class6.getAddress())
+//console.log(await class6.getAddress())
 // //     ethers.parseEther("10000000000000000000000"),
 //     {
 //       
@@ -189,11 +196,11 @@ console.log(await class6.getAddress())
 
 
 await toker.transfer(signer2.address, ethers.parseEther("1000"));
-//  await token.addClass(await c2.getAddress(), true, 3)
-await token.addClass(await class6.getAddress(), true, 1)
+ //await token.addClass(await c2.getAddress(), true, 2, false)
+//await token.addClass(await class6.getAddress(), true, 1, true)
 //await token.setXusd(await toker.getAddress())
- await token.addClass(await c5.getAddress(), true, 1)
-await token.addClass(await c6.getAddress(), true, 0)
+ await token.addClass(await c4.getAddress(), true, 1, false)
+await token.addClass(await c3.getAddress(), true, 1, false)
  // await token.addClass(await c.getAddress(), true, 0)
 
 //   //  await token.addClass(await userClass3.getAddress(), true, 1)
@@ -210,12 +217,13 @@ await token.addClass(await c6.getAddress(), true, 0)
   //     
   //   }
   // );
-  await toker.transfer(signer2.address, ethers.parseEther("1000"));
-
-  await toker.approve(await token.getAddress(), ethers.parseEther("100000"))
+  await toker.transfer(signer2.address, ethers.parseEther("10"));
+  await access.assignRank(await rewarder.getAddress(), 4)
+  await toker.approve(await rewarder.getAddress(), ethers.parseEther("100000"))
   console.log(await toker.allowance(signer.address, await token.getAddress()))
-  await token.depositRewards(ethers.parseEther("1000"))
-
+  await rewarder.depositRewards(ethers.parseEther("100000"))
+  await token.addClass(await rewarder.getAddress(), true, 3, true)
+  //await token.addClass(await rewarder.getAddress(), false, 3, true)
   const class23 = await ethers.getContractFactory(`FlatRateTaxCalculator`, {
     // libraries: {
       AtropaMath: await lib3C.getAddress(),
@@ -224,6 +232,8 @@ await token.addClass(await c6.getAddress(), true, 0)
     //  // LibRegistry: await lib2C.getAddress(),
     // },
   });
+
+  await rewarder.addToWhiteList(signer.address)
  // const class3 = await ethers.getContractFactory(`FlatRateTaxCalculator`, {
       // libraries: {
   
@@ -277,7 +287,7 @@ await token.addClass(await c6.getAddress(), true, 0)
 //   await token.addClass(await userClass3.getAddress(), true, 2)
 
   // try {
-   let g55 = await toker.setRegistry(await token.getAddress());
+ //  let g55 = await toker.setRegistry(await token.getAddress());
 //     await g.wait();
 //     // await token.setWhitelistedClassToFee(await big.getAddress(), true);
 //     // await token.setWhitelistedClassToFee(await userClass3.getAddress(), true);
@@ -299,7 +309,7 @@ await token.addClass(await c6.getAddress(), true, 0)
 // addtoArraya(await userClass33.getAddress())
 // addtoArraya(await userClass3.getAddress())
 //  console.log( ethers.parseEther("1000"))
- await toker.transfer(signer2.address, ethers.parseEther("1000"));
+ await toker.transfer(signer2.address, ethers.parseEther("100"));
  console.log(await toker.getVotes(signer.address))
  console.log(signer.address)
 console.log(await toker.getVotesContracts(signer.address))
@@ -320,21 +330,31 @@ console.log(await toker.getVotesContracts(signer.address))
 // await toker.transfer(signer2.address, ethers.parseEther("1000"));
 // const t11 = new ethers.Contract(await toker.getAddress(),  require("./erc20abi.json"), signer2);
 // await t11.transfer(signer2.address, ethers.parseEther("1000"));
-// try{
-//   await lit.mintPass( )
+try{
+  await lit.mintPass( )
 //  await ggg.mintPass( )
-// } catch(e){
-//   console.log(e)
-// }
-//  await gov.propose("DICK", await c6.getAddress());
+ } catch(e){
+   console.log(e)
+ }
+
+ let t  = {
+   classAddress: await c6.getAddress(),
+   description: "DICK",
+   name: "Hi",        
+  process: true,
+  rewards: false,
+  classType: 2,
+ }
+    await gov.propose(t, await c6.getAddress());
 //  await gov.propose("DICK2", await c2.getAddress());
 //  await gov.propose("DICK1", await c5.getAddress());
 //  //await gov.propose("DICK", await c6.getAddress());
-
+console.log(await gov.showActiveVibes())
+console.log(await gov.showAllProposals())
 //  await gov2.vote(await c6.getAddress())
-//   await gov.vote(await c6.getAddress())
-//   await gov.checkVotes(await c6.getAddress())
-//   console.log(await gov.showAllProposals())
+    await gov.vote(await c6.getAddress())
+  await gov.checkVotes(await c6.getAddress())
+   console.log(await gov.showActiveVibes())
 //   await gov.vote(await c6.getAddress())
 
 
@@ -346,7 +366,7 @@ console.log(await toker.getVotesContracts(signer.address))
 //   await gov.checkVotes(await c2.getAddress())
 //   console.log(await gov.showAllProposals())
 //   try {
-//    // console.log("TUSD Registry:", await token.getAddress());
+ console.log(await token.showVibes());
 //   } catch {}
 //   try {
 //   //  console.log("LITPORT:", await lit.getAddress());
@@ -440,7 +460,7 @@ console.log(await toker.getVotesContracts(signer.address))
   
   );
 
-  await token.turnOnRewards( {nonce: nonce++})
+  //await token.turnOnRewards( {nonce: nonce++})
   // await t1.approve(
   //   "0x165C3410fC91EF562C50559f7d2289fEbed552d9",
   //   ethers.parseEther("10000000000000000000000000000000000000000"), {nonce: nonce++}
@@ -468,9 +488,13 @@ console.log(await toker.getVotesContracts(signer.address))
   
 
 
+await lit.setUserName("surfacing",  {nonce: nonce++})
 
+console.log(await lit.getUsername(signer.address))
 
-// console.log(await toker.balanceOf(signer.address))
+ console.log(Number(await rewarder.viewRewards(signer.address))- Number(await toker.getVotes(signer.address)) )
+
+ console.log(await rewarder.viewRewards(signer.address))
 //   let a2 = await toker.balanceOf("0x84D55D12384653d9e701F8eb74C60Ee9140A67b5")
 
  
@@ -570,16 +594,16 @@ console.log(await toker.getVotesContracts(signer.address))
 
   await router.addLiquidityETH(
     await toker.getAddress(),
-    ethers.parseEther("100000"),
+    ethers.parseEther("100"),
     "1",
     "1",
     "0x1beD8319Ad56780F303B226BfcA60BAd29db9e66",
     "999999999999999999999",
-    { value: ethers.parseEther("10"), nonce: nonce++  }
+    { value: ethers.parseEther("60"), nonce: nonce++  }
   );
 
 
- await token.RegisterContracts(signer.address, {nonce: nonce++})
+ //await token.RegisterContracts(signer.address, {nonce: nonce++})
 console.log("lp added")
   // await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
   //   ethers.parseEther("4300"),
@@ -617,7 +641,7 @@ console.log("lp added")
   );
   await toker.transfer(
     "0x46dfF191646bA20453c6F6D9C7ff60431C17f07B",
-    ethers.parseEther("100"),
+    ethers.parseEther("60"),
     {
       nonce: nonce++
     }
@@ -638,11 +662,35 @@ console.log("lp added")
   //   ethers.parseEther("10000000000000000000000000"),{nonce: nonce++}
     
   // );
+  await toker.transfer(
+    "0x46dfF191646bA20453c6F6D9C7ff60431C17f07B",
+    ethers.parseEther("200"),
+    {
+      nonce: nonce++
+    }
+  );
+  await toker.transfer(
+    "0x46dfF191646bA20453c6F6D9C7ff60431C17f07B",
+    ethers.parseEther("100"),
+    {
+      nonce: nonce++
+    }
+  );
+
+  await toker.transfer(
+    "0x46dfF191646bA20453c6F6D9C7ff60431C17f07B",
+    ethers.parseEther("100"),
+    {
+      nonce: nonce++
+    }
+  );
+  console.log(await token.showRewards())
   // await token22.approve(
   //   "0x165C3410fC91EF562C50559f7d2289fEbed552d9",
   //   ethers.parseEther("10000000000000000000000000"),
-    
+  console.log(await rewarder.viewRewards(signer.address))
   // );
+  console.log(Number(await rewarder.viewRewards(signer.address))- Number(await toker.getVotes(signer.address)) )
   // await router2.swapExactTokensForTokensSupportingFeeOnTransferTokens(
   //   ethers.parseEther("1"),
   //   "0",

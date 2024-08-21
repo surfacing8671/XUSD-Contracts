@@ -95,6 +95,23 @@ function approve(address spender, uint256 amount) external nonpayable returns (b
 |---|---|---|
 | _0 | bool | undefined |
 
+### assignRank
+
+```solidity
+function assignRank(address account, enum HierarchicalAccessControl.Rank rank) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| rank | enum HierarchicalAccessControl.Rank | undefined |
+
 ### balanceOf
 
 ```solidity
@@ -212,6 +229,22 @@ function delegate(address delegatee) external nonpayable
 |---|---|---|
 | delegatee | address | undefined |
 
+### downgradeRank
+
+```solidity
+function downgradeRank(address account) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+
 ### feeBasisPoints
 
 ```solidity
@@ -245,6 +278,28 @@ function feeRecipient() external view returns (address)
 | Name | Type | Description |
 |---|---|---|
 | _0 | address | undefined |
+
+### getRank
+
+```solidity
+function getRank(address account) external view returns (enum HierarchicalAccessControl.Rank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | enum HierarchicalAccessControl.Rank | undefined |
 
 ### getTaxAddress
 
@@ -323,6 +378,29 @@ function getVotesContracts(address account) external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
+
+### hasRank
+
+```solidity
+function hasRank(enum HierarchicalAccessControl.Rank requiredRank, address account) external view returns (bool)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
+| account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
 
 ### increaseAllowance
 
@@ -425,23 +503,6 @@ function name() external view returns (string)
 |---|---|---|
 | _0 | string | undefined |
 
-### owner
-
-```solidity
-function owner() external view returns (address)
-```
-
-
-
-*Returns the address of the current owner.*
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
 ### registry
 
 ```solidity
@@ -492,16 +553,21 @@ function removeWhitelistedContract(address contractAddr) external nonpayable
 |---|---|---|
 | contractAddr | address | undefined |
 
-### renounceOwnership
+### revokeRank
 
 ```solidity
-function renounceOwnership() external nonpayable
+function revokeRank(address account) external nonpayable
 ```
 
 
 
-*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.*
 
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
 
 ### setRegistry
 
@@ -617,21 +683,21 @@ function transferFrom(address from, address to, uint256 amount) external nonpaya
 |---|---|---|
 | _0 | bool | undefined |
 
-### transferOwnership
+### upgradeRank
 
 ```solidity
-function transferOwnership(address newOwner) external nonpayable
+function upgradeRank(address account) external nonpayable
 ```
 
 
 
-*Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.*
+
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| newOwner | address | undefined |
+| account | address | undefined |
 
 ### whitelistBurn
 
@@ -708,10 +774,10 @@ event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint
 | previousVotes  | uint256 | undefined |
 | newVotes  | uint256 | undefined |
 
-### OwnershipTransferred
+### RankAssigned
 
 ```solidity
-event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
+event RankAssigned(address indexed account, enum HierarchicalAccessControl.Rank rank)
 ```
 
 
@@ -722,8 +788,58 @@ event OwnershipTransferred(address indexed previousOwner, address indexed newOwn
 
 | Name | Type | Description |
 |---|---|---|
-| previousOwner `indexed` | address | undefined |
-| newOwner `indexed` | address | undefined |
+| account `indexed` | address | undefined |
+| rank  | enum HierarchicalAccessControl.Rank | undefined |
+
+### RankDowngraded
+
+```solidity
+event RankDowngraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+| newRank  | enum HierarchicalAccessControl.Rank | undefined |
+
+### RankRevoked
+
+```solidity
+event RankRevoked(address indexed account)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+
+### RankUpgraded
+
+```solidity
+event RankUpgraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+| newRank  | enum HierarchicalAccessControl.Rank | undefined |
 
 ### Transfer
 
@@ -760,5 +876,41 @@ event WhitelistContract(address indexed contractAddr, bool status)
 | contractAddr `indexed` | address | undefined |
 | status  | bool | undefined |
 
+
+
+## Errors
+
+### AccessDenied
+
+```solidity
+error AccessDenied(address account, enum HierarchicalAccessControl.Rank requiredRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
+
+### InvalidOperation
+
+```solidity
+error InvalidOperation(string reason)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| reason | string | undefined |
 
 

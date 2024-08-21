@@ -2,17 +2,17 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-
+import "./VibeBase.sol";
 /**
  * @title ProgressiveTaxCalculator
  * @dev A tax calculator that imposes a progressively increasing tax rate based on the cumulative transaction amount.
  */
-contract ProgressiveTaxCalculator is ITaxCalculator {
+contract ProgressiveTaxCalculator is VibeBase {
     mapping(address => uint256) public cumulativeTransfers;
     int public immutable baseRateBasisPoints;
     int public immutable rateIncrementBasisPoints;
     uint256 public immutable incrementThreshold; // Threshold at which the tax rate increases
-
+       string public Description;
     /**
      * @dev Constructor to set the base rate, rate increment, and increment threshold.
      * @param _baseRateBasisPoints The base tax rate in basis points.
@@ -22,8 +22,9 @@ contract ProgressiveTaxCalculator is ITaxCalculator {
     constructor(
         int _baseRateBasisPoints,
         int _rateIncrementBasisPoints,
-        uint256 _incrementThreshold
-    ) {
+        uint256 _incrementThreshold,
+  string memory _description
+    )  VibeBase(_description) {
         baseRateBasisPoints = _baseRateBasisPoints;
         rateIncrementBasisPoints = _rateIncrementBasisPoints;
         incrementThreshold = _incrementThreshold;
@@ -35,7 +36,6 @@ contract ProgressiveTaxCalculator is ITaxCalculator {
         int increment = int256(cumulativeAmount / incrementThreshold) * rateIncrementBasisPoints;
         return baseRateBasisPoints + increment;
     }
-
     /**
      * @dev Record the amount transferred by an address to update cumulative transfers.
      * @param _addy The address that transferred the amount.

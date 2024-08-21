@@ -2,7 +2,7 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-import "./BaseClass.sol";
+import "./VibeBase.sol";
 /**
  * @title HoldingPeriodNegativeTaxCalculator
  * @dev A tax calculator that provides increasing rewards based on the holding period of an asset.
@@ -11,7 +11,7 @@ contract HoldingPeriodNegativeTaxCalculator is VibeBase {
     int public immutable shortTermRewardBasisPoints;
     int public immutable longTermRewardBasisPoints;
     uint256 public immutable holdingPeriodThreshold; // Time in seconds for the threshold between short and long term
-
+       string public Description;
     mapping(address => uint256) public purchaseTimestamps;
 
     /**

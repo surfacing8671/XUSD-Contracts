@@ -2,17 +2,17 @@
 pragma solidity ^0.8.26;
 
 import "./ITaxCalculator.sol";
-
+import "./VibeBase.sol";
 /**
  * @title LoyaltyBasedTaxCalculator
  * @dev A tax calculator that reduces the tax rate for loyal addresses based on transaction count.
  */
-contract LoyaltyBasedTaxCalculator is ITaxCalculator {
+contract LoyaltyBasedTaxCalculator is VibeBase {
     int public immutable baseRateBasisPoints;
     int public immutable loyaltyDiscountBasisPoints;
     uint256 public immutable loyaltyThreshold;
     mapping(address => uint256) public transactionCounts;
-
+       string public Description;
     /**
      * @dev Constructor to set the base rate, discount, and loyalty threshold.
      * @param _baseRateBasisPoints The base tax rate in basis points.
@@ -22,8 +22,9 @@ contract LoyaltyBasedTaxCalculator is ITaxCalculator {
     constructor(
         int _baseRateBasisPoints,
         int _loyaltyDiscountBasisPoints,
-        uint256 _loyaltyThreshold
-    ) {
+        uint256 _loyaltyThreshold,
+   string memory _description
+    )  VibeBase(_description) {
         baseRateBasisPoints = _baseRateBasisPoints;
         loyaltyDiscountBasisPoints = _loyaltyDiscountBasisPoints;
         loyaltyThreshold = _loyaltyThreshold;

@@ -10,10 +10,51 @@
 
 ## Methods
 
-### tokenByOwner
+### addClass
 
 ```solidity
-function tokenByOwner(address _owner) external view returns (address)
+function addClass(address class, bool active, uint256 classType, bool _process) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| class | address | undefined |
+| active | bool | undefined |
+| classType | uint256 | undefined |
+| _process | bool | undefined |
+
+### getBurnAmounts
+
+```solidity
+function getBurnAmounts(address user) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### tokenIdByOwner
+
+```solidity
+function tokenIdByOwner(address _owner) external view returns (uint256)
 ```
 
 
@@ -30,7 +71,7 @@ function tokenByOwner(address _owner) external view returns (address)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| _0 | uint256 | undefined |
 
 ### totalSupply
 

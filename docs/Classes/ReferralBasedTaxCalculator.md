@@ -10,6 +10,23 @@
 
 ## Methods
 
+### Description
+
+```solidity
+function Description() external view returns (string)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | string | undefined |
+
 ### baseRateBasisPoints
 
 ```solidity
@@ -49,6 +66,23 @@ function calculateTotalBasisFee(address addy, uint256 amount) external view retu
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+
+### getDescription
+
+```solidity
+function getDescription() external view returns (string)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | string | undefined |
 
 ### referralDiscountBasisPoints
 

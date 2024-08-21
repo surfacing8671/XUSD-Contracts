@@ -6,9 +6,32 @@
 
 
 
-*This contract is to store the Whitlisted Tax Classes, 3 different types, and the logic to call them and determine the ussers basis points*
+*Manages whitelisted tax classes, processes user basis points, and handles whitelisting logic.*
 
 ## Methods
+
+### DailyRewards
+
+```solidity
+function DailyRewards(uint256, address) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+| _1 | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### MAX_AMOUNT
 
@@ -27,34 +50,10 @@ function MAX_AMOUNT() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### MasteClassMap
-
-```solidity
-function MasteClassMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| classAddress | address | undefined |
-| updatedTimestamp | uint256 | undefined |
-| active | bool | undefined |
-
 ### MasterClassCallerMap
 
 ```solidity
-function MasterClassCallerMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
+function MasterClassCallerMap(address) external view returns (address classAddress, uint256 updatedTimestamp, bool active, bool process, string description)
 ```
 
 
@@ -65,7 +64,7 @@ function MasterClassCallerMap(uint256) external view returns (address classAddre
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
@@ -74,11 +73,13 @@ function MasterClassCallerMap(uint256) external view returns (address classAddre
 | classAddress | address | undefined |
 | updatedTimestamp | uint256 | undefined |
 | active | bool | undefined |
+| process | bool | undefined |
+| description | string | undefined |
 
 ### MasterClassContractMap
 
 ```solidity
-function MasterClassContractMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
+function MasterClassContractMap(address) external view returns (address classAddress, bool active, bool process, string description)
 ```
 
 
@@ -89,20 +90,21 @@ function MasterClassContractMap(uint256) external view returns (address classAdd
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 | classAddress | address | undefined |
-| updatedTimestamp | uint256 | undefined |
 | active | bool | undefined |
+| process | bool | undefined |
+| description | string | undefined |
 
 ### MasterClassFromMap
 
 ```solidity
-function MasterClassFromMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
+function MasterClassFromMap(address) external view returns (address classAddress, uint256 updatedTimestamp, bool active, bool process, string description)
 ```
 
 
@@ -113,7 +115,7 @@ function MasterClassFromMap(uint256) external view returns (address classAddress
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
@@ -122,11 +124,39 @@ function MasterClassFromMap(uint256) external view returns (address classAddress
 | classAddress | address | undefined |
 | updatedTimestamp | uint256 | undefined |
 | active | bool | undefined |
+| process | bool | undefined |
+| description | string | undefined |
+
+### MasterClassMap
+
+```solidity
+function MasterClassMap(address) external view returns (address classAddress, uint256 updatedTimestamp, bool active, bool process, string description)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| classAddress | address | undefined |
+| updatedTimestamp | uint256 | undefined |
+| active | bool | undefined |
+| process | bool | undefined |
+| description | string | undefined |
 
 ### MasterClassToMap
 
 ```solidity
-function MasterClassToMap(uint256) external view returns (address classAddress, uint256 updatedTimestamp, bool active)
+function MasterClassToMap(address) external view returns (address classAddress, uint256 updatedTimestamp, bool active, bool process, string description)
 ```
 
 
@@ -137,7 +167,7 @@ function MasterClassToMap(uint256) external view returns (address classAddress, 
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
@@ -146,22 +176,8 @@ function MasterClassToMap(uint256) external view returns (address classAddress, 
 | classAddress | address | undefined |
 | updatedTimestamp | uint256 | undefined |
 | active | bool | undefined |
-
-### RegisterContracts
-
-```solidity
-function RegisterContracts(address contracts) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contracts | address | undefined |
+| process | bool | undefined |
+| description | string | undefined |
 
 ### RewardBalance
 
@@ -180,10 +196,10 @@ function RewardBalance() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### addClass
+### Rewards
 
 ```solidity
-function addClass(address class, bool active, uint256 classType) external nonpayable
+function Rewards(address) external view returns (bool)
 ```
 
 
@@ -194,66 +210,7 @@ function addClass(address class, bool active, uint256 classType) external nonpay
 
 | Name | Type | Description |
 |---|---|---|
-| class | address | undefined |
-| active | bool | undefined |
-| classType | uint256 | undefined |
-
-### calculateAndSumBasis
-
-```solidity
-function calculateAndSumBasis(address to, address from, address _caller, uint256 amount) external nonpayable returns (int256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| to | address | undefined |
-| from | address | undefined |
-| _caller | address | undefined |
-| amount | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | int256 | undefined |
-
-### depositRewards
-
-```solidity
-function depositRewards(uint256 amount) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| amount | uint256 | undefined |
-
-### hasVibes
-
-```solidity
-function hasVibes(address user) external nonpayable returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
@@ -261,13 +218,13 @@ function hasVibes(address user) external nonpayable returns (bool)
 |---|---|---|
 | _0 | bool | undefined |
 
-### isWhitelistedCaller
+### addClass
 
 ```solidity
-function isWhitelistedCaller(address) external view returns (bool)
+function addClass(address class, bool active, uint256 classType, bool _process) external nonpayable
 ```
 
-Tracks the contracts that can call Sickle multicall
+Adds a new class to the appropriate registry
 
 
 
@@ -275,21 +232,18 @@ Tracks the contracts that can call Sickle multicall
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| class | address | The address of the class to be added |
+| active | bool | The active status of the class |
+| classType | uint256 | The type of class (0: To, 1: From, 2: Caller, 3: Contract) |
+| _process | bool | A boolean indicating if the process is ongoing |
 
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | True if the contract is a whitelisted caller |
-
-### isWhitelistedTarget
+### calculateAndSumBasis
 
 ```solidity
-function isWhitelistedTarget(address) external view returns (bool)
+function calculateAndSumBasis(address to, address from, address _caller, uint256 amount) external nonpayable returns (int256)
 ```
 
-Tracks the contracts that can be called through Sickle multicall
+Calculates and sums the basis points for a transaction
 
 
 
@@ -297,21 +251,24 @@ Tracks the contracts that can be called through Sickle multicall
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| to | address | The address of the recipient |
+| from | address | The address of the sender |
+| _caller | address | The address of the caller |
+| amount | uint256 | The transaction amount |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | bool | True if the contract is a whitelisted target |
+| _0 | int256 | The total basis points summed from the transaction |
 
-### referralCodes
+### caller
 
 ```solidity
-function referralCodes(bytes32) external view returns (address)
+function caller(uint256) external view returns (address)
 ```
 
-Keeps track of the referrers and their associated code
+
 
 
 
@@ -319,13 +276,126 @@ Keeps track of the referrers and their associated code
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | bytes32 | undefined |
+| _0 | uint256 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 | _0 | address | undefined |
+
+### callerVibe
+
+```solidity
+function callerVibe(uint256) external view returns (address userAddress, int256 vibes, uint256 timestamp, bool enter)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| userAddress | address | undefined |
+| vibes | int256 | undefined |
+| timestamp | uint256 | undefined |
+| enter | bool | undefined |
+
+### checkRank
+
+```solidity
+function checkRank(address user) external nonpayable
+```
+
+Checks and assigns the rank of the user based on their vibe score
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | The address of the user |
+
+### contractVibe
+
+```solidity
+function contractVibe(uint256) external view returns (address userAddress, int256 vibes, uint256 timestamp, bool enter)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| userAddress | address | undefined |
+| vibes | int256 | undefined |
+| timestamp | uint256 | undefined |
+| enter | bool | undefined |
+
+### fromArray
+
+```solidity
+function fromArray(uint256) external view returns (address)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
+### fromVibe
+
+```solidity
+function fromVibe(uint256) external view returns (address userAddress, int256 vibes, uint256 timestamp, bool enter)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| userAddress | address | undefined |
+| vibes | int256 | undefined |
+| timestamp | uint256 | undefined |
+| enter | bool | undefined |
 
 ### setGov
 
@@ -333,6 +403,56 @@ Keeps track of the referrers and their associated code
 function setGov(address gove) external nonpayable
 ```
 
+Assigns the CONSUL rank to the given address
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| gove | address | The address to assign the CONSUL rank to |
+
+### showRewards
+
+```solidity
+function showRewards() external view returns (struct ClassRegistry.RewardClass[])
+```
+
+Returns the reward classes in the registry
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | ClassRegistry.RewardClass[] | _rewards An array of RewardClass representing the rewards |
+
+### showVibes
+
+```solidity
+function showVibes() external view returns (struct ClassRegistry.MaterClass[][3])
+```
+
+Returns the active vibe classes in the registry
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | ClassRegistry.MaterClass[][3] | _vibes A 2D array representing the vibes for To, From, and Caller classes |
+
+### toArray
+
+```solidity
+function toArray(uint256) external view returns (address)
+```
+
 
 
 
@@ -341,23 +461,18 @@ function setGov(address gove) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| gove | address | undefined |
+| _0 | uint256 | undefined |
 
-### turnOnRewards
+#### Returns
 
-```solidity
-function turnOnRewards() external nonpayable
-```
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
 
-
-
-
-
-
-### viewUser
+### toVibe
 
 ```solidity
-function viewUser(address user) external nonpayable returns (int256)
+function toVibe(uint256) external view returns (address userAddress, int256 vibes, uint256 timestamp, bool enter)
 ```
 
 
@@ -368,13 +483,121 @@ function viewUser(address user) external nonpayable returns (int256)
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
+| _0 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| userAddress | address | undefined |
+| vibes | int256 | undefined |
+| timestamp | uint256 | undefined |
+| enter | bool | undefined |
+
+### userRewards
+
+```solidity
+function userRewards(address) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### vibeFree
+
+```solidity
+function vibeFree(address) external view returns (bool)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
+
+### vibes
+
+```solidity
+function vibes() external view returns (int256)
+```
+
+
+
+
+
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+
+### viewUser
+
+```solidity
+function viewUser(address user) external view returns (int256)
+```
+
+Returns the vibe score of a given user
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | The address of the user |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | int256 | The vibe score of the user |
+
+### viewVibes
+
+```solidity
+function viewVibes(address user) external view returns (int256)
+```
+
+Returns the vibe score of a given user
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | The address of the user |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | int256 | The vibe score of the user |
 
 ### xusd
 
@@ -400,7 +623,7 @@ function xusd() external view returns (contract XUSD)
 ### CallerStatusChanged
 
 ```solidity
-event CallerStatusChanged(address caller, bool isWhitelisted)
+event CallerStatusChanged(address indexed caller, bool isWhitelisted)
 ```
 
 
@@ -411,13 +634,13 @@ event CallerStatusChanged(address caller, bool isWhitelisted)
 
 | Name | Type | Description |
 |---|---|---|
-| caller  | address | undefined |
+| caller `indexed` | address | undefined |
 | isWhitelisted  | bool | undefined |
 
 ### TargetStatusChanged
 
 ```solidity
-event TargetStatusChanged(address target, bool isWhitelisted)
+event TargetStatusChanged(address indexed target, bool isWhitelisted)
 ```
 
 
@@ -428,13 +651,13 @@ event TargetStatusChanged(address target, bool isWhitelisted)
 
 | Name | Type | Description |
 |---|---|---|
-| target  | address | undefined |
+| target `indexed` | address | undefined |
 | isWhitelisted  | bool | undefined |
 
-### whitelistedClassContractFeeChange
+### WhitelistedClassContractFeeChange
 
 ```solidity
-event whitelistedClassContractFeeChange(address newContractClass, bool approval)
+event WhitelistedClassContractFeeChange(address indexed newContractClass, bool approval)
 ```
 
 
@@ -445,13 +668,13 @@ event whitelistedClassContractFeeChange(address newContractClass, bool approval)
 
 | Name | Type | Description |
 |---|---|---|
-| newContractClass  | address | undefined |
+| newContractClass `indexed` | address | undefined |
 | approval  | bool | undefined |
 
-### whitelistedClassFromFeeChange
+### WhitelistedClassFromFeeChange
 
 ```solidity
-event whitelistedClassFromFeeChange(address newFromClass, bool approval)
+event WhitelistedClassFromFeeChange(address indexed newFromClass, bool approval)
 ```
 
 
@@ -462,13 +685,13 @@ event whitelistedClassFromFeeChange(address newFromClass, bool approval)
 
 | Name | Type | Description |
 |---|---|---|
-| newFromClass  | address | undefined |
+| newFromClass `indexed` | address | undefined |
 | approval  | bool | undefined |
 
-### whitelistedClassToFeeChange
+### WhitelistedClassToFeeChange
 
 ```solidity
-event whitelistedClassToFeeChange(address newToClass, bool approval)
+event WhitelistedClassToFeeChange(address indexed newToClass, bool approval)
 ```
 
 
@@ -479,7 +702,7 @@ event whitelistedClassToFeeChange(address newToClass, bool approval)
 
 | Name | Type | Description |
 |---|---|---|
-| newToClass  | address | undefined |
+| newToClass `indexed` | address | undefined |
 | approval  | bool | undefined |
 
 
@@ -503,7 +726,7 @@ error AlreadyProposed()
 error ArrayLengthMismatch()
 ```
 
-ERRORS ///
+
 
 
 

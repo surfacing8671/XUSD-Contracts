@@ -141,5 +141,91 @@ event RankAssigned(address indexed account, enum HierarchicalAccessControl.Rank 
 | account `indexed` | address | undefined |
 | rank  | enum HierarchicalAccessControl.Rank | undefined |
 
+### RankDowngraded
+
+```solidity
+event RankDowngraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+| newRank  | enum HierarchicalAccessControl.Rank | undefined |
+
+### RankRevoked
+
+```solidity
+event RankRevoked(address indexed account)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+
+### RankUpgraded
+
+```solidity
+event RankUpgraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account `indexed` | address | undefined |
+| newRank  | enum HierarchicalAccessControl.Rank | undefined |
+
+
+
+## Errors
+
+### AccessDenied
+
+```solidity
+error AccessDenied(address account, enum HierarchicalAccessControl.Rank requiredRank)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
+
+### InvalidOperation
+
+```solidity
+error InvalidOperation(string reason)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| reason | string | undefined |
 
 

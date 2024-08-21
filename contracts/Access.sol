@@ -1,27 +1,34 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import "./registry.sol";
 import "./atropamath.sol";
+
 contract HierarchicalAccessControl {
-    // Define ranks
     using LibRegistry for LibRegistry.Registry;
     using AtropaMath for address;
+
     enum Rank {
-        PREATORMAXIMUS,
-        CONSUL,
-        SENATOR,
-        LEGATUS,
-        GLADIATOR,
-        PRINCEPS
-        
+        PRINCEPS,         // 0
+        GLADIATOR,        // 1
+        LEGATUS,          // 2
+        SENATOR,          // 3
+        CONSUL,           // 4
+        PREATORMAXIMUS    // 5 (Highest rank)
     }
 
-    // Mapping to store the rank of each contract address
     LibRegistry.Registry private Registry;
     mapping(address => Rank) internal Ranks;
 
+    // Custom errors for gas-efficient error handling
+    error AccessDenied(address account, Rank requiredRank);
+    error InvalidOperation(string reason);
+
     // Events
     event RankAssigned(address indexed account, Rank rank);
+    event RankRevoked(address indexed account);
+    event RankUpgraded(address indexed account, Rank newRank);
+    event RankDowngraded(address indexed account, Rank newRank);
 
     // Constructor to assign the deployer the highest rank
     constructor() {
@@ -30,18 +37,22 @@ contract HierarchicalAccessControl {
 
     // Modifier to check for rank access
     modifier onlyRank(Rank requiredRank) {
-        require(hasRank(requiredRank, msg.sender), "Access denied: insufficient rank");
+        if (!hasRank(requiredRank, msg.sender)) {
+            revert AccessDenied(msg.sender, requiredRank);
+        }
         _;
     }
 
     // Function to check if a contract has the required rank or higher
     function hasRank(Rank requiredRank, address account) public view returns (bool) {
-   
-        return Ranks[account] <= requiredRank;
+        return Ranks[account] >= requiredRank;
     }
 
-    // Function to assign a rank to a contract
-    function assignRank(address account, Rank rank) public onlyRank(Rank.SENATOR) {
+    // Function to assign a rank to an account, with strict control
+    function assignRank(address account, Rank rank) public onlyRank(Rank.CONSUL) {
+        if (Ranks[account] >= Rank.PREATORMAXIMUS) {
+            revert InvalidOperation("Cannot assign or reassign PREATORMAXIMUS rank");
+        }
         _assignRank(account, rank);
     }
 
@@ -51,27 +62,39 @@ contract HierarchicalAccessControl {
         emit RankAssigned(account, rank);
     }
 
+    // Function to get the rank of an account
     function getRank(address account) public view returns (Rank) {
-    return Ranks[account];
-}
+        return Ranks[account];
+    }
 
-function revokeRank(address account) public onlyRank(Rank.SENATOR) {
+    // Function to revoke a rank from an account
+    function revokeRank(address account) public onlyRank(Rank.SENATOR) {
+        if (Ranks[account] == Rank.PREATORMAXIMUS) {
+            revert InvalidOperation("Cannot revoke PREATORMAXIMUS rank");
+        }
+        delete Ranks[account];
+        emit RankRevoked(account);
+    }
 
-    delete Ranks[account];
-    emit RankAssigned(account, Rank(uint8(0))); // Log with no rank
-}
+    // Function to upgrade the rank of an account
+    function upgradeRank(address account) public onlyRank(Rank.CONSUL) {
+        Rank currentRank = Ranks[account];
+        if (currentRank >= Rank.LEGATUS) {
+            revert InvalidOperation("Already at highest rank");
+        }
+        _assignRank(account, Rank(uint(currentRank) + 1));
+        emit RankUpgraded(account, Ranks[account]);
+    }
 
-function upgradeRank(address account) public onlyRank(Rank.SENATOR) {
-    require(Ranks[account] < Rank.PREATORMAXIMUS, "Already at highest rank");
-    Ranks[account] = Rank(uint(Ranks[account]) + 1);
-    emit RankAssigned(account, Ranks[account]);
-}
+    // Function to downgrade the rank of an account
+    function downgradeRank(address account) public onlyRank(Rank.CONSUL) {
+        Rank currentRank = Ranks[account];
+        if (currentRank <= Rank.PRINCEPS) {
+            revert InvalidOperation("Already at lowest rank");
+        }
+        _assignRank(account, Rank(uint(currentRank) - 1));
+        emit RankDowngraded(account, Ranks[account]);
+    }
 
-function downgradeRank(address account) public onlyRank(Rank.SENATOR) {
-    require(Ranks[account] > Rank.PRINCEPS, "Already at lowest rank");
-    Ranks[account] = Rank(uint(Ranks[account]) - 1);
-    emit RankAssigned(account, Ranks[account]);
-}
 
-   
 }

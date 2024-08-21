@@ -1,66 +1,52 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.20;
-import "./registry.sol";
-import "./atropamath.sol";
+
 import "./ClassRegistry.sol";
 import "./IVibePass.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorStorage.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import "./AddressReg.sol";
+import "./Access.sol";
 
-contract MyGovernor   {
-    using LibRegistry for LibRegistry.Registry;
-    using AtropaMath for address;
+contract MyGovernor {
+    using LibRegistryAdd for LibRegistryAdd.Registry;
     using Address for address;
 
+    // Custom errors for specific conditions
     error AlreadyProposed();
     error NotAllowedAccess();
+    error AlreadyPassed();
+    error NeedAVibePass();
 
-    event whitelistedClassToFeeChange(address newToClass, bool approval);
-    event whitelistedClassFromFeeChange(address newFromClass, bool approval);
-    event whitelistedClassContractFeeChange(
-        address newContractClass,
-        bool approval
-    );
-
-    // Multicall caller and target whitelist status changes
-    event CallerStatusChanged(address caller, bool isWhitelisted);
-    event TargetStatusChanged(address target, bool isWhitelisted);
-
-    /// @title SickleRegistry contract
-    /// @author vfat.tools
-    /// @notice Manages the whitelisted contracts and the collector address
-
-    /// ERRORS ///
-
-    error ArrayLengthMismatch(); // 0xa24a13a6
-    error FeeAboveMaxLimit(); // 0xd6cf7b5e
-    error InvalidReferralCode(); // 0xe55b4629
-    error NeedAVibePass(); // 0xe55b4629
-    /// STORAGE ///
-
-    /// @notice Address of the fee collector
-    // address public collector;
-
-    /// @notice Tracks the contracts that can be called through Sickle multicall
-    /// @return True if the contract is a whitelisted target
-    mapping(address => bool) public isWhitelistedTarget;
-
-    /// @notice Tracks the contracts that can call Sickle multicall
-    /// @return True if the contract is a whitelisted caller
-    mapping(address => bool) public isWhitelistedCaller;
-
-    /// @notice Keeps track of the referrers and their associated code
-    mapping(bytes32 => address) public referralCodes;
-    struct VoteUser {
-        address userAddress;
-        uint vote;
-        bool voted;
+    /// @notice Struct representing a vote proposal
+    /// @param classAddress The address associated with the class
+    /// @param description The description of the proposal
+    /// @param name The name of the proposal
+    /// @param process A boolean indicating if the process is ongoing
+    /// @param rewards A boolean indicating if rewards are associated with the proposal
+    /// @param classType The type of the class in the proposal
+    struct VoteProposal {
+        address classAddress;
+        string description;
+        string name;
+        bool process;
+        bool rewards;
+        uint classType;
     }
 
-struct VoteTally {
+    /// @notice Struct representing a tally of votes
+    /// @param classAddress The address associated with the class
+    /// @param voteTotal The total number of votes
+    /// @param index The index of the vote tally in the registry
+    /// @param hashes Array of hashes associated with the votes
+    /// @param timestampStart The start timestamp of the voting
+    /// @param totalNft The total number of NFTs involved in the vote
+    /// @param name The name of the vote tally
+    /// @param description The description of the vote tally
+    /// @param approved A boolean indicating if the proposal has been approved
+    /// @param rewards A boolean indicating if rewards are associated with the vote
+    /// @param process A boolean indicating if the process is ongoing
+    /// @param classType The type of the class in the vote tally
+    struct VoteTally {
         address classAddress;
         uint voteTotal;
         uint index;
@@ -68,86 +54,175 @@ struct VoteTally {
         uint timestampStart;
         uint totalNft;
         string name;
+        string description;
         bool approved;
+        bool rewards;
+        bool process;
+        uint classType;
     }
-    uint indexNum =0;
-    mapping(uint => LibRegistry.Registry) internal voterRegistryMap;
-    LibRegistry.Registry internal UserVoteRegistry;
-    LibRegistry.Registry internal VoterTallyRegistry;
 
+    uint public denominator = 2;
 
-    mapping(uint => VoteTally) public VoterTallyMap;
+    /// @notice Registry of all vote tallies
+    LibRegistryAdd.Registry internal VoterTallyRegistry;
 
-    mapping(address => uint) public hashIndexMap;
+    /// @notice Mapping of voters by vote index and user address to prevent double voting
+    mapping(uint => mapping(address => bool)) private voterRegistryMap;
 
-    ClassRegistry private classReg; 
+    /// @notice Mapping of vote tallies by class address
+    mapping(address => VoteTally) public VoterTallyMap;
+
+    HierarchicalAccessControl private access;
     IVibePass private vibePass;
-   constructor(address _classReg, address Nft){
-    classReg = ClassRegistry(_classReg);
-    vibePass = IVibePass(Nft);
-   }
+    ClassRegistry private classReg;
+
+    /// @notice Constructor to initialize the MyGovernor contract
+    /// @param _access The address of the HierarchicalAccessControl contract
+    /// @param Nft The address of the IVibePass contract
+    /// @param _classReg The address of the ClassRegistry contract
+    constructor(address _access, address Nft, address _classReg) {
+        access = HierarchicalAccessControl(_access);
+        vibePass = IVibePass(Nft);
+        classReg = ClassRegistry(_classReg);
+    }
+
+    function updateVoteDen(uint _denominator) external {
+        assert( access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender));
+        denominator = _denominator;
+    }
+
+    /// @notice Retrieves all active vote proposals
+    /// @return voters An array of VoteTally structs representing all active vote proposals
+    function showAllProposals() external view returns (VoteTally[] memory) {
+        uint tallyCount = VoterTallyRegistry.Count();
+        uint activeCount;
+        for (uint i; i < tallyCount; ) {
+            if (!VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)].approved) {
+                activeCount++;
+            }
+            unchecked {
+                i++;
+            }
+        }
 
 
-  
 
-    function showAllProposals() external view returns(VoteTally[] memory){
-        VoteTally[] memory voters = new VoteTally[](VoterTallyRegistry.Count());
-        for(uint i; i < VoterTallyRegistry.Count();){
-            voters[i] = VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)];
-            unchecked{
-                i ++;
+        VoteTally[] memory voters = new VoteTally[](activeCount);
+        uint index = 0;
+        for (uint i; i < tallyCount; ) {
+            if (!VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)].approved) {
+                voters[index] = VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)];
+                index++;
+            }
+            unchecked {
+                i++;
             }
         }
         return voters;
     }
 
-    function vote(address classAddress) external {
-        VoteTally storage Vote =  VoterTallyMap[hashIndexMap[classAddress]];
-      
-       uint hash = msg.sender.hashWith(classAddress);
-        if(vibePass.tokenByOwner(msg.sender) == address(0)){
-            revert NeedAVibePass();
-        }else{
-         if(!voterRegistryMap[Vote.index].Contains(hash)){
-            voterRegistryMap[Vote.index].Register(hash);
-         
-       Vote.voteTotal += 1;
-
-         }
+    /// @notice Retrieves all approved vote proposals (active vibes)
+    /// @return voters An array of VoteTally structs representing all approved vote proposals
+    function showActiveVibes() external view returns (VoteTally[] memory) {
+        uint tallyCount = VoterTallyRegistry.Count();
+        uint approvedCount;
+        for (uint i; i < tallyCount; ) {
+            if (VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)].approved) {
+                approvedCount++;
+            }
+            unchecked {
+                i++;
+            }
         }
 
-
-
+        VoteTally[] memory voters = new VoteTally[](approvedCount);
+        uint index = 0;
+        for (uint i; i < tallyCount; ) {
+            if (VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)].approved) {
+                voters[index] = VoterTallyMap[VoterTallyRegistry.GetHashByIndex(i)];
+                index++;
+            }
+            unchecked {
+                i++;
+            }
+        }
+        return voters;
     }
 
-    function checkVotes(address classAddress) external {
-          VoteTally storage Vote =  VoterTallyMap[hashIndexMap[classAddress]];
-          if(Vote.voteTotal > Vote.totalNft/2){
-            Vote.approved = true;
-            classReg.addClass(classAddress, true, 2);
+    /// @notice Cast a vote for a specific class address
+    /// @param classAddress The address of the class being voted on
+    function vote(address classAddress) external {
+        VoteTally storage Vote = VoterTallyMap[classAddress];
 
-          }
-    }
-
-    function propose(string memory description, address classAddress) external {
-        if(vibePass.tokenByOwner(msg.sender) == address(0)){
+        if (vibePass.tokenIdByOwner(msg.sender) == 0) {
             revert NeedAVibePass();
         }
         else{
-        uint hash = msg.sender.hashWith(classAddress);
-        if(!VoterTallyRegistry.Contains(hash)){
-            VoterTallyRegistry.Register(hash);
-            hashIndexMap[classAddress] = hash;
-            VoterTallyMap[hash].index = indexNum;
-            VoterTallyMap[hash].classAddress = classAddress;
-           VoterTallyMap[hash].totalNft = vibePass.totalSupply();
-            VoterTallyMap[hash].timestampStart = block.timestamp;
-            VoterTallyMap[hash].name = description;
+        
+        if (!voterRegistryMap[Vote.index][msg.sender]) {
 
-            indexNum ++;
+            voterRegistryMap[Vote.index][msg.sender] = true;
 
+            // Increment voteTotal based on the rank of the voter
+            if (access.hasRank(HierarchicalAccessControl.Rank.GLADIATOR, msg.sender)) {
+                Vote.voteTotal += 1;
+            }
+            if (access.hasRank(HierarchicalAccessControl.Rank.LEGATUS, msg.sender)) {
+                Vote.voteTotal += 1;
+            }
+            if (access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)) {
+                Vote.voteTotal += 1;
+            }
+            if (access.hasRank(HierarchicalAccessControl.Rank.PREATORMAXIMUS, msg.sender)) {
+                Vote.voteTotal += 1;
+            }
         }
         }
+    }
 
+    /// @notice Check the votes for a specific class address and finalize the proposal if the vote passes
+    /// @param classAddress The address of the class being voted on
+    function checkVotes(address classAddress) external {
+        VoteTally storage Vote = VoterTallyMap[classAddress];
+        console.logUint(Vote.voteTotal);
+
+        if (!Vote.approved) {
+            if (Vote.voteTotal > Vote.totalNft / denominator) {
+                console.logBool(Vote.rewards);
+                if (Vote.rewards) {
+                    classReg.addClass(classAddress, true, 3, Vote.process);
+                } else {
+                    classReg.addClass(classAddress, true, Vote.classType, Vote.process);
+                }
+                Vote.approved = true;
+            }
+        } else {
+            revert AlreadyPassed();
+        }
+    }
+
+    /// @notice Propose a new vote for a specific class address
+    /// @param proposal The VoteProposal struct containing the proposal details
+    /// @param classAddress The address of the class being proposed
+    function propose(VoteProposal memory proposal, address classAddress) external {
+        if (vibePass.tokenIdByOwner(msg.sender) == 0) {
+            revert NeedAVibePass();
+        }
+        
+        if (!VoterTallyRegistry.Contains(classAddress)) {
+            VoterTallyRegistry.Register(classAddress);
+
+            VoteTally storage newVote = VoterTallyMap[classAddress];
+            newVote.index = VoterTallyRegistry.Count();
+            newVote.classAddress = classAddress;
+            newVote.totalNft = vibePass.totalSupply();
+            newVote.timestampStart = block.timestamp;
+            newVote.name = proposal.name;
+            newVote.process = proposal.process;
+            newVote.description = proposal.description;
+            newVote.classType = proposal.classType;
+            newVote.rewards = proposal.rewards;
+        }
+        else revert AlreadyProposed();
     }
 }

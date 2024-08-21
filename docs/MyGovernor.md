@@ -13,10 +13,10 @@
 ### VoterTallyMap
 
 ```solidity
-function VoterTallyMap(uint256) external view returns (address classAddress, uint256 voteTotal, uint256 index, uint256 timestampStart, uint256 totalNft, string name, bool approved)
+function VoterTallyMap(address) external view returns (address classAddress, uint256 voteTotal, uint256 index, uint256 timestampStart, uint256 totalNft, string name, string description, bool approved, bool rewards, bool process, uint256 classType)
 ```
 
-
+Mapping of vote tallies by class address
 
 
 
@@ -24,7 +24,7 @@ function VoterTallyMap(uint256) external view returns (address classAddress, uin
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
@@ -36,7 +36,11 @@ function VoterTallyMap(uint256) external view returns (address classAddress, uin
 | timestampStart | uint256 | undefined |
 | totalNft | uint256 | undefined |
 | name | string | undefined |
+| description | string | undefined |
 | approved | bool | undefined |
+| rewards | bool | undefined |
+| process | bool | undefined |
+| classType | uint256 | undefined |
 
 ### checkVotes
 
@@ -44,7 +48,7 @@ function VoterTallyMap(uint256) external view returns (address classAddress, uin
 function checkVotes(address classAddress) external nonpayable
 ```
 
-
+Check the votes for a specific class address and finalize the proposal if the vote passes
 
 
 
@@ -52,23 +56,18 @@ function checkVotes(address classAddress) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| classAddress | address | undefined |
+| classAddress | address | The address of the class being voted on |
 
-### hashIndexMap
+### denominator
 
 ```solidity
-function hashIndexMap(address) external view returns (uint256)
+function denominator() external view returns (uint256)
 ```
 
 
 
 
 
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
 
 #### Returns
 
@@ -76,54 +75,10 @@ function hashIndexMap(address) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### isWhitelistedCaller
-
-```solidity
-function isWhitelistedCaller(address) external view returns (bool)
-```
-
-Tracks the contracts that can call Sickle multicall
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | True if the contract is a whitelisted caller |
-
-### isWhitelistedTarget
-
-```solidity
-function isWhitelistedTarget(address) external view returns (bool)
-```
-
-Tracks the contracts that can be called through Sickle multicall
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | True if the contract is a whitelisted target |
-
 ### propose
 
 ```solidity
-function propose(string description, address classAddress) external nonpayable
+function propose(MyGovernor.VoteProposal proposal, address classAddress) external nonpayable
 ```
 
 
@@ -134,30 +89,25 @@ function propose(string description, address classAddress) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| description | string | undefined |
+| proposal | MyGovernor.VoteProposal | undefined |
 | classAddress | address | undefined |
 
-### referralCodes
+### showActiveVibes
 
 ```solidity
-function referralCodes(bytes32) external view returns (address)
+function showActiveVibes() external view returns (struct MyGovernor.VoteTally[])
 ```
 
-Keeps track of the referrers and their associated code
+Retrieves all approved vote proposals (active vibes)
 
 
 
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bytes32 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| _0 | MyGovernor.VoteTally[] | voters An array of VoteTally structs representing all approved vote proposals |
 
 ### showAllProposals
 
@@ -165,7 +115,7 @@ Keeps track of the referrers and their associated code
 function showAllProposals() external view returns (struct MyGovernor.VoteTally[])
 ```
 
-
+Retrieves all active vote proposals
 
 
 
@@ -174,7 +124,23 @@ function showAllProposals() external view returns (struct MyGovernor.VoteTally[]
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | MyGovernor.VoteTally[] | undefined |
+| _0 | MyGovernor.VoteTally[] | voters An array of VoteTally structs representing all active vote proposals |
+
+### updateVoteDen
+
+```solidity
+function updateVoteDen(uint256 _denominator) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _denominator | uint256 | undefined |
 
 ### vote
 
@@ -182,27 +148,7 @@ function showAllProposals() external view returns (struct MyGovernor.VoteTally[]
 function vote(address classAddress) external nonpayable
 ```
 
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| classAddress | address | undefined |
-
-
-
-## Events
-
-### CallerStatusChanged
-
-```solidity
-event CallerStatusChanged(address caller, bool isWhitelisted)
-```
-
-
+Cast a vote for a specific class address
 
 
 
@@ -210,118 +156,28 @@ event CallerStatusChanged(address caller, bool isWhitelisted)
 
 | Name | Type | Description |
 |---|---|---|
-| caller  | address | undefined |
-| isWhitelisted  | bool | undefined |
+| classAddress | address | The address of the class being voted on |
 
-### TargetStatusChanged
-
-```solidity
-event TargetStatusChanged(address target, bool isWhitelisted)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| target  | address | undefined |
-| isWhitelisted  | bool | undefined |
-
-### whitelistedClassContractFeeChange
-
-```solidity
-event whitelistedClassContractFeeChange(address newContractClass, bool approval)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newContractClass  | address | undefined |
-| approval  | bool | undefined |
-
-### whitelistedClassFromFeeChange
-
-```solidity
-event whitelistedClassFromFeeChange(address newFromClass, bool approval)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newFromClass  | address | undefined |
-| approval  | bool | undefined |
-
-### whitelistedClassToFeeChange
-
-```solidity
-event whitelistedClassToFeeChange(address newToClass, bool approval)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newToClass  | address | undefined |
-| approval  | bool | undefined |
 
 
 
 ## Errors
 
+### AlreadyPassed
+
+```solidity
+error AlreadyPassed()
+```
+
+
+
+
+
+
 ### AlreadyProposed
 
 ```solidity
 error AlreadyProposed()
-```
-
-
-
-
-
-
-### ArrayLengthMismatch
-
-```solidity
-error ArrayLengthMismatch()
-```
-
-ERRORS ///
-
-
-
-
-### FeeAboveMaxLimit
-
-```solidity
-error FeeAboveMaxLimit()
-```
-
-
-
-
-
-
-### InvalidReferralCode
-
-```solidity
-error InvalidReferralCode()
 ```
 
 

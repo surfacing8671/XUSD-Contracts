@@ -4,14 +4,14 @@ pragma solidity ^0.8.24;
 
 //import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "./ERC20Taxible.sol";
-
+import "./Access.sol";
 import "./ClassRegistry.sol";
 
 /**
  * @title MyTokenMock
  * @dev A mock token contract inheriting ERC20Taxable with voting and delegate functionalities.
  */
-contract XUSD is ERC20Taxable, Ownable {
+contract XUSD is ERC20Taxable, HierarchicalAccessControl {
     address public feeRecipient;
     uint256 public feeBasisPoints;
 
@@ -23,28 +23,35 @@ contract XUSD is ERC20Taxable, Ownable {
     event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);
     event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint256 newVotes);
     event WhitelistContract(address indexed contractAddr, bool status);
-
+    HierarchicalAccessControl private access;
     // Constructor
     constructor(
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        uint256 initialBalance_
+        uint256 initialBalance_,
+        address _access
      
     ) ERC20Base(name_, symbol_) {
         require(initialBalance_ > 0, "MyTokenMock: initial supply cannot be zero");
-    
+        access = HierarchicalAccessControl(_access);
         _mint(_msgSender(), initialBalance_);
    
     }
 
     // Set registry address
-    function setRegistry(address reg) public onlyOwner {
+    function setRegistry(address reg) public  {
+                assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
         registry = ClassRegistry(reg);
     }
 
     // Mint new tokens
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount) public  {
+          assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
         _mint(to, amount);
     }
 
@@ -65,7 +72,9 @@ contract XUSD is ERC20Taxable, Ownable {
 
         function Rewardtransfer(address to, uint256 amount) public virtual  returns (bool) {
         address _owner = _msgSender();
-        assert(msg.sender == address(registry));
+       assert(
+            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
+        );
         // int fee = registry.calculateAndSumBasis(to, msg.sender, tx.origin, amount);
 
         // if (fee > 0 && !_isExcludedFromTax[owner] && !_isExcludedFromTax[to]) {
@@ -136,13 +145,19 @@ contract XUSD is ERC20Taxable, Ownable {
     }
 
     // Whitelist contract for collective burn and votes
-    function addWhitelistedContract(address contractAddr) external onlyOwner {
+    function addWhitelistedContract(address contractAddr) external  {
+          assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
         _whitelistedContracts[contractAddr] = true;
         emit WhitelistContract(contractAddr, true);
     }
 
     // Remove contract from whitelist
-    function removeWhitelistedContract(address contractAddr) external onlyOwner {
+    function removeWhitelistedContract(address contractAddr) external  {
+          assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
         _whitelistedContracts[contractAddr] = false;
         emit WhitelistContract(contractAddr, false);
     }

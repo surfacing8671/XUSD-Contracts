@@ -19,6 +19,14 @@ function calculateTotalBasisFeeNow(address to, address from, address caller, uin
 
 
 interface ITaxCalculator{
+//function isRewards() external returns (bool);
+
 function calculateTotalBasisFee(address addy, uint amount) external  returns (int); 
+
+}
+interface IRewardsModule{
+//function isRewards() external returns (bool);
+
+function calculateRewards(address to, address from, address caller, uint amount, int vibes) external ; 
 
 }

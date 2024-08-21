@@ -1,19 +1,19 @@
-# LitPass
+# VibePass
 
 
 
+> VibePass
 
 
 
-
-
+*ERC721 token representing a VibePass, with additional features for handling access control and token burning.*
 
 ## Methods
 
-### AccessIsClass
+### UserUpdate
 
 ```solidity
-function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType class) external nonpayable returns (bool)
+function UserUpdate(address user) external nonpayable
 ```
 
 
@@ -25,175 +25,6 @@ function AccessIsClass(address user, address dom, enum AccessRegistry.AccessType
 | Name | Type | Description |
 |---|---|---|
 | user | address | undefined |
-| dom | address | undefined |
-| class | enum AccessRegistry.AccessType | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
-
-### AccessRegistryCount
-
-```solidity
-function AccessRegistryCount() external nonpayable returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### GetAccess
-
-```solidity
-function GetAccess(address user, address dom) external nonpayable returns (struct AccessRegistry.Accessor)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| dom | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | AccessRegistry.Accessor | undefined |
-
-### GetAccessByIndex
-
-```solidity
-function GetAccessByIndex(uint256 i) external nonpayable returns (struct AccessRegistry.Accessor)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| i | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | AccessRegistry.Accessor | undefined |
-
-### GetNftByIndexHash
-
-```solidity
-function GetNftByIndexHash(uint256 i) external view returns (uint256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| i | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### HasAccess
-
-```solidity
-function HasAccess(address user, enum AccessRegistry.AccessType min, address dom) external nonpayable returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| min | enum AccessRegistry.AccessType | undefined |
-| dom | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
-
-### RegisterAccess
-
-```solidity
-function RegisterAccess(address addr, enum AccessRegistry.AccessType class, address dom) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| addr | address | undefined |
-| class | enum AccessRegistry.AccessType | undefined |
-| dom | address | undefined |
-
-### RemoveAccess
-
-```solidity
-function RemoveAccess(address user, address dom) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| dom | address | undefined |
-
-### SetAccessOwner
-
-```solidity
-function SetAccessOwner(address user, enum AccessRegistry.AccessType Class, address dom) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-| Class | enum AccessRegistry.AccessType | undefined |
-| dom | address | undefined |
 
 ### approve
 
@@ -234,6 +65,39 @@ function balanceOf(address owner) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### delegate
+
+```solidity
+function delegate(address delegatee) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| delegatee | address | undefined |
+
+### getAllProtocolMessage
+
+```solidity
+function getAllProtocolMessage() external view returns (string[])
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | string[] | undefined |
+
 ### getApproved
 
 ```solidity
@@ -255,6 +119,111 @@ function getApproved(uint256 tokenId) external view returns (address)
 | Name | Type | Description |
 |---|---|---|
 | _0 | address | undefined |
+
+### getBurnAmounts
+
+```solidity
+function getBurnAmounts(address user) external view returns (uint256)
+```
+
+Get the burn amounts for the specified user
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | The address of the user to get the burn amounts for |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | The burn amount of the user minus the purchase burn amount |
+
+### getProtocolMessage
+
+```solidity
+function getProtocolMessage() external view returns (string)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | string | undefined |
+
+### getUsername
+
+```solidity
+function getUsername(address user) external view returns (string)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | string | undefined |
+
+### getVotes
+
+```solidity
+function getVotes(address account) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### getVotesContracts
+
+```solidity
+function getVotesContracts(address account) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| account | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### isApprovedForAll
 
@@ -285,7 +254,7 @@ function isApprovedForAll(address owner, address operator) external view returns
 function mintPass() external nonpayable
 ```
 
-
+Mint a new VibePass NFT for the caller if they meet the required rank
 
 
 
@@ -316,23 +285,6 @@ function oneSwap() external view returns (address)
 
 
 
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### owner
-
-```solidity
-function owner() external view returns (address)
-```
-
-
-
-*Returns the address of the current owner.*
 
 
 #### Returns
@@ -380,17 +332,6 @@ function purchaseAmount() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### renounceOwnership
-
-```solidity
-function renounceOwnership() external nonpayable
-```
-
-
-
-*Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.*
-
-
 ### safeTransferFrom
 
 ```solidity
@@ -415,18 +356,18 @@ function safeTransferFrom(address from, address to, uint256 tokenId) external no
 function safeTransferFrom(address from, address to, uint256 tokenId, bytes data) external nonpayable
 ```
 
+Safely transfers the VibePass from one user to another
 
 
-*See {IERC721-safeTransferFrom}.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| from | address | undefined |
-| to | address | undefined |
-| tokenId | uint256 | undefined |
-| data | bytes | undefined |
+| from | address | The address of the current owner |
+| to | address | The address of the new owner |
+| tokenId | uint256 | The token ID to transfer |
+| data | bytes | Additional data for the transfer |
 
 ### setApprovalForAll
 
@@ -445,10 +386,10 @@ function setApprovalForAll(address operator, bool approved) external nonpayable
 | operator | address | undefined |
 | approved | bool | undefined |
 
-### setPurchaseAmount
+### setProtocolMessage
 
 ```solidity
-function setPurchaseAmount(uint256 amount) external nonpayable
+function setProtocolMessage(string message) external nonpayable
 ```
 
 
@@ -459,7 +400,23 @@ function setPurchaseAmount(uint256 amount) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| amount | uint256 | undefined |
+| message | string | undefined |
+
+### setPurchaseAmount
+
+```solidity
+function setPurchaseAmount(uint256 amount) external nonpayable
+```
+
+Set the purchase amount for the VibePass
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| amount | uint256 | The new purchase amount |
 
 ### setRegistry
 
@@ -467,7 +424,7 @@ function setPurchaseAmount(uint256 amount) external nonpayable
 function setRegistry(address registry) external nonpayable
 ```
 
-
+Set the address of the access control registry
 
 
 
@@ -475,12 +432,29 @@ function setRegistry(address registry) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| registry | address | undefined |
+| registry | address | The new access control registry address |
 
-### setXusd
+### setURI
 
 ```solidity
-function setXusd(address _xusd) external nonpayable
+function setURI(address user, string Url) external nonpayable
+```
+
+Set the URI for the NFT owned by the given user
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | The address of the user who owns the NFT |
+| Url | string | The new URI to set |
+
+### setUserName
+
+```solidity
+function setUserName(string userName) external nonpayable
 ```
 
 
@@ -491,7 +465,23 @@ function setXusd(address _xusd) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| _xusd | address | undefined |
+| userName | string | undefined |
+
+### setXusd
+
+```solidity
+function setXusd(address _xusd) external nonpayable
+```
+
+Set the address of the XUSD token
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _xusd | address | The new XUSD token address |
 
 ### supportsInterface
 
@@ -554,13 +544,13 @@ function tokenByIndex(uint256 index) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### tokenByOwner
+### tokenIdByOwner
 
 ```solidity
-function tokenByOwner(address _owner) external nonpayable returns (address)
+function tokenIdByOwner(address _owner) external view returns (uint256)
 ```
 
-
+Get the token ID owned by the specified address
 
 
 
@@ -568,13 +558,13 @@ function tokenByOwner(address _owner) external nonpayable returns (address)
 
 | Name | Type | Description |
 |---|---|---|
-| _owner | address | undefined |
+| _owner | address | The address to get the token ID for |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| _0 | uint256 | The token ID owned by the address |
 
 ### tokenOfOwnerByIndex
 
@@ -605,21 +595,21 @@ function tokenOfOwnerByIndex(address owner, uint256 index) external view returns
 function tokenURI(uint256 tokenId) external view returns (string)
 ```
 
+Get the URI of the specified token ID
 
 
-*See {IERC721Metadata-tokenURI}.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| tokenId | uint256 | undefined |
+| tokenId | uint256 | The ID of the token to get the URI for |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | string | undefined |
+| _0 | string | The URI of the specified token ID |
 
 ### totalSupply
 
@@ -644,7 +634,7 @@ function totalSupply() external view returns (uint256)
 function transferFrom(address from, address to, uint256 tokenId) external nonpayable
 ```
 
-
+Transfers the VibePass from one user to another
 
 
 
@@ -652,33 +642,17 @@ function transferFrom(address from, address to, uint256 tokenId) external nonpay
 
 | Name | Type | Description |
 |---|---|---|
-| from | address | undefined |
-| to | address | undefined |
-| tokenId | uint256 | undefined |
-
-### transferOwnership
-
-```solidity
-function transferOwnership(address newOwner) external nonpayable
-```
-
-
-
-*Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| newOwner | address | undefined |
+| from | address | The address of the current owner |
+| to | address | The address of the new owner |
+| tokenId | uint256 | The token ID to transfer |
 
 ### viewUrl
 
 ```solidity
-function viewUrl(address user) external nonpayable returns (string)
+function viewUrl(address user) external view returns (string)
 ```
 
-
+View the URI associated with a user&#39;s VibePass
 
 
 
@@ -686,13 +660,13 @@ function viewUrl(address user) external nonpayable returns (string)
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
+| user | address | The address of the user |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | string | undefined |
+| _0 | string | The URI of the user&#39;s VibePass |
 
 ### xusd
 
@@ -751,10 +725,10 @@ event ApprovalForAll(address indexed owner, address indexed operator, bool appro
 | operator `indexed` | address | undefined |
 | approved  | bool | undefined |
 
-### OwnershipTransferred
+### DelegateChanged
 
 ```solidity
-event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
+event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate)
 ```
 
 
@@ -765,8 +739,27 @@ event OwnershipTransferred(address indexed previousOwner, address indexed newOwn
 
 | Name | Type | Description |
 |---|---|---|
-| previousOwner `indexed` | address | undefined |
-| newOwner `indexed` | address | undefined |
+| delegator `indexed` | address | undefined |
+| fromDelegate `indexed` | address | undefined |
+| toDelegate `indexed` | address | undefined |
+
+### DelegateVotesChanged
+
+```solidity
+event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint256 newVotes)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| delegate `indexed` | address | undefined |
+| previousVotes  | uint256 | undefined |
+| newVotes  | uint256 | undefined |
 
 ### Transfer
 
@@ -785,6 +778,23 @@ event Transfer(address indexed from, address indexed to, uint256 indexed tokenId
 | from `indexed` | address | undefined |
 | to `indexed` | address | undefined |
 | tokenId `indexed` | uint256 | undefined |
+
+### WhitelistContract
+
+```solidity
+event WhitelistContract(address indexed contractAddr, bool status)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| contractAddr `indexed` | address | undefined |
+| status  | bool | undefined |
 
 
 
@@ -949,61 +959,6 @@ error ERC721OutOfBoundsIndex(address owner, uint256 index)
 | owner | address | undefined |
 | index | uint256 | undefined |
 
-### LitPassAlreadyMinted
-
-```solidity
-error LitPassAlreadyMinted()
-```
-
-
-
-
-
-
-### LitPassCanOnlyHoldOne
-
-```solidity
-error LitPassCanOnlyHoldOne()
-```
-
-
-
-
-
-
-### LitPassDelegated
-
-```solidity
-error LitPassDelegated()
-```
-
-
-
-
-
-
-### LitPassNonExistant
-
-```solidity
-error LitPassNonExistant()
-```
-
-
-
-
-
-
-### LitPassNotDelegated
-
-```solidity
-error LitPassNotDelegated()
-```
-
-
-
-
-
-
 ### NotRankedForVibePass
 
 ```solidity
@@ -1014,38 +969,6 @@ error NotRankedForVibePass()
 
 
 
-
-### OwnableInvalidOwner
-
-```solidity
-error OwnableInvalidOwner(address owner)
-```
-
-
-
-*The owner is not a valid owner account. (eg. `address(0)`)*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| owner | address | undefined |
-
-### OwnableUnauthorizedAccount
-
-```solidity
-error OwnableUnauthorizedAccount(address account)
-```
-
-
-
-*The caller account is not authorized to perform an operation.*
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
 
 ### OwnerDoesNotHoldId
 
@@ -1058,10 +981,65 @@ error OwnerDoesNotHoldId()
 
 
 
-### UserDoesNotOwnLitPassId
+### UserDoesNotOwnVibePassId
 
 ```solidity
-error UserDoesNotOwnLitPassId()
+error UserDoesNotOwnVibePassId()
+```
+
+
+
+
+
+
+### VibePassAlreadyMinted
+
+```solidity
+error VibePassAlreadyMinted()
+```
+
+
+
+
+
+
+### VibePassCanOnlyHoldOne
+
+```solidity
+error VibePassCanOnlyHoldOne()
+```
+
+
+
+
+
+
+### VibePassDelegated
+
+```solidity
+error VibePassDelegated()
+```
+
+
+
+
+
+
+### VibePassNonExistant
+
+```solidity
+error VibePassNonExistant()
+```
+
+
+
+
+
+
+### VibePassNotDelegated
+
+```solidity
+error VibePassNotDelegated()
 ```
 
 
