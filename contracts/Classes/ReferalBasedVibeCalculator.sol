@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "./ITaxCalculator.sol";
+import "./IVibeCalculator.sol";
 import "./VibeBase.sol";
 /**
  * @title ReferralBasedTaxCalculator
  * @dev A tax calculator that provides a discount for referred addresses.
  */
-contract ReferralBasedTaxCalculator is ITaxCalculator {
+contract ReferralBasedTaxCalculator is IVibeCalculator {
     int public immutable baseRateBasisPoints;
     int public immutable referralDiscountBasisPoints;
     mapping(address => address) public referrals;
@@ -41,11 +41,11 @@ contract ReferralBasedTaxCalculator is ITaxCalculator {
         return Description;
     }
 
-    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int) {
+    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int, uint) {
         if (referrals[addy] != address(0)) {
-            return baseRateBasisPoints - referralDiscountBasisPoints;
+            return (baseRateBasisPoints - referralDiscountBasisPoints, amount);
         } else {
-            return baseRateBasisPoints;
+            return (baseRateBasisPoints, amount);
         }
     }
 }

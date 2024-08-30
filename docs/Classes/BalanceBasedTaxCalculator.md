@@ -69,7 +69,7 @@ function balanceThreshold() external view returns (uint256)
 ### calculateTotalBasisFee
 
 ```solidity
-function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256)
+function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256, uint256)
 ```
 
 
@@ -88,6 +88,7 @@ function calculateTotalBasisFee(address addy, uint256 amount) external view retu
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+| _1 | uint256 | undefined |
 
 ### description
 
@@ -123,6 +124,23 @@ function getDescription() external view returns (string)
 |---|---|---|
 | _0 | string | undefined |
 
+### getLevel
+
+```solidity
+function getLevel() external view returns (enum VibeBase.Importance)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | enum VibeBase.Importance | undefined |
+
 ### highBalanceRateBasisPoints
 
 ```solidity
@@ -139,6 +157,25 @@ function highBalanceRateBasisPoints() external view returns (int256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+
+### id
+
+```solidity
+function id() external view returns (address creatorAddress, string info, enum VibeBase.Importance level)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| creatorAddress | address | undefined |
+| info | string | undefined |
+| level | enum VibeBase.Importance | undefined |
 
 ### lowBalanceRateBasisPoints
 

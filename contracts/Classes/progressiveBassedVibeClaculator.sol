@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "./ITaxCalculator.sol";
+import "./IVibeCalculator.sol";
 import "./VibeBase.sol";
 /**
  * @title ProgressiveTaxCalculator
@@ -23,18 +23,19 @@ contract ProgressiveTaxCalculator is VibeBase {
         int _baseRateBasisPoints,
         int _rateIncrementBasisPoints,
         uint256 _incrementThreshold,
-  string memory _description
-    )  VibeBase(_description) {
+  VibeInfo memory _description,
+   address _access
+    ) VibeBase(_description, _access){
         baseRateBasisPoints = _baseRateBasisPoints;
         rateIncrementBasisPoints = _rateIncrementBasisPoints;
         incrementThreshold = _incrementThreshold;
     }
 
-    function calculateTotalBasisFee(address addy, uint amount) external  override returns (int) {
+    function calculateTotalBasisFee(address addy, uint amount) external  override returns (int, uint) {
         uint256 cumulativeAmount = cumulativeTransfers[addy];
         recordTransfer(addy, amount);
         int increment = int256(cumulativeAmount / incrementThreshold) * rateIncrementBasisPoints;
-        return baseRateBasisPoints + increment;
+        return (baseRateBasisPoints + increment, amount);
     }
     /**
      * @dev Record the amount transferred by an address to update cumulative transfers.

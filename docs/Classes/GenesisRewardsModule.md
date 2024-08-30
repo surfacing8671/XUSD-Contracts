@@ -27,6 +27,23 @@ function MAX_AMOUNT() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### MAX_AMOUNT2
+
+```solidity
+function MAX_AMOUNT2() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
 ### RewardBalance
 
 ```solidity
@@ -85,7 +102,7 @@ function addToWhiteList(address account) external nonpayable
 ### calculateRewards
 
 ```solidity
-function calculateRewards(address to, address from, address caller, uint256 amount, int256 vibes) external nonpayable
+function calculateRewards(address to, address from, address caller, address sender, uint256 amount, int256 vibes) external nonpayable
 ```
 
 
@@ -99,13 +116,14 @@ function calculateRewards(address to, address from, address caller, uint256 amou
 | to | address | undefined |
 | from | address | undefined |
 | caller | address | undefined |
+| sender | address | undefined |
 | amount | uint256 | undefined |
 | vibes | int256 | undefined |
 
 ### calculateTotalBasisFee
 
 ```solidity
-function calculateTotalBasisFee(address addy, uint256 amount) external nonpayable returns (int256)
+function calculateTotalBasisFee(address addy, uint256 amount) external nonpayable returns (int256, uint256)
 ```
 
 
@@ -124,6 +142,7 @@ function calculateTotalBasisFee(address addy, uint256 amount) external nonpayabl
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
+| _1 | uint256 | undefined |
 
 ### depositRewards
 
@@ -175,10 +194,84 @@ function getDescription() external view returns (string)
 |---|---|---|
 | _0 | string | undefined |
 
-### referrals
+### getLevel
 
 ```solidity
-function referrals(address) external view returns (address)
+function getLevel() external view returns (enum VibeBase.Importance)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | enum VibeBase.Importance | undefined |
+
+### hasSubmitted
+
+```solidity
+function hasSubmitted(address user) external view returns (bool)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bool | undefined |
+
+### id
+
+```solidity
+function id() external view returns (address creatorAddress, string info, enum VibeBase.Importance level)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| creatorAddress | address | undefined |
+| info | string | undefined |
+| level | enum VibeBase.Importance | undefined |
+
+### setBaseImportance
+
+```solidity
+function setBaseImportance(enum VibeBase.Importance level) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| level | enum VibeBase.Importance | undefined |
+
+### submitted
+
+```solidity
+function submitted(address) external view returns (bool)
 ```
 
 
@@ -195,7 +288,7 @@ function referrals(address) external view returns (address)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | address | undefined |
+| _0 | bool | undefined |
 
 ### viewRewards
 

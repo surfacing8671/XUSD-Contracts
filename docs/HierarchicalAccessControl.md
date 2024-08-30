@@ -2,11 +2,11 @@
 
 
 
+> HierarchicalAccessControl
 
 
 
-
-
+*Implements role-based access control with hierarchical ranks.*
 
 ## Methods
 
@@ -16,16 +16,16 @@
 function assignRank(address account, enum HierarchicalAccessControl.Rank rank) external nonpayable
 ```
 
+Assign a rank to an account.
 
-
-
+*Can only be called by accounts with CONSUL rank or higher.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
-| rank | enum HierarchicalAccessControl.Rank | undefined |
+| account | address | The address to assign the rank to. |
+| rank | enum HierarchicalAccessControl.Rank | The rank to be assigned. |
 
 ### downgradeRank
 
@@ -33,15 +33,15 @@ function assignRank(address account, enum HierarchicalAccessControl.Rank rank) e
 function downgradeRank(address account) external nonpayable
 ```
 
+Downgrade the rank of an account.
 
-
-
+*Can only be called by accounts with CONSUL rank or higher.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
+| account | address | The address to downgrade the rank for. |
 
 ### getRank
 
@@ -49,7 +49,7 @@ function downgradeRank(address account) external nonpayable
 function getRank(address account) external view returns (enum HierarchicalAccessControl.Rank)
 ```
 
-
+Get the rank of an account.
 
 
 
@@ -57,13 +57,13 @@ function getRank(address account) external view returns (enum HierarchicalAccess
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
+| account | address | The address to check. |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | enum HierarchicalAccessControl.Rank | undefined |
+| _0 | enum HierarchicalAccessControl.Rank | Rank The rank of the account. |
 
 ### hasRank
 
@@ -71,7 +71,7 @@ function getRank(address account) external view returns (enum HierarchicalAccess
 function hasRank(enum HierarchicalAccessControl.Rank requiredRank, address account) external view returns (bool)
 ```
 
-
+Check if an account has the required rank or higher.
 
 
 
@@ -79,14 +79,14 @@ function hasRank(enum HierarchicalAccessControl.Rank requiredRank, address accou
 
 | Name | Type | Description |
 |---|---|---|
-| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
-| account | address | undefined |
+| requiredRank | enum HierarchicalAccessControl.Rank | The rank required. |
+| account | address | The address of the account to check. |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | bool | undefined |
+| _0 | bool | bool True if the account has the required rank or higher, false otherwise. |
 
 ### revokeRank
 
@@ -94,15 +94,15 @@ function hasRank(enum HierarchicalAccessControl.Rank requiredRank, address accou
 function revokeRank(address account) external nonpayable
 ```
 
+Revoke the rank of an account.
 
-
-
+*Can only be called by accounts with SENATOR rank or higher.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
+| account | address | The address to revoke the rank from. |
 
 ### upgradeRank
 
@@ -110,15 +110,15 @@ function revokeRank(address account) external nonpayable
 function upgradeRank(address account) external nonpayable
 ```
 
+Upgrade the rank of an account.
 
-
-
+*Can only be called by accounts with CONSUL rank or higher.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
+| account | address | The address to upgrade the rank for. |
 
 
 
@@ -132,14 +132,14 @@ event RankAssigned(address indexed account, enum HierarchicalAccessControl.Rank 
 
 
 
-
+*Emitted when a rank is assigned to an account.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account `indexed` | address | undefined |
-| rank  | enum HierarchicalAccessControl.Rank | undefined |
+| account `indexed` | address | The address of the account being assigned a rank. |
+| rank  | enum HierarchicalAccessControl.Rank | The rank assigned to the account. |
 
 ### RankDowngraded
 
@@ -149,14 +149,14 @@ event RankDowngraded(address indexed account, enum HierarchicalAccessControl.Ran
 
 
 
-
+*Emitted when an account&#39;s rank is downgraded.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account `indexed` | address | undefined |
-| newRank  | enum HierarchicalAccessControl.Rank | undefined |
+| account `indexed` | address | The address of the account being downgraded. |
+| newRank  | enum HierarchicalAccessControl.Rank | The new rank assigned to the account. |
 
 ### RankRevoked
 
@@ -166,13 +166,13 @@ event RankRevoked(address indexed account)
 
 
 
-
+*Emitted when a rank is revoked from an account.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account `indexed` | address | undefined |
+| account `indexed` | address | The address of the account whose rank is revoked. |
 
 ### RankUpgraded
 
@@ -182,14 +182,14 @@ event RankUpgraded(address indexed account, enum HierarchicalAccessControl.Rank 
 
 
 
-
+*Emitted when an account&#39;s rank is upgraded.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account `indexed` | address | undefined |
-| newRank  | enum HierarchicalAccessControl.Rank | undefined |
+| account `indexed` | address | The address of the account being upgraded. |
+| newRank  | enum HierarchicalAccessControl.Rank | The new rank assigned to the account. |
 
 
 
@@ -203,14 +203,14 @@ error AccessDenied(address account, enum HierarchicalAccessControl.Rank required
 
 
 
-
+*Error thrown when an account lacks the required rank.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| account | address | undefined |
-| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
+| account | address | The address of the account attempting the operation. |
+| requiredRank | enum HierarchicalAccessControl.Rank | The rank required for the operation. |
 
 ### InvalidOperation
 
@@ -220,12 +220,12 @@ error InvalidOperation(string reason)
 
 
 
-
+*Error thrown when an invalid operation is attempted.*
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| reason | string | undefined |
+| reason | string | The reason why the operation is invalid. |
 
 

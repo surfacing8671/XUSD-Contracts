@@ -16,7 +16,7 @@
 function VoterTallyMap(address) external view returns (address classAddress, uint256 voteTotal, uint256 index, uint256 timestampStart, uint256 totalNft, string name, string description, bool approved, bool rewards, bool process, uint256 classType)
 ```
 
-Mapping of vote tallies by class address
+
 
 
 
@@ -48,7 +48,7 @@ Mapping of vote tallies by class address
 function checkVotes(address classAddress) external nonpayable
 ```
 
-Check the votes for a specific class address and finalize the proposal if the vote passes
+
 
 
 
@@ -56,7 +56,7 @@ Check the votes for a specific class address and finalize the proposal if the vo
 
 | Name | Type | Description |
 |---|---|---|
-| classAddress | address | The address of the class being voted on |
+| classAddress | address | undefined |
 
 ### denominator
 
@@ -95,36 +95,48 @@ function propose(MyGovernor.VoteProposal proposal, address classAddress) externa
 ### showActiveVibes
 
 ```solidity
-function showActiveVibes() external view returns (struct MyGovernor.VoteTally[])
+function showActiveVibes(uint256 limit, uint256 offset) external view returns (struct MyGovernor.VoteTally[])
 ```
 
-Retrieves all approved vote proposals (active vibes)
 
 
 
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| limit | uint256 | undefined |
+| offset | uint256 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | MyGovernor.VoteTally[] | voters An array of VoteTally structs representing all approved vote proposals |
+| _0 | MyGovernor.VoteTally[] | undefined |
 
 ### showAllProposals
 
 ```solidity
-function showAllProposals() external view returns (struct MyGovernor.VoteTally[])
+function showAllProposals(uint256 limit, uint256 offset) external view returns (struct MyGovernor.VoteTally[])
 ```
 
-Retrieves all active vote proposals
 
 
 
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| limit | uint256 | undefined |
+| offset | uint256 | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | MyGovernor.VoteTally[] | voters An array of VoteTally structs representing all active vote proposals |
+| _0 | MyGovernor.VoteTally[] | undefined |
 
 ### updateVoteDen
 
@@ -148,7 +160,7 @@ function updateVoteDen(uint256 _denominator) external nonpayable
 function vote(address classAddress) external nonpayable
 ```
 
-Cast a vote for a specific class address
+
 
 
 
@@ -156,8 +168,102 @@ Cast a vote for a specific class address
 
 | Name | Type | Description |
 |---|---|---|
-| classAddress | address | The address of the class being voted on |
+| classAddress | address | undefined |
 
+
+
+## Events
+
+### ProposalFailed
+
+```solidity
+event ProposalFailed(address indexed classAddress, string reason)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| classAddress `indexed` | address | undefined |
+| reason  | string | undefined |
+
+### VoteCast
+
+```solidity
+event VoteCast(address indexed voter, address indexed classAddress, uint256 voteTotal)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| voter `indexed` | address | undefined |
+| classAddress `indexed` | address | undefined |
+| voteTotal  | uint256 | undefined |
+
+### VoteChecked
+
+```solidity
+event VoteChecked(address indexed classAddress, bool approved, uint256 totalVotes)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| classAddress `indexed` | address | undefined |
+| approved  | bool | undefined |
+| totalVotes  | uint256 | undefined |
+
+### VoteDenominatorUpdated
+
+```solidity
+event VoteDenominatorUpdated(uint256 oldDenominator, uint256 newDenominator)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| oldDenominator  | uint256 | undefined |
+| newDenominator  | uint256 | undefined |
+
+### VoteProposed
+
+```solidity
+event VoteProposed(address indexed classAddress, string name, string description, uint256 classType, bool process, bool rewards)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| classAddress `indexed` | address | undefined |
+| name  | string | undefined |
+| description  | string | undefined |
+| classType  | uint256 | undefined |
+| process  | bool | undefined |
+| rewards  | bool | undefined |
 
 
 
@@ -185,6 +291,17 @@ error AlreadyProposed()
 
 
 
+### InvalidDenominator
+
+```solidity
+error InvalidDenominator()
+```
+
+
+
+
+
+
 ### NeedAVibePass
 
 ```solidity
@@ -200,6 +317,28 @@ error NeedAVibePass()
 
 ```solidity
 error NotAllowedAccess()
+```
+
+
+
+
+
+
+### ReentrancyGuardReentrantCall
+
+```solidity
+error ReentrancyGuardReentrantCall()
+```
+
+
+
+*Unauthorized reentrant call.*
+
+
+### classAddressNotMatch
+
+```solidity
+error classAddressNotMatch()
 ```
 
 

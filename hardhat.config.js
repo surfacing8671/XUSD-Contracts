@@ -1,11 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-ignition-ethers");
 require('@openzeppelin/hardhat-upgrades');
- //require('@primitivefi/hardhat-dodoc');
+ require('@primitivefi/hardhat-dodoc');
 require('dotenv').config()
-
+require('@primitivefi/hardhat-marmite');
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
+ 
 solidity: {
     compilers: [
       {
@@ -32,5 +33,12 @@ solidity: {
     },
     
   },
+  etherscan: {
+    apiKey: {
+
+        "polygon-mainnet": "TUCW8DV1FFPPUYFJRVBMNKQM69IU7CWYHF" || ``,
+        
+    },
+},
   
 };

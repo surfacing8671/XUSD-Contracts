@@ -2,13 +2,30 @@
 
 
 
-> MyTokenMock
+> XUSD
 
 
 
-*A mock token contract inheriting ERC20Taxable with voting and delegate functionalities.*
+*ERC20 implementation with burn functionality and registry integration.*
 
 ## Methods
+
+### BURN_ADDRESS
+
+```solidity
+function BURN_ADDRESS() external view returns (address)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
 
 ### Rewardtransfer
 
@@ -32,22 +49,6 @@ function Rewardtransfer(address to, uint256 amount) external nonpayable returns 
 | Name | Type | Description |
 |---|---|---|
 | _0 | bool | undefined |
-
-### addWhitelistedContract
-
-```solidity
-function addWhitelistedContract(address contractAddr) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contractAddr | address | undefined |
 
 ### allowance
 
@@ -95,23 +96,6 @@ function approve(address spender, uint256 amount) external nonpayable returns (b
 |---|---|---|
 | _0 | bool | undefined |
 
-### assignRank
-
-```solidity
-function assignRank(address account, enum HierarchicalAccessControl.Rank rank) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| rank | enum HierarchicalAccessControl.Rank | undefined |
-
 ### balanceOf
 
 ```solidity
@@ -133,23 +117,6 @@ function balanceOf(address account) external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
-
-### burnAddress
-
-```solidity
-function burnAddress() external view returns (address)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
 
 ### burnBalance
 
@@ -213,195 +180,6 @@ function decreaseAllowance(address spender, uint256 subtractedValue) external no
 |---|---|---|
 | _0 | bool | undefined |
 
-### delegate
-
-```solidity
-function delegate(address delegatee) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegatee | address | undefined |
-
-### downgradeRank
-
-```solidity
-function downgradeRank(address account) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-### feeBasisPoints
-
-```solidity
-function feeBasisPoints() external view returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### feeRecipient
-
-```solidity
-function feeRecipient() external view returns (address)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### getRank
-
-```solidity
-function getRank(address account) external view returns (enum HierarchicalAccessControl.Rank)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | enum HierarchicalAccessControl.Rank | undefined |
-
-### getTaxAddress
-
-```solidity
-function getTaxAddress() external view returns (address)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
-
-### getTaxRate
-
-```solidity
-function getTaxRate() external view returns (uint256)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### getVotes
-
-```solidity
-function getVotes(address account) external view returns (uint256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### getVotesContracts
-
-```solidity
-function getVotesContracts(address account) external view returns (uint256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### hasRank
-
-```solidity
-function hasRank(enum HierarchicalAccessControl.Rank requiredRank, address account) external view returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
-
 ### increaseAllowance
 
 ```solidity
@@ -447,28 +225,6 @@ function isExcludedFromTax(address account) external view returns (bool)
 |---|---|---|
 | _0 | bool | undefined |
 
-### isWhitelistedContract
-
-```solidity
-function isWhitelistedContract(address contractAddr) external view returns (bool)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contractAddr | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
-
 ### mint
 
 ```solidity
@@ -506,7 +262,7 @@ function name() external view returns (string)
 ### registry
 
 ```solidity
-function registry() external view returns (contract ClassRegistry)
+function registry() external view returns (contract VibeRegistry)
 ```
 
 
@@ -518,7 +274,7 @@ function registry() external view returns (contract ClassRegistry)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | contract ClassRegistry | undefined |
+| _0 | contract VibeRegistry | undefined |
 
 ### registryBurn
 
@@ -537,26 +293,10 @@ function registryBurn(address account, uint256 amount) external nonpayable
 | account | address | undefined |
 | amount | uint256 | undefined |
 
-### removeWhitelistedContract
+### setExclusionFromTax
 
 ```solidity
-function removeWhitelistedContract(address contractAddr) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contractAddr | address | undefined |
-
-### revokeRank
-
-```solidity
-function revokeRank(address account) external nonpayable
+function setExclusionFromTax(address account, bool status) external nonpayable
 ```
 
 
@@ -568,6 +308,7 @@ function revokeRank(address account) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | account | address | undefined |
+| status | bool | undefined |
 
 ### setRegistry
 
@@ -683,39 +424,6 @@ function transferFrom(address from, address to, uint256 amount) external nonpaya
 |---|---|---|
 | _0 | bool | undefined |
 
-### upgradeRank
-
-```solidity
-function upgradeRank(address account) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-### whitelistBurn
-
-```solidity
-function whitelistBurn(address account, uint256 amount) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| amount | uint256 | undefined |
-
 
 
 ## Events
@@ -738,109 +446,6 @@ event Approval(address indexed owner, address indexed spender, uint256 value)
 | spender `indexed` | address | undefined |
 | value  | uint256 | undefined |
 
-### DelegateChanged
-
-```solidity
-event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegator `indexed` | address | undefined |
-| fromDelegate `indexed` | address | undefined |
-| toDelegate `indexed` | address | undefined |
-
-### DelegateVotesChanged
-
-```solidity
-event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint256 newVotes)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegate `indexed` | address | undefined |
-| previousVotes  | uint256 | undefined |
-| newVotes  | uint256 | undefined |
-
-### RankAssigned
-
-```solidity
-event RankAssigned(address indexed account, enum HierarchicalAccessControl.Rank rank)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account `indexed` | address | undefined |
-| rank  | enum HierarchicalAccessControl.Rank | undefined |
-
-### RankDowngraded
-
-```solidity
-event RankDowngraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account `indexed` | address | undefined |
-| newRank  | enum HierarchicalAccessControl.Rank | undefined |
-
-### RankRevoked
-
-```solidity
-event RankRevoked(address indexed account)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account `indexed` | address | undefined |
-
-### RankUpgraded
-
-```solidity
-event RankUpgraded(address indexed account, enum HierarchicalAccessControl.Rank newRank)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account `indexed` | address | undefined |
-| newRank  | enum HierarchicalAccessControl.Rank | undefined |
-
 ### Transfer
 
 ```solidity
@@ -859,58 +464,5 @@ event Transfer(address indexed from, address indexed to, uint256 value)
 | to `indexed` | address | undefined |
 | value  | uint256 | undefined |
 
-### WhitelistContract
-
-```solidity
-event WhitelistContract(address indexed contractAddr, bool status)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contractAddr `indexed` | address | undefined |
-| status  | bool | undefined |
-
-
-
-## Errors
-
-### AccessDenied
-
-```solidity
-error AccessDenied(address account, enum HierarchicalAccessControl.Rank requiredRank)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| requiredRank | enum HierarchicalAccessControl.Rank | undefined |
-
-### InvalidOperation
-
-```solidity
-error InvalidOperation(string reason)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| reason | string | undefined |
 
 

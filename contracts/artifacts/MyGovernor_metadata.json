@@ -1,0 +1,960 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_access",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "Nft",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_classReg",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "AlreadyPassed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "AlreadyProposed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NeedAVibePass",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotAllowedAccess",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "voteTotal",
+						"type": "uint256"
+					}
+				],
+				"name": "VoteCast",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalVotes",
+						"type": "uint256"
+					}
+				],
+				"name": "VoteChecked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "oldDenominator",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newDenominator",
+						"type": "uint256"
+					}
+				],
+				"name": "VoteDenominatorUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "classType",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "process",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "rewards",
+						"type": "bool"
+					}
+				],
+				"name": "VoteProposed",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "VoterTallyMap",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "voteTotal",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestampStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalNft",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "rewards",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "process",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "classType",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					}
+				],
+				"name": "checkVotes",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "denominator",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "process",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "rewards",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "classType",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MyGovernor.VoteProposal",
+						"name": "proposal",
+						"type": "tuple"
+					},
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					}
+				],
+				"name": "propose",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "showActiveVibes",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteTotal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "index",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[]",
+								"name": "hashes",
+								"type": "uint256[]"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestampStart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalNft",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "approved",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "rewards",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "process",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "classType",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MyGovernor.VoteTally[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "showAllProposals",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteTotal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "index",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[]",
+								"name": "hashes",
+								"type": "uint256[]"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestampStart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalNft",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "approved",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "rewards",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "process",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "classType",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MyGovernor.VoteTally[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "class",
+						"type": "address"
+					}
+				],
+				"name": "showProposal",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "classAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteTotal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "index",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[]",
+								"name": "hashes",
+								"type": "uint256[]"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestampStart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalNft",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "approved",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "rewards",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "process",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "classType",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MyGovernor.VoteTally",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_denominator",
+						"type": "uint256"
+					}
+				],
+				"name": "updateVoteDen",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "classAddress",
+						"type": "address"
+					}
+				],
+				"name": "vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Govenor.sol": "MyGovernor"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
+			"keccak256": "0xc163fcf9bb10138631a9ba5564df1fa25db9adff73bd9ee868a8ae1858fe093a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9706d43a0124053d9880f6e31a59f31bc0a6a3dc1acd66ce0a16e1111658c5f6",
+				"dweb:/ipfs/QmUFmfowzkRwGtDu36cXV9SPTBHJ3n7dG9xQiK5B28jTf2"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0x631188737069917d2f909d29ce62c4d48611d326686ba6683e26b72a23bfac0b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7a61054ae84cd6c4d04c0c4450ba1d6de41e27e0a2c4f1bcdf58f796b401c609",
+				"dweb:/ipfs/QmUvtdp7X1mRVyC3CsHrtPbgoqWaXHp3S1ZR24tpAQYJWM"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol": {
+			"keccak256": "0x3f13b947637c4969c0644cab4ef399cdc4b67f101463b8775c5a43b118558e53",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c6683e6ade6985d394d32baaef5eea0d8b9ff0b3eca86ae413d6cdde114a9930",
+				"dweb:/ipfs/QmdBE8T1BTddZxpdECMsb3KiCFyjNWmxcCddYrWFTXmWPj"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol": {
+			"keccak256": "0x9a1766b1921bf91b3e61eb53c7a6e70725254befd4bdcbbcd3af40bd9f66856f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://29bf2fa41a172086a665c9738377b93655aa4b1ffda9fe839c8bdf646f185040",
+				"dweb:/ipfs/QmeB21qDuo8WPQSrqXJbQmWHKsdeocGNSUWLhCwniVejrt"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol": {
+			"keccak256": "0x8a97653aeba40e9f0c2e8df1a1379b29b927b6dc3534040c668e71ad9ae89d88",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e529c294c9d634eb68a1e4aeb66eb8381de5a08ccd2c0bfeebd48a6b28fcff7",
+				"dweb:/ipfs/QmWCezuxfZb68nM3Hs6XzQNNiW7VJsymU4sajy2DW1CKbp"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
+				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol": {
+			"keccak256": "0x778f4a1546a1c6c726ecc8e2348a2789690fb8f26e12bd9d89537669167b79a4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://851d3dfe724e918ff0a064b206e1ef46b27ab0df2aa2c8af976973a22ef59827",
+				"dweb:/ipfs/Qmd4wb7zX8ueYhMVBy5PJjfsANK3Ra3pKPN7qQkNsdwGHn"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol": {
+			"keccak256": "0x85462422a22578744581e012e9aa0a391958cb360288b0b63f29bf0431d70327",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2bc529e2b9b28da5d26da451058250d85afcaa3c5083ee273ac68fa6bf956b78",
+				"dweb:/ipfs/Qmd3Aq59ztmoVmHigsaR4YjkXWKERVpjfQ4a2PHk7Ke6Rx"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC5267.sol": {
+			"keccak256": "0x92aa1df62dc3d33f1656d63bede0923e0df0b706ad4137c8b10b0a8fe549fd92",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c5c0f29195ad64cbe556da8e257dac8f05f78c53f90323c0d2accf8e6922d33a",
+				"dweb:/ipfs/QmQ61TED8uaCZwcbh8KkgRSsCav7x7HbcGHwHts3U4DmUP"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/draft-IERC1822.sol": {
+			"keccak256": "0x2a1f9944df2015c081d89cd41ba22ffaf10aa6285969f0dc612b235cc448999c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef381843676aec64421200ee85eaa0b1356a35f28b9fc67e746a6bbb832077d9",
+				"dweb:/ipfs/QmY8aorMYA2TeTCnu6ejDjzb4rW4t7TCtW4GZ6LoxTFm7v"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+			"keccak256": "0x60c65f701957fdd6faea1acb0bb45825791d473693ed9ecb34726fdfaa849dd7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ea290300e0efc4d901244949dc4d877fd46e6c5e43dc2b26620e8efab3ab803f",
+				"dweb:/ipfs/QmcLLJppxKeJWqHxE2CUkcfhuRTgHSn8J4kijcLa5MYhSt"
+			]
+		},
+		"@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol": {
+			"keccak256": "0xbfb6695731de677140fbf76c772ab08c4233a122fb51ac28ac120fc49bbbc4ec",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://68f8fded7cc318efa15874b7c6a983fe17a4a955d72d240353a9a4ca1e1b824c",
+				"dweb:/ipfs/QmdcmBL9Qo4Tk3Dby4wFYabGyot9JNeLPxpSXZUgUm92BV"
+			]
+		},
+		"@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol": {
+			"keccak256": "0x06a78f9b3ee3e6d0eb4e4cd635ba49960bea34cac1db8c0a27c75f2319f1fd65",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://547d21aa17f4f3f1a1a7edf7167beff8dd9496a0348d5588f15cc8a4b29d052a",
+				"dweb:/ipfs/QmT16JtRQSWNpLo9W23jr6CzaMuTAcQcjJJcdRd8HLJ6cE"
+			]
+		},
+		"@openzeppelin/contracts/proxy/Proxy.sol": {
+			"keccak256": "0xc3f2ec76a3de8ed7a7007c46166f5550c72c7709e3fc7e8bb3111a7191cdedbd",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e73efb4c2ca655882dc237c6b4f234a9bd36d97159d8fcaa837eb01171f726ac",
+				"dweb:/ipfs/QmTNnnv7Gu5fs5G1ZMh7Fexp8N4XUs3XrNAngjcxgiss3e"
+			]
+		},
+		"@openzeppelin/contracts/proxy/beacon/IBeacon.sol": {
+			"keccak256": "0xc59a78b07b44b2cf2e8ab4175fca91e8eca1eee2df7357b8d2a8833e5ea1f64c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5aa4f07e65444784c29cd7bfcc2341b34381e4e5b5da9f0c5bd00d7f430e66fa",
+				"dweb:/ipfs/QmWRMh4Q9DpaU9GvsiXmDdoNYMyyece9if7hnfLz7uqzWM"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ea104e577e63faea3b69c415637e99e755dcbf64c5833d7140c35a714d6d90c",
+				"dweb:/ipfs/Qmau6x4Ns9XdyynRCNNp3RhLqijJjFm7z5fyZazfYFGYdq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0xaa761817f6cd7892fcf158b3c776b34551cde36f48ff9703d53898bc45a94ea2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ad7c8d4d08938c8dfc43d75a148863fb324b80cf53e0a36f7e5a4ac29008850",
+				"dweb:/ipfs/QmcrhfPgVNf5mkdhQvy1pMv51TFokD3Y4Wa5WZhFqVh8UV"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol": {
+			"keccak256": "0x6008dabfe393240d73d7dd7688033f72740d570aa422254d29a7dce8568f3aff",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f5196ec75139918c6c7bb4251b36395e668f1fa6d206beba7e7520e74913940d",
+				"dweb:/ipfs/QmSyqjksXxmm2mCG6qRd1yuwLykypkSVBbnBnGqJRcuJMi"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+			"keccak256": "0x13dd061770956c8489b80cfc89d9cdfc8ea2783d953691ea037a380731d52784",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ed37f0f86e7fe31659e48c3a2a5920a92dd7f13c85cf8991fb79fe5f01e08efd",
+				"dweb:/ipfs/QmUtm9bQGvjr9hHGwkPWrbgFmVqzaJcxjkaYDex2oGsonS"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+			"keccak256": "0x5ef46daa3b58ef2702279d514780316efaa952915ee1aa3396f041ee2982b0b4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2f8f2a76e23b02fc69e8cd24c3cb47da6c7af3a2d6c3a382f8ac25c6e094ade7",
+				"dweb:/ipfs/QmPV4ZS4tPVv4mTCf9ejyZ1ai57EEibDRj7mN2ARDCLV5n"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+			"keccak256": "0x7f7a26306c79a65fb8b3b6c757cd74660c532cd8a02e165488e30027dd34ca49",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d01e0b2b837ee2f628545e54d8715b49c7ef2befd08356c2e7f6c50dde8a1c22",
+				"dweb:/ipfs/QmWBAn6y2D1xgftci97Z3qR9tQnkvwQpYwFwkTvDMvqU4i"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+			"keccak256": "0x37d1aaaa5a2908a09e9dcf56a26ddf762ecf295afb5964695937344fc6802ce1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ed0bfc1b92153c5000e50f4021367b931bbe96372ac6facec3c4961b72053d02",
+				"dweb:/ipfs/Qmbwp8VDerjS5SV1quwHH1oMXxPQ93fzfLVqJ2RCqbowGE"
+			]
+		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0xaf28a975a78550e45f65e559a3ad6a5ad43b9b8a37366999abd1b7084eb70721",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b7bd24e224f67f65bfadf85dc2929fa965456bb2415478bd0125471b5ce35245",
+				"dweb:/ipfs/QmRaydGr8BTHs1kvaZfsNU69pKzUAGFrvABn1KiRSbE51y"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"@openzeppelin/contracts/utils/StorageSlot.sol": {
+			"keccak256": "0x32ba59b4b7299237c8ba56319110989d7978a039faf754793064e967e5894418",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1ae50c8b562427df610cc4540c9bf104acca7ef8e2dcae567ae7e52272281e9c",
+				"dweb:/ipfs/QmTHiadFCSJUPpRjNegc5SahmeU8bAoY8i9Aq6tVscbcKR"
+			]
+		},
+		"@openzeppelin/contracts/utils/Strings.sol": {
+			"keccak256": "0x55f102ea785d8399c0e58d1108e2d289506dde18abc6db1b7f68c1f9f9bc5792",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e52e0a7765c943ef14e5bcf11e46e6139fa044be564881378349236bf2e3453",
+				"dweb:/ipfs/QmZEeeXoFPW47amyP35gfzomF9DixqqTEPwzBakv6cZw6i"
+			]
+		},
+		"@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
+			"keccak256": "0xeed0a08b0b091f528356cbc7245891a4c748682d4f6a18055e8e6ca77d12a6cf",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ba80ba06c8e6be852847e4c5f4492cef801feb6558ae09ed705ff2e04ea8b13c",
+				"dweb:/ipfs/QmXRJDv3xHLVQCVXg1ZvR35QS9sij5y9NDWYzMfUfAdTHF"
+			]
+		},
+		"@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol": {
+			"keccak256": "0xba333517a3add42cd35fe877656fc3dfcc9de53baa4f3aabbd6d12a92e4ea435",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2ceacff44c0fdc81e48e0e0b1db87a2076d3c1fb497341de077bf1da9f6b406c",
+				"dweb:/ipfs/QmRUo1muMRAewxrKQ7TkXUtknyRoR57AyEkoPpiuZQ8FzX"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+			"keccak256": "0x9e8778b14317ba9e256c30a76fd6c32b960af621987f56069e1e819c77c6a133",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1777404f1dcd0fac188e55a288724ec3c67b45288e49cc64723e95e702b49ab8",
+				"dweb:/ipfs/QmZFdC626GButBApwDUvvTnUzdinevC3B24d7yyh57XkiA"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df",
+				"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0x005ec64c6313f0555d59e278f9a7a5ab2db5bdc72a027f255a37c327af1ec02d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ece9f0b9c8daca08c76b6b5405a6446b6f73b3a15fab7ff56e296cbd4a2c875",
+				"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SignedMath.sol": {
+			"keccak256": "0x5f7e4076e175393767754387c962926577f1660dd9b810187b9002407656be72",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7d533a1c97cd43a57cd9c465f7ee8dd0e39ae93a8fb8ff8e5303a356b081cdcc",
+				"dweb:/ipfs/QmVBEei6aTnvYNZp2CHYVNKyZS4q1KkjANfY39WVXZXVoT"
+			]
+		},
+		"contracts/Access.sol": {
+			"keccak256": "0xe102e73b2a993f970acff24acf058c313c6c7b5835ed8303ec067ddfe9ea26c2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1eb8237226ecfa5257e23b000ce28d92484cf28200eb99d8c374b88446148fd9",
+				"dweb:/ipfs/QmNzuBz5RhXhHJ1zUemRSw1D9s6Ctd5bvu6yVGvVxx985a"
+			]
+		},
+		"contracts/Address.sol": {
+			"keccak256": "0x63743094396d249833b433fb315f8ab49475bf2cd1f3888e97c9cb313ca403d8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c105a0df1aef5e7a1a2c58f6bb499a74b3e1b770df51daeaaa95f17ca76fcf2b",
+				"dweb:/ipfs/QmeJcH1gWBkFdafsXxLoVfjgusXAUBoBWBHEbcU1q3xLh2"
+			]
+		},
+		"contracts/AddressReg.sol": {
+			"keccak256": "0xe41e2b4fcc1e789b7f14244d06e26dc3bf54fcd92384ee63d0fcfbc026051e3b",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://407449de487084b3d475ccdd607feae64d1d9f0cf915a94d26edf14135a3dd88",
+				"dweb:/ipfs/Qme82jh1zs5HwtHpEuoJfYoZ2YGa9xd4VcG7RX92XacMY3"
+			]
+		},
+		"contracts/Classes/IClassBase.sol": {
+			"keccak256": "0x20bb2f74b01f2a77bc153d2aa3239db4681cf9ae1d78b97eb25844e7b4776c83",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ac41f44562ac2e2be7ca8ad4a51535e39ade902243f1f7e46340f1c3941500ab",
+				"dweb:/ipfs/QmXt1mSJZPV4V7Eztif8Ytek4GFAcfS8puFTH5TKgdRxoo"
+			]
+		},
+		"contracts/Classes/IVibeCalculator.sol": {
+			"keccak256": "0x5111d7d5b71da7e56db6fbb71782f7f8cb3bef5a6541656a0410c00901090ab3",
+			"urls": [
+				"bzz-raw://00de48d8fa1bff2e26c2d764012f48f1b7ac15282e912cfbcdbf802828b82ecb",
+				"dweb:/ipfs/Qme5hg5GWgrvuLJjrq7gwqU8RQXtZBPe4PBQmuUwtJc9bL"
+			]
+		},
+		"contracts/Classes/VibeBase.sol": {
+			"keccak256": "0xbc38b558417bb6746ec2fe5618a1a4200ddce0264f3640fc70ca599adbeef13a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://bf987c97920412d0e6c5dc47d6f4fe1547a2ab4ceac8fc87d128595b5a2586ec",
+				"dweb:/ipfs/QmXuk2wRsgjwxtWUxmmLEdBzgbmDHxgZGDsWtqufCZTZ6a"
+			]
+		},
+		"contracts/Govenor.sol": {
+			"keccak256": "0x678580d28c2cd59cb0c30ed351b51418708b56d2cff27cdac34b6b4e468d8d1f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://126382ccbfe21dac5cee15e4534f24756fc96257d0b8e3ebde3752366fc54098",
+				"dweb:/ipfs/Qmc1wdezrwLgkxwa4v3vR861WArPjXjQBMsq1MB6yEXTBw"
+			]
+		},
+		"contracts/IVibePass.sol": {
+			"keccak256": "0x31ee5ebd8e6166371d2f0dd3776411103c063bdd4274fdc090265a27bd7b56a6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e2650053888cb6cd59fd721b1ac776b45acc88efcf3e3d4786de1f206cdcfac9",
+				"dweb:/ipfs/QmV6TEjxD2mZVuWgY4we7QF1a3i2kp1UmkJZJ7HmwjctkN"
+			]
+		},
+		"contracts/Ownable.sol": {
+			"keccak256": "0x61815100ca5638c80bdf4bdf2384b1b5ec4635a0ff6a06487cf97a20d6e63026",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1cf656d732c05886a06abad933b5e959c6974074cc3e59b37d476dc95de5a01b",
+				"dweb:/ipfs/QmUEgPdH4GA7KpUPxWYNWF56viXZv7anp8umhUKBDQCV5k"
+			]
+		},
+		"contracts/VibeRegistry.sol": {
+			"keccak256": "0x67282864d039c65f49b7bc3f37f930a1fefb225eb7865d4a7b63c3b9699e6e31",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://956a413cae9e7be9541bdf88ca2ef380cd95a60e148f969d53b29345d8555d44",
+				"dweb:/ipfs/QmX24gsrsCoHmQW9kCfuspMVqBk1N8ASdTHY9vUQg8UgRv"
+			]
+		},
+		"contracts/XUSD1.sol": {
+			"keccak256": "0x006f6995ffacfcb5709b6c91ee926ea08782848309da1c2a71392284efdadb22",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://73c5bee93bd404d803025fba7239766fd4195faef0f1d6ba27e473af08f3841d",
+				"dweb:/ipfs/QmaWC47LMEmgx4KuJUAac7gpRpocuurwMtnbWM7QMV5QEP"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0x7c07375935c4a4aeb031ef9ac4b1e5f0f99e7da719e8a2aabc9b3be2a9684562",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://b41a4c8dd8cace3a8b1aa4c0a27ce47dc5f7fd999a3c028a378d79d720b347eb",
+				"dweb:/ipfs/QmUTCb8Af5TLDtaftUUuHbkA79ndb3RYJDxG7wD1BFNMv1"
+			]
+		},
+		"contracts/registry.sol": {
+			"keccak256": "0x3b72d65ff76dc47e6b3a1a9639062655646d2d9fdab41e70a1f3ee6f7bcbf0a2",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://14cf9336e9bb84af9de7e34b7037b16a51a410678830f973af8f87632f246d09",
+				"dweb:/ipfs/QmNbF9S5G3tXnVQ1TzMU9neoiaGKCjG4z9rKJzVHA58j3x"
+			]
+		},
+		"hardhat/console.sol": {
+			"keccak256": "0x7434453e6d3b7d0e5d0eb7846ffdbc27f0ccf3b163591263739b628074dc103a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://49355f780520494d1d5a0f01858385e51bb5280ce0ecfb960f16995065dca395",
+				"dweb:/ipfs/QmSwJ6C5QLz6xKeQZS8wbwjU1KxRFTYfwbGmtzisd5sRW4"
+			]
+		}
+	},
+	"version": 1
+}

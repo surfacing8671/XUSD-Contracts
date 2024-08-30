@@ -126,7 +126,7 @@ function getApproved(uint256 tokenId) external view returns (address)
 function getBurnAmounts(address user) external view returns (uint256)
 ```
 
-Get the burn amounts for the specified user
+
 
 
 
@@ -134,13 +134,13 @@ Get the burn amounts for the specified user
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | The address of the user to get the burn amounts for |
+| user | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | The burn amount of the user minus the purchase burn amount |
+| _0 | uint256 | undefined |
 
 ### getProtocolMessage
 
@@ -315,6 +315,23 @@ function ownerOf(uint256 tokenId) external view returns (address)
 |---|---|---|
 | _0 | address | undefined |
 
+### pDecay
+
+```solidity
+function pDecay() external view returns (contract PriceSlowDecay)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract PriceSlowDecay | undefined |
+
 ### purchaseAmount
 
 ```solidity
@@ -402,22 +419,6 @@ function setProtocolMessage(string message) external nonpayable
 |---|---|---|
 | message | string | undefined |
 
-### setPurchaseAmount
-
-```solidity
-function setPurchaseAmount(uint256 amount) external nonpayable
-```
-
-Set the purchase amount for the VibePass
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| amount | uint256 | The new purchase amount |
-
 ### setRegistry
 
 ```solidity
@@ -440,7 +441,7 @@ Set the address of the access control registry
 function setURI(address user, string Url) external nonpayable
 ```
 
-Set the URI for the NFT owned by the given user
+
 
 
 
@@ -448,8 +449,8 @@ Set the URI for the NFT owned by the given user
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | The address of the user who owns the NFT |
-| Url | string | The new URI to set |
+| user | address | undefined |
+| Url | string | undefined |
 
 ### setUserName
 
@@ -550,7 +551,7 @@ function tokenByIndex(uint256 index) external view returns (uint256)
 function tokenIdByOwner(address _owner) external view returns (uint256)
 ```
 
-Get the token ID owned by the specified address
+
 
 
 
@@ -558,13 +559,13 @@ Get the token ID owned by the specified address
 
 | Name | Type | Description |
 |---|---|---|
-| _owner | address | The address to get the token ID for |
+| _owner | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | The token ID owned by the address |
+| _0 | uint256 | undefined |
 
 ### tokenOfOwnerByIndex
 
@@ -667,6 +668,17 @@ View the URI associated with a user&#39;s VibePass
 | Name | Type | Description |
 |---|---|---|
 | _0 | string | The URI of the user&#39;s VibePass |
+
+### withdrawOneswap
+
+```solidity
+function withdrawOneswap() external nonpayable
+```
+
+
+
+
+
 
 ### xusd
 
@@ -779,6 +791,40 @@ event Transfer(address indexed from, address indexed to, uint256 indexed tokenId
 | to `indexed` | address | undefined |
 | tokenId `indexed` | uint256 | undefined |
 
+### URIUpdated
+
+```solidity
+event URIUpdated(address indexed user, string newURI)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user `indexed` | address | undefined |
+| newURI  | string | undefined |
+
+### UserNameUpdated
+
+```solidity
+event UserNameUpdated(address indexed user, string newUserName)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user `indexed` | address | undefined |
+| newUserName  | string | undefined |
+
 ### WhitelistContract
 
 ```solidity
@@ -795,6 +841,23 @@ event WhitelistContract(address indexed contractAddr, bool status)
 |---|---|---|
 | contractAddr `indexed` | address | undefined |
 | status  | bool | undefined |
+
+### XusdAddressUpdated
+
+```solidity
+event XusdAddressUpdated(address indexed updater, address newXusd)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| updater `indexed` | address | undefined |
+| newXusd  | address | undefined |
 
 
 
