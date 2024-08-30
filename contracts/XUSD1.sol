@@ -125,7 +125,7 @@ contract XUSD is Context, IERC20, IERC20Metadata {
     }
 
     function mint(address to, uint256 amount) public {
-        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, _msgSender()), "XUSD: insufficient rank");
+        require(access.hasRank(HierarchicalAccessControl.Rank.CONSUL, _msgSender()), "XUSD: insufficient rank");
         _mint(to, amount);
     }
 
