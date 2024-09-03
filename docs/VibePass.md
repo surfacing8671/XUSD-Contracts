@@ -26,6 +26,23 @@ function UserUpdate(address user) external nonpayable
 |---|---|---|
 | user | address | undefined |
 
+### VibReg
+
+```solidity
+function VibReg() external view returns (contract VibeRegistry)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract VibeRegistry | undefined |
+
 ### approve
 
 ```solidity
@@ -364,6 +381,22 @@ function setApprovalForAll(address operator, bool approved) external nonpayable
 |---|---|---|
 | operator | address | undefined |
 | approved | bool | undefined |
+
+### setGladiator
+
+```solidity
+function setGladiator(int256 vibes) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| vibes | int256 | undefined |
 
 ### setProtocolMessage
 

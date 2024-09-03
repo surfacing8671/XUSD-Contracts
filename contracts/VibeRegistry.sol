@@ -124,8 +124,6 @@ contract VibeRegistry {
     }
 
 
-   
-
     function showRewards() external view returns (RewardClass[] memory) {
         uint count = MasterClassContractRegistry.Count();
         RewardClass[] memory _rewards = new RewardClass[](count);
@@ -242,71 +240,95 @@ contract VibeRegistry {
             : sumVibes;
         userTotalVibes[_caller] = sumVibes;
 
-
+       
         return (sumVibes, amount);
     }
 
 
+function viewToVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
+    uint count = MasterClassToRegistry.Count();
+    require(start < count, "Invalid start index");
 
-    function viewToVibes() external view returns (MaterClass[] memory) {
-        uint count = MasterClassToRegistry.Count();
-        MaterClass[] memory _rewards = new MaterClass[](count);
+    // Calculate the effective limit
+    uint effectiveLimit = start + limit > count ? count - start : limit;
 
-        for (uint i = 0; i < count; ) {
-            _rewards[i] = MasterClassToMap[
-                MasterClassToRegistry.GetHashByIndex(i)
-            ];
-            unchecked {
-                i++;
-            }
+    MaterClass[] memory _rewards = new MaterClass[](effectiveLimit);
+
+    for (uint i = 0; i < effectiveLimit; ) {
+        _rewards[i] = MasterClassToMap[
+            MasterClassToRegistry.GetHashByIndex(start + i)
+        ];
+        unchecked {
+            i++;
         }
-        return _rewards;
     }
 
-    function viewFromVibes() external view returns (MaterClass[] memory) {
-        uint count = MasterClassFromRegistry.Count();
-        MaterClass[] memory _rewards = new MaterClass[](count);
+    return _rewards;
+}
+  
+function viewFromVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
+    uint count = MasterClassFromRegistry.Count();
+    require(start < count, "Invalid start index");
 
-        for (uint i = 0; i < count; ) {
-            _rewards[i] = MasterClassFromMap[
-                MasterClassFromRegistry.GetHashByIndex(i)
-            ];
-            unchecked {
-                i++;
-            }
+    // Calculate the effective limit
+    uint effectiveLimit = start + limit > count ? count - start : limit;
+
+    MaterClass[] memory _rewards = new MaterClass[](effectiveLimit);
+
+    for (uint i = 0; i < effectiveLimit; ) {
+        _rewards[i] = MasterClassFromMap[
+            MasterClassFromRegistry.GetHashByIndex(start + i)
+        ];
+        unchecked {
+            i++;
         }
-        return _rewards;
     }
 
-    function viewCallerVibes() external view returns (MaterClass[] memory) {
-        uint count = MasterClassCallerRegistry.Count();
-        MaterClass[] memory _rewards = new MaterClass[](count);
+    return _rewards;
+}
 
-        for (uint i = 0; i < count; ) {
-            _rewards[i] = MasterClassCallerMap[
-                MasterClassCallerRegistry.GetHashByIndex(i)
-            ];
-            unchecked {
-                i++;
-            }
+function viewCallerVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
+    uint count = MasterClassCallerRegistry.Count();
+    require(start < count, "Invalid start index");
+
+    // Calculate the effective limit
+    uint effectiveLimit = start + limit > count ? count - start : limit;
+
+    MaterClass[] memory _rewards = new MaterClass[](effectiveLimit);
+
+    for (uint i = 0; i < effectiveLimit; ) {
+        _rewards[i] = MasterClassCallerMap[
+            MasterClassCallerRegistry.GetHashByIndex(start + i)
+        ];
+        unchecked {
+            i++;
         }
-        return _rewards;
     }
 
-    function viewSenderVibes() external view returns (MaterClass[] memory) {
-        uint count = MasterClassSenderRegistry.Count();
-        MaterClass[] memory _rewards = new MaterClass[](count);
+    return _rewards;
+}
 
-        for (uint i; i < count; ) {
-            _rewards[i] = MasterClassSenderMap[
-                MasterClassSenderRegistry.GetHashByIndex(i)
-            ];
-            unchecked {
-                i++;
-            }
+
+function viewSenderVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
+    uint count = MasterClassSenderRegistry.Count();
+    require(start < count, "Invalid start index");
+
+    // Calculate the effective limit
+    uint effectiveLimit = start + limit > count ? count - start : limit;
+
+    MaterClass[] memory _rewards = new MaterClass[](effectiveLimit);
+
+    for (uint i = 0; i < effectiveLimit; ) {
+        _rewards[i] = MasterClassSenderMap[
+            MasterClassSenderRegistry.GetHashByIndex(start + i)
+        ];
+        unchecked {
+            i++;
         }
-        return _rewards;
     }
+
+    return _rewards;
+}
 
     function calculateVibesForAddress(
         address user,
@@ -317,8 +339,7 @@ contract VibeRegistry {
         int sumVibes = 0;
    
 
-        console.logUint(registry.Count());
-
+        
         // Sort registry by access style if the count exceeds the class limit
         if (registry.Count() >= classLimit) {
             registry.SortRegistryByAccessStyle();

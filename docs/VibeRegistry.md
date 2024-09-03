@@ -225,13 +225,19 @@ function showRewards() external view returns (struct VibeRegistry.RewardClass[])
 ### viewCallerVibes
 
 ```solidity
-function viewCallerVibes() external view returns (struct VibeRegistry.MaterClass[])
+function viewCallerVibes(uint256 start, uint256 limit) external view returns (struct VibeRegistry.MaterClass[])
 ```
 
 
 
 
 
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| start | uint256 | undefined |
+| limit | uint256 | undefined |
 
 #### Returns
 
@@ -242,13 +248,19 @@ function viewCallerVibes() external view returns (struct VibeRegistry.MaterClass
 ### viewFromVibes
 
 ```solidity
-function viewFromVibes() external view returns (struct VibeRegistry.MaterClass[])
+function viewFromVibes(uint256 start, uint256 limit) external view returns (struct VibeRegistry.MaterClass[])
 ```
 
 
 
 
 
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| start | uint256 | undefined |
+| limit | uint256 | undefined |
 
 #### Returns
 
@@ -259,13 +271,19 @@ function viewFromVibes() external view returns (struct VibeRegistry.MaterClass[]
 ### viewSenderVibes
 
 ```solidity
-function viewSenderVibes() external view returns (struct VibeRegistry.MaterClass[])
+function viewSenderVibes(uint256 start, uint256 limit) external view returns (struct VibeRegistry.MaterClass[])
 ```
 
 
 
 
 
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| start | uint256 | undefined |
+| limit | uint256 | undefined |
 
 #### Returns
 
@@ -276,13 +294,19 @@ function viewSenderVibes() external view returns (struct VibeRegistry.MaterClass
 ### viewToVibes
 
 ```solidity
-function viewToVibes() external view returns (struct VibeRegistry.MaterClass[])
+function viewToVibes(uint256 start, uint256 limit) external view returns (struct VibeRegistry.MaterClass[])
 ```
 
 
 
 
 
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| start | uint256 | undefined |
+| limit | uint256 | undefined |
 
 #### Returns
 

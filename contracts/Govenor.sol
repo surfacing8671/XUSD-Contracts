@@ -171,6 +171,7 @@ contract MyGovernor is ReentrancyGuard {
     }
 
     function checkVotes(address classAddress) external nonReentrant {
+        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender), "Not authorized");
         VoteTally storage Vote = VoterTallyMap[classAddress];
 
         if (!Vote.approved) {

@@ -7,6 +7,7 @@ import "./registry.sol";
 import "./atropamath.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "./Access.sol";
+import "./VibeRegistry.sol";
 import "./PriceDecay.sol";
 interface IXUSD {
     function burnBalance(address user) external view returns (uint256);
@@ -77,7 +78,8 @@ event XusdAddressUpdated(address indexed updater, address newXusd);
     mapping(address => UserNft) internal VibePassUserIndex;
     mapping(address => uint) internal VibePassTokenIdIndex;
         mapping(address => uint) internal VibePassTokenIdOwners;
-
+       VibeRegistry public VibReg;
+           int internal gladiator = 350;
     address public xusd;
     address public oneSwap;
     PriceSlowDecay public pDecay;
@@ -102,16 +104,41 @@ event XusdAddressUpdated(address indexed updater, address newXusd);
         address _oneSwap,
         address classReg,
         address _xusd,
-        address _priceDecay
+        address _priceDecay,
+        address vibes
     ) ERC721(".", ".") {
         accessControl = HierarchicalAccessControl(classReg);
         oneSwap = _oneSwap;
         xusd = _xusd;
         pDecay = PriceSlowDecay(_priceDecay);
+        VibReg = VibeRegistry(vibes);
     }
 
+function setGladiator(int vibes) external {
+     require(
+        accessControl.hasRank(
+            HierarchicalAccessControl.Rank.CONSUL,
+            msg.sender
+        ),
+        "Caller does not have the required rank"
+    );
+
+    gladiator = vibes;
+}
+    function checkRank(address user) internal {
+        if (VibReg.viewVibes(user) < gladiator && VibReg.viewVibes(user) > 0 ) {
+            try
+                accessControl.assignRank(
+                    user,
+                    HierarchicalAccessControl.Rank.GLADIATOR
+                )
+            {} catch {}
+        }
+    }
     /// @notice Mint a new VibePass NFT for the caller if they meet the required rank
    function mintPass() public nonReentrant {
+
+    checkRank(msg.sender);
     require(
         accessControl.hasRank(
             HierarchicalAccessControl.Rank.GLADIATOR,

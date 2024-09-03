@@ -23,7 +23,7 @@ contract HierarchicalAccessControl {
         CONSUL,           // 4
         PREATORMAXIMUS    // 5 (Highest rank)
     }
-
+   int internal gladiator = 350;
     /// @notice Internal registry instance
     LibRegistry.Registry private Registry;
 
@@ -112,6 +112,7 @@ contract HierarchicalAccessControl {
         }
         _assignRank(account, rank);
     }
+
 
     /**
      * @notice Internal function to assign a rank to an account.
