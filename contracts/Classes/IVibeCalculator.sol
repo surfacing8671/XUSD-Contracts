@@ -10,7 +10,7 @@ pragma solidity ^0.8.26;
 interface IVibeCalculator{
 //function isRewards() external returns (bool);
 
-function calculateTotalBasisFee(address addy, uint amount) external  returns (int, uint); 
+function calculateTotalBasisFee(address addy, uint amount) external  returns (int); 
 
 }
 interface IRewardsModule{

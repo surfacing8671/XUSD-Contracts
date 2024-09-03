@@ -52,7 +52,7 @@ function UserActiveList(uint256) external view returns (bool)
 ### calculateTotalBasisFee
 
 ```solidity
-function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256, uint256)
+function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256)
 ```
 
 
@@ -71,7 +71,6 @@ function calculateTotalBasisFee(address addy, uint256 amount) external view retu
 | Name | Type | Description |
 |---|---|---|
 | _0 | int256 | undefined |
-| _1 | uint256 | undefined |
 
 ### description
 

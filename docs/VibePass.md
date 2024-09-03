@@ -65,22 +65,6 @@ function balanceOf(address owner) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### delegate
-
-```solidity
-function delegate(address delegatee) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegatee | address | undefined |
-
 ### getAllProtocolMessage
 
 ```solidity
@@ -123,7 +107,7 @@ function getApproved(uint256 tokenId) external view returns (address)
 ### getBurnAmounts
 
 ```solidity
-function getBurnAmounts(address user) external view returns (uint256)
+function getBurnAmounts(uint256 id) external view returns (uint256)
 ```
 
 
@@ -134,7 +118,29 @@ function getBurnAmounts(address user) external view returns (uint256)
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
+| id | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### getBurnAmountsOrigin
+
+```solidity
+function getBurnAmountsOrigin(uint256 id) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| id | uint256 | undefined |
 
 #### Returns
 
@@ -180,50 +186,6 @@ function getUsername(address user) external view returns (string)
 | Name | Type | Description |
 |---|---|---|
 | _0 | string | undefined |
-
-### getVotes
-
-```solidity
-function getVotes(address account) external view returns (uint256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
-
-### getVotesContracts
-
-```solidity
-function getVotesContracts(address account) external view returns (uint256)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | uint256 | undefined |
 
 ### isApprovedForAll
 
@@ -589,6 +551,28 @@ function tokenOfOwnerByIndex(address owner, uint256 index) external view returns
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
+
+### tokenOwnerFromId
+
+```solidity
+function tokenOwnerFromId(uint256 id) external view returns (address)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| id | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
 
 ### tokenURI
 

@@ -41,11 +41,11 @@ contract ReferralBasedTaxCalculator is IVibeCalculator {
         return Description;
     }
 
-    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int, uint) {
+    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int) {
         if (referrals[addy] != address(0)) {
-            return (baseRateBasisPoints - referralDiscountBasisPoints, amount);
+            return (baseRateBasisPoints - referralDiscountBasisPoints);
         } else {
-            return (baseRateBasisPoints, amount);
+            return (baseRateBasisPoints);
         }
     }
 }

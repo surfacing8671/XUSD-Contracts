@@ -2,35 +2,18 @@
 
 
 
-> XUSD
+> ERC20Base
 
 
 
-*ERC20 implementation with burn functionality and registry integration.*
+*Basic ERC20 implementation with burn functionality and registry integration.*
 
 ## Methods
-
-### BURN_ADDRESS
-
-```solidity
-function BURN_ADDRESS() external view returns (address)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | address | undefined |
 
 ### Rewardtransfer
 
 ```solidity
-function Rewardtransfer(address to, uint256 amount) external nonpayable returns (bool)
+function Rewardtransfer(address to, uint256 amount) external nonpayable
 ```
 
 
@@ -43,12 +26,6 @@ function Rewardtransfer(address to, uint256 amount) external nonpayable returns 
 |---|---|---|
 | to | address | undefined |
 | amount | uint256 | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | bool | undefined |
 
 ### allowance
 
@@ -118,10 +95,49 @@ function balanceOf(address account) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### burnAddress
+
+```solidity
+function burnAddress() external view returns (address)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+
 ### burnBalance
 
 ```solidity
 function burnBalance(address user) external view returns (uint256)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### burnBalanceOrigin
+
+```solidity
+function burnBalanceOrigin(address user) external view returns (uint256)
 ```
 
 
@@ -275,40 +291,6 @@ function registry() external view returns (contract VibeRegistry)
 | Name | Type | Description |
 |---|---|---|
 | _0 | contract VibeRegistry | undefined |
-
-### registryBurn
-
-```solidity
-function registryBurn(address account, uint256 amount) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| amount | uint256 | undefined |
-
-### setExclusionFromTax
-
-```solidity
-function setExclusionFromTax(address account, bool status) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| account | address | undefined |
-| status | bool | undefined |
 
 ### setRegistry
 

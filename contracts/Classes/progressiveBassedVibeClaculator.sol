@@ -31,11 +31,11 @@ contract ProgressiveTaxCalculator is VibeBase {
         incrementThreshold = _incrementThreshold;
     }
 
-    function calculateTotalBasisFee(address addy, uint amount) external  override returns (int, uint) {
+    function calculateTotalBasisFee(address addy, uint amount) external  override returns (int) {
         uint256 cumulativeAmount = cumulativeTransfers[addy];
         recordTransfer(addy, amount);
         int increment = int256(cumulativeAmount / incrementThreshold) * rateIncrementBasisPoints;
-        return (baseRateBasisPoints + increment, amount);
+        return (baseRateBasisPoints + increment);
     }
     /**
      * @dev Record the amount transferred by an address to update cumulative transfers.

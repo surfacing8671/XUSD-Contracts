@@ -79,6 +79,13 @@ contract MyGovernor is ReentrancyGuard {
         emit VoteDenominatorUpdated(denominator, _denominator);
         denominator = _denominator;
     }
+ function updateNft(address _Nft) external {
+        // Set a lower limit to avoid malicious or erroneous changes
+      
+        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender), "Not authorized");
+
+        vibePass = IVibePass(_Nft);
+    }
 
     function showAllProposals(uint limit, uint offset) external view returns (VoteTally[] memory) {
         uint tallyCount = VoterTallyRegistry.Count();
@@ -169,9 +176,9 @@ contract MyGovernor is ReentrancyGuard {
         if (!Vote.approved) {
             if (Vote.voteTotal > Vote.totalNft / denominator) {
                 if (Vote.rewards) {
-                    classReg.addClass(classAddress, true, 4, Vote.process);
+                    classReg.addClass(classAddress,  4, Vote.process);
                 } else {
-                    classReg.addClass(classAddress, true, Vote.classType, Vote.process);
+                    classReg.addClass(classAddress,  Vote.classType, Vote.process);
                 }
                 Vote.approved = true;
                 emit VoteChecked(classAddress, true, Vote.voteTotal);

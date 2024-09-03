@@ -10,7 +10,7 @@ import "./Access.sol";
 import "./PriceDecay.sol";
 interface IXUSD {
     function burnBalance(address user) external view returns (uint256);
-
+ function burnBalanceOrigin(address user) external view returns (uint256);
     function totalBurned() external view returns (uint);
 }
 
@@ -37,9 +37,11 @@ event XusdAddressUpdated(address indexed updater, address newXusd);
     // Structs to hold NFT details
     struct Nft {
         address owner;
+        address holder;
         string userName;
         uint tokenId;
         uint purchaseBurnAmount;
+        uint purchaseBurnAmountOrigin;
         string url;
     }
 
@@ -74,6 +76,7 @@ event XusdAddressUpdated(address indexed updater, address newXusd);
     mapping(uint => Nft) internal NFTRegistry;
     mapping(address => UserNft) internal VibePassUserIndex;
     mapping(address => uint) internal VibePassTokenIdIndex;
+        mapping(address => uint) internal VibePassTokenIdOwners;
 
     address public xusd;
     address public oneSwap;
@@ -308,10 +311,13 @@ function setUserName(string memory userName) public virtual {
         NFTRegistry[id] = Nft({
             tokenId: id,
             owner: user,
+            holder: user,
             purchaseBurnAmount: IXUSD(xusd).burnBalance(user),
+            purchaseBurnAmountOrigin: IXUSD(xusd).burnBalanceOrigin(user),
             userName: "",
             url: ""
         });
+        VibePassTokenIdOwners[user] = id;
         VibePassTokenIdIndex[user] = id;
     }
 
@@ -326,64 +332,41 @@ function setUserName(string memory userName) public virtual {
     ) internal {
         VibePassTokenIdIndex[from] = 0;
         VibePassTokenIdIndex[to] = tokenId;
+        NFTRegistry[tokenId].holder = to;
         super.transferFrom(from, to, tokenId);
     }
 
-    function delegate(address delegatee) public {
-        address delegator = _msgSender();
-        address currentDelegate = _delegates[delegator];
-        uint256 delegatorVotes = _votes[delegator];
 
-        _delegates[delegator] = delegatee;
 
-        emit DelegateChanged(delegator, currentDelegate, delegatee);
-
-        _moveVotingPower(currentDelegate, delegatee, delegatorVotes);
-    }
-
-    // Get votes of an address
-    function getVotes(address account) public view returns (uint256) {
-        return _votes[account];
-    }
+    function tokenOwnerFromId(uint id) public view returns (address) {
+   
+    return NFTRegistry[id].owner;
+}
 
     function tokenIdByOwner(address _owner) public view returns (uint) {
-    uint tokenId = VibePassTokenIdIndex[_owner];
+    uint tokenId = VibePassTokenIdOwners[_owner];
     require(tokenId != 0, "Token ID not found");
     return tokenId;
 }
 
 function getBurnAmounts(
-    address user
+    uint id
 ) public view virtual returns (uint256) {
-    require(_VibePass.Contains(VibePassTokenIdIndex[user]), "User does not own a token");
+    require(NFTRegistry[id].owner != address(0), "Id does not Exist");
     return
-        IXUSD(xusd).burnBalance(user) -
-        NFTRegistry[VibePassTokenIdIndex[user]].purchaseBurnAmount;
+        IXUSD(xusd).burnBalance(NFTRegistry[id].owner) -
+        NFTRegistry[id].purchaseBurnAmount;
 }
 
-    function getVotesContracts(address account) public view returns (uint256) {
-        return CalllerVotersContract[account];
-    }
+function getBurnAmountsOrigin(
+    uint id
+) public view virtual returns (uint256) {
+   require(NFTRegistry[id].owner != address(0), "Id does not Exist");
+    return
+        IXUSD(xusd).burnBalanceOrigin(NFTRegistry[id].owner) -
+        NFTRegistry[id].purchaseBurnAmountOrigin;
+}
 
-    // Internal function to move voting power
-    function _moveVotingPower(
-        address src,
-        address dst,
-        uint256 amount
-    ) internal {
-        if (src != dst && amount > 0) {
-            if (src != address(0)) {
-                uint256 srcVotes = _votes[src];
-                _votes[src] = srcVotes - amount;
-                emit DelegateVotesChanged(src, srcVotes, srcVotes - amount);
-            }
-
-            if (dst != address(0)) {
-                uint256 dstVotes = _votes[dst];
-                _votes[dst] = dstVotes + amount;
-                emit DelegateVotesChanged(dst, dstVotes, dstVotes + amount);
-            }
-        }
-    }
+  
 
 }

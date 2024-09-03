@@ -1,3 +1,6 @@
+
+
+
 const { AbiCoder } = require("ethers");
 const { ethers } = require("hardhat");
 const axios = require('axios');
@@ -9,69 +12,46 @@ async function deployRouter() {
   const signer = new ethers.Wallet(process.env.PK, provider);
   const signer2 = new ethers.Wallet(process.env.PK1, provider);
 
-  console.log("Signers initialized.");
-  
-  const lib2 = await ethers.getContractFactory(`LibRegistry`);
-  const lib3 = await ethers.getContractFactory(`AtropaMath`);
-  const libV = await ethers.getContractFactory(`VibeLibRegistry`);
-  const libe2 = await ethers.getContractFactory(`LibRegistryAdd`);
-  const toke = await ethers.getContractFactory(`XUSD`);
+const toker = "0xc89d5330C672CFb8957B0120Ac3Ec0C2A7295a62"
+const toke = await ethers.getContractFactory(`XUSD`);
 
-  console.log("Contract factories created.");
+const class29 = await ethers.getContractFactory(`Reward`);
+const exClass = await ethers.getContractFactory(`Exchange`);
+const acc = ethers.getContractFactory("HierarchicalAccessControl")
+const access =  (await acc).attach("0xE6A75ED9207436aBEC421ded4bBbB1B9156cAd95")
+const tokerc = toke.attach("0xc89d5330C672CFb8957B0120Ac3Ec0C2A7295a62")
+// const token = ethers.getContractAt("0xfc5b27244EB01d34E019f94cbC053DC8F91aE6Da")
+ const reward = class29.attach("0x571A9Fc6eb082249dE2Cd11b32D96868444B6000")
+//   await access.assignRank(toker, 4);
+//   console.log("Access rank assigned to XUSD.");
 
-  const lib22C = await libe2.deploy({maxFeePerGas: 307890370973333n});
-  console.log(`LibRegistryAdd deployed at: ${await lib22C.getAddress()}`);
-  const libVC = await libV.deploy();
-  const lib2C = await lib2.deploy();
-  console.log(`LibRegistry deployed at: ${await lib2C.getAddress()}`);
+ 
 
-  const lib3C = await lib3.deploy();
-  console.log(`AtropaMath deployed at: ${await lib3C.getAddress()}`);
+// //   await access.assignRank("0x2Bc82B634B146aCaf02785d56A6c3B74DCb20343", 4);
+// //   console.log("Access rank assigned to ClassRegistry.");
+//   let moo5o = {
+//     creatorAddress: signer.address,
+//     info: "moo",
+//     level: 0
+//   }
 
-  const lib5 = await ethers.getContractFactory(`HierarchicalAccessControl`);
-  const access = await lib5.deploy();
-  console.log(`HierarchicalAccessControl deployed at: ${await access.getAddress()}`);
+// //  await tokerc.setRegistry("0x2Bc82B634B146aCaf02785d56A6c3B74DCb20343");
+// // await tokerc.transfer(await reward.getAddress(), ethers.parseEther("100000"));
+//  const exxclass =  await exClass.deploy(await access.getAddress(), toker, await reward.getAddress(), moo5o)
+//  console.log(await exxclass.getAddress());
+//  await reward.setExchangeContract(await exxclass.getAddress())
 
-  const class29 = await ethers.getContractFactory(`Reward`);
-  const class53 = await ethers.getContractFactory(`MyGovernor`, {
-    libraries: {
-      LibRegistryAdd: await lib22C.getAddress(),
-    },
-  });
-  
-  const class3 = await ethers.getContractFactory(`PriceSlowDecay`);
-  const Token = await ethers.getContractFactory(`VibeRegistry`, {
-    libraries: {AtropaMath : await lib3C.getAddress(),
-      LibRegistry: await lib2C.getAddress(),
-      VibeLibRegistry: await libVC.getAddress()
-
-    },
-  });
-  const exClass = await ethers.getContractFactory(`Exchange`);
-
-  console.log("Deploying XUSD...");
-  const toker = await toke.deploy("f", "f","18", "10000000000000000000000000000000", await access.getAddress());
-  console.log(`XUSD deployed at: ${await toker.getAddress()}`);
-
-  //await access.assignRank(await toker.getAddress(), 4);
-  console.log("Access rank assigned to XUSD.");
-
-  const token = await Token.deploy(await access.getAddress(), await toker.getAddress());
-  console.log(`ClassRegistry deployed at: ${await token.getAddress()}`);
-
- // await access.assignRank(await token.getAddress(), 4);
-  console.log("Access rank assigned to ClassRegistry.");
-  let moo5o = {
-    creatorAddress: signer.address,
-    info: "moo",
-    level: 0
-  }
- const reward = await class29.deploy(await toker.getAddress());
- console.log(await reward.getAddress())
-//  await toker.setRegistry(await token.getAddress());
+let mooo = {
+  creatorAddress: signer.address,
+  info: "moo",
+  level: 1
+}
+ const exClassw = await ethers.getContractFactory(`RandomizedVibeCalculator`);
+ const vibes =  await exClassw.deploy(100, 1600,  mooo, await access.getAddress())
+console.log(await vibes.getAddress())
 //  await toker.transfer(await reward.getAddress(), ethers.parseEther("100000"));
 //   console.log(`GenesisRewardsModule deployed at: ${await reward.getAddress()}`);
-//  const exxclass =  await exClass.deploy(await access.getAddress(), await toker.getAddress(), await reward.getAddress(), moo5o)
+//  const exxclass =  await exClass.deploy(await access.getAddress(), toker, await reward.getAddress(), moo5o)
 //   await reward.setExchangeContract(await exxclass.getAddress())
 //   await exxclass.addToWhiteListAdmin(signer.address)
 //   console.log("XUSD registry set.");
@@ -92,7 +72,7 @@ async function deployRouter() {
 //   const lit = await NFT.deploy(
 //     "0xEb14f3192A37ad2501F3BF6627C565e6799aD661", 
 //     await access.getAddress(), 
-//     await toker.getAddress(), 
+//     toker, 
 //     await c5.getAddress()
 //   );
 //   console.log(`VibePass deployed at: ${await lit.getAddress()}`);
@@ -222,7 +202,7 @@ async function deployRouter() {
   
 //   console.log("Adding liquidity to the router...");
 //   await router.addLiquidityETH(
-//     await toker.getAddress(),
+//     toker,
 //     ethers.parseEther("1000"),
 //     "1",
 //     "1",
@@ -238,7 +218,7 @@ async function deployRouter() {
 //   await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
 //     ethers.parseEther("4300"),
 //     "0",
-//     [await toker.getAddress(), "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
+//     [toker, "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
 //     "0x1beD8319Ad56780F303B226BfcA60BAd29db9e66",
 //     "9999999999999999999999999",
 //     {
@@ -256,7 +236,7 @@ async function deployRouter() {
 //   await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
 //     ethers.parseEther("430"),
 //     "0",
-//     [await toker.getAddress(), "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
+//     [toker, "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
 //     "0x1beD8319Ad56780F303B226BfcA60BAd29db9e66",
 //     "9999999999999999999999999",
 //     {
@@ -270,7 +250,7 @@ async function deployRouter() {
 //   await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
 //     ethers.parseEther("430"),
 //     "0",
-//     [await toker.getAddress(), "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
+//     [toker, "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
 //     "0x1beD8319Ad56780F303B226BfcA60BAd29db9e66",
 //     "9999999999999999999999999",
 //     {
@@ -282,7 +262,7 @@ async function deployRouter() {
 //   console.log(ethers.formatEther(await toker.burnBalanceOrigin(signer.address)))
 //  // await token.addClass(await c362.getAddress(), true, 1, false, 0);
 //   await router.addLiquidityETH(
-//     await toker.getAddress(),
+//     toker,
 //     ethers.parseEther("100"),
 //     "1",
 //     "1",
@@ -296,7 +276,7 @@ async function deployRouter() {
 //   await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
 //     ethers.parseEther("4300"),
 //     "0",
-//     [await toker.getAddress(), "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
+//     [toker, "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"], // Replace with your token addresses
 //     "0x1beD8319Ad56780F303B226BfcA60BAd29db9e66",
 //     "9999999999999999999999999",
 //     {

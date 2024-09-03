@@ -65,5 +65,5 @@ abstract contract VibeBase is IVibeCalculator {
     function calculateTotalBasisFee(
         address addy,
         uint amount
-    ) external virtual nonReentrant returns (int, uint) {}
+    ) external virtual nonReentrant returns (int) {}
 }

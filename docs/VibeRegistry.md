@@ -47,7 +47,7 @@ function activateVibeUser(address user, address class) external nonpayable
 ### addClass
 
 ```solidity
-function addClass(address class, bool active, uint256 classType, bool _process) external nonpayable
+function addClass(address class, uint256 classType, bool _process) external nonpayable
 ```
 
 
@@ -59,7 +59,6 @@ function addClass(address class, bool active, uint256 classType, bool _process) 
 | Name | Type | Description |
 |---|---|---|
 | class | address | undefined |
-| active | bool | undefined |
 | classType | uint256 | undefined |
 | _process | bool | undefined |
 
@@ -107,16 +106,39 @@ function checkErrors() external view returns (struct VibeRegistry.userVibe[])
 |---|---|---|
 | _0 | VibeRegistry.userVibe[] | undefined |
 
-### checkRank
+### deactivateRewards
 
 ```solidity
-function checkRank() external nonpayable
+function deactivateRewards(address user, address class) external nonpayable
 ```
 
 
 
 
 
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+| class | address | undefined |
+
+### deactivateVibe
+
+```solidity
+function deactivateVibe(address class, uint256 classType) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| class | address | undefined |
+| classType | uint256 | undefined |
 
 ### deactivateVibeUser
 
@@ -151,28 +173,6 @@ function removeError(uint64 Omnicron) external nonpayable
 |---|---|---|
 | Omnicron | uint64 | undefined |
 
-### retrieveUserVibeList
-
-```solidity
-function retrieveUserVibeList(address user) external view returns (struct VibeRegistry.userVibe[])
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| user | address | undefined |
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | VibeRegistry.userVibe[] | undefined |
-
 ### setClassError
 
 ```solidity
@@ -204,54 +204,6 @@ function setClassLimit(uint256 limit) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | limit | uint256 | undefined |
-
-### setDenominator
-
-```solidity
-function setDenominator(uint256 _denominator) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| _denominator | uint256 | undefined |
-
-### setGladiatorLimit
-
-```solidity
-function setGladiatorLimit(int256 limit) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| limit | int256 | undefined |
-
-### setLegatusLimit
-
-```solidity
-function setLegatusLimit(int256 limit) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| limit | int256 | undefined |
 
 ### showRewards
 

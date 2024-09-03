@@ -13,7 +13,7 @@
 ### addToWhitelist
 
 ```solidity
-function addToWhitelist(address addr) external nonpayable
+function addToWhitelist(address addr, int256 amount) external nonpayable
 ```
 
 
@@ -25,11 +25,12 @@ function addToWhitelist(address addr) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | addr | address | The address to whitelist. |
+| amount | int256 | undefined |
 
 ### calculateTotalBasisFee
 
 ```solidity
-function calculateTotalBasisFee(address addy, uint256 amount) external nonpayable returns (int256)
+function calculateTotalBasisFee(address addy, uint256 amount) external view returns (int256)
 ```
 
 
@@ -69,7 +70,7 @@ function taxRateBasisPoints() external view returns (int256)
 ### whitelistedAddresses
 
 ```solidity
-function whitelistedAddresses(uint256) external view returns (bool)
+function whitelistedAddresses(address) external view returns (int256)
 ```
 
 
@@ -80,13 +81,13 @@ function whitelistedAddresses(uint256) external view returns (bool)
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | undefined |
+| _0 | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | bool | undefined |
+| _0 | int256 | undefined |
 
 
 

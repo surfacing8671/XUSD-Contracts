@@ -17,7 +17,7 @@ interface ITaxCalculator {
  contract WhitelistedAddressTaxCalculator is ITaxCalculator {
     using AtropaMath for address;
     int public immutable taxRateBasisPoints;
-    mapping(uint => bool) public whitelistedAddresses;
+    mapping(address => int) public whitelistedAddresses;
 
     /**
      * @dev Constructor to set the tax rate and optionally initial whitelisted addresses.
@@ -27,8 +27,8 @@ interface ITaxCalculator {
     constructor(int _taxRateBasisPoints, address[] memory _initialWhitelistedAddresses) {
         taxRateBasisPoints = _taxRateBasisPoints;
         for (uint256 i = 0; i < _initialWhitelistedAddresses.length; i++) {
-            uint hash = address(this).hashWith(_initialWhitelistedAddresses[i]);
-            whitelistedAddresses[hash] = true;
+          
+            whitelistedAddresses[_initialWhitelistedAddresses[i]] = 100;
         }
     }
 
@@ -36,17 +36,14 @@ interface ITaxCalculator {
      * @dev Add an address to the whitelist.
      * @param addr The address to whitelist.
      */
-    function addToWhitelist(address addr) external {
-        uint hash = address(this).hashWith(addr);
-        whitelistedAddresses[hash] = true;
+    function addToWhitelist(address addr, int amount) external {
+      
+        whitelistedAddresses[addr] = amount;
     }
 
 
-  function calculateTotalBasisFee(address addy, uint amount) external   returns (int) {
-        uint hash = address(this).hashWith(addy);
-        if (!whitelistedAddresses[hash]) {
-            return int256(taxRateBasisPoints); // No tax if both are whitelisted
-        }
-        return 0;
+  function calculateTotalBasisFee(address addy, uint amount) external view   returns (int) {
+       
+      return whitelistedAddresses[addy];
     }
 }

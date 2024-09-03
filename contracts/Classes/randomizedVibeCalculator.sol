@@ -23,8 +23,8 @@ contract RandomizedVibeCalculator is VibeBase {
         maxRateBasisPoints = _maxRateBasisPoints;
     }
 
-    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int, uint) {
+    function calculateTotalBasisFee(address addy, uint amount) external view override returns (int) {
         uint256 random = uint256(keccak256(abi.encodePacked(block.timestamp, addy, amount))) % (uint256(maxRateBasisPoints) - uint256(minRateBasisPoints) + 1);
-        return (minRateBasisPoints + int(random), amount);
+        return (minRateBasisPoints + int(random));
     }
 }

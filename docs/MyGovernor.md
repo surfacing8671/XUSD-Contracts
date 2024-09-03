@@ -138,6 +138,22 @@ function showAllProposals(uint256 limit, uint256 offset) external view returns (
 |---|---|---|
 | _0 | MyGovernor.VoteTally[] | undefined |
 
+### updateNft
+
+```solidity
+function updateNft(address _Nft) external nonpayable
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _Nft | address | undefined |
+
 ### updateVoteDen
 
 ```solidity

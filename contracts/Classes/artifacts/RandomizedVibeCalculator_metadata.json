@@ -1,0 +1,300 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "int256",
+						"name": "_minRateBasisPoints",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "_maxRateBasisPoints",
+						"type": "int256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "creatorAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "info",
+								"type": "string"
+							},
+							{
+								"internalType": "enum VibeBase.Importance",
+								"name": "level",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct VibeBase.VibeInfo",
+						"name": "_description",
+						"type": "tuple"
+					},
+					{
+						"internalType": "address",
+						"name": "_access",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "Description",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "UserActiveList",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addy",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "calculateTotalBasisFee",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "description",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getDescription",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getLevel",
+				"outputs": [
+					{
+						"internalType": "enum VibeBase.Importance",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "id",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "creatorAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "info",
+						"type": "string"
+					},
+					{
+						"internalType": "enum VibeBase.Importance",
+						"name": "level",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "maxRateBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minRateBasisPoints",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum VibeBase.Importance",
+						"name": "level",
+						"type": "uint8"
+					}
+				],
+				"name": "setBaseImportance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A vibe calculator that applies a random vibe rate within a specified range.",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "Constructor to set the range for the random vibe rate.",
+					"params": {
+						"_maxRateBasisPoints": "The maximum vibe rate in basis points.",
+						"_minRateBasisPoints": "The minimum vibe rate in basis points."
+					}
+				}
+			},
+			"title": "RandomizedVibeCalculator",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Classes/randomizedVibeCalculator.sol": "RandomizedVibeCalculator"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Access.sol": {
+			"keccak256": "0xe102e73b2a993f970acff24acf058c313c6c7b5835ed8303ec067ddfe9ea26c2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1eb8237226ecfa5257e23b000ce28d92484cf28200eb99d8c374b88446148fd9",
+				"dweb:/ipfs/QmNzuBz5RhXhHJ1zUemRSw1D9s6Ctd5bvu6yVGvVxx985a"
+			]
+		},
+		"contracts/Classes/IVibeCalculator.sol": {
+			"keccak256": "0x5111d7d5b71da7e56db6fbb71782f7f8cb3bef5a6541656a0410c00901090ab3",
+			"urls": [
+				"bzz-raw://00de48d8fa1bff2e26c2d764012f48f1b7ac15282e912cfbcdbf802828b82ecb",
+				"dweb:/ipfs/Qme5hg5GWgrvuLJjrq7gwqU8RQXtZBPe4PBQmuUwtJc9bL"
+			]
+		},
+		"contracts/Classes/VibeBase.sol": {
+			"keccak256": "0xb8e7deb14d24e7707b7cc34bb0e173a2bc479bff9c7c61aab776579ed6515596",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://89a9d19680032a9073d3abf17c45ae62e0e165b468f6cdff6b29c94eea8ff959",
+				"dweb:/ipfs/QmYFBdyQXrHBsbEfYCTtUQomgwhZX67BVNibkdcbsHuDnJ"
+			]
+		},
+		"contracts/Classes/randomizedVibeCalculator.sol": {
+			"keccak256": "0xa1074501372e30b6f5e5c6b5e10bf93182d924bed395acd3d926a524dde2fdaa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c03eac2fcf4113f708007a52cbb3bb3fa4a11d611f7696a12609c35a91aeb264",
+				"dweb:/ipfs/QmUrCMxGwTkQzYfDDt1U52i1MhGWaSPXM3fje4cugXYb8C"
+			]
+		},
+		"contracts/atropamath.sol": {
+			"keccak256": "0xe904fdc8a60f37772a91e3ed0785df4b0e3aca40384b4c2183f96807bb4b5d40",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://aab160802107ed200148421cdaf94fad0be9f62b992c6f1a53104b0067d098ad",
+				"dweb:/ipfs/Qmba9wMVDNUyDTfvtPzWLV6B8EgrAgyXCviLt1x5KmmDcd"
+			]
+		},
+		"contracts/registry.sol": {
+			"keccak256": "0x3b72d65ff76dc47e6b3a1a9639062655646d2d9fdab41e70a1f3ee6f7bcbf0a2",
+			"license": "Sharia",
+			"urls": [
+				"bzz-raw://14cf9336e9bb84af9de7e34b7037b16a51a410678830f973af8f87632f246d09",
+				"dweb:/ipfs/QmNbF9S5G3tXnVQ1TzMU9neoiaGKCjG4z9rKJzVHA58j3x"
+			]
+		}
+	},
+	"version": 1
+}

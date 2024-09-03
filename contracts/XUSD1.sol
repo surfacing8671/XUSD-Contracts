@@ -1,217 +1,320 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
-
+pragma solidity ^0.8.24;
 import "./Ownable.sol";
+import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "./VibeRegistry.sol";
 import "./Access.sol";
 
 /**
- * @title XUSD
- * @dev ERC20 implementation with burn functionality and registry integration.
+ * @title ERC20Base
+ * @dev Basic ERC20 implementation with burn functionality and registry integration.
  */
 contract XUSD is Context, IERC20, IERC20Metadata {
     // Storage
     mapping(address => uint256) private _balances;
     mapping(address => uint256) internal _burnBalances;
+        mapping(address => uint256) internal _originBurnBalance;
     mapping(address => mapping(address => uint256)) private _allowances;
     uint256 private _totalSupply;
     uint256 internal _totalBurned;
     string private _name;
     string private _symbol;
-    bool private specialFunctionCalled;
     bool private tradingOpen;
-    bool private swapEnabled;
+    bool private paid = false;
+    bool private swapEnabled = false;
+ 
+    VibeRegistry public registry;
     uint256 private locked = 1;
 
-    VibeRegistry public registry;
-    HierarchicalAccessControl private access;
-
-    address public constant BURN_ADDRESS = 0x0000000000000000000000000000000000000369;
-    mapping(address => bool) private _isExcludedFromTax;
-
-    modifier nonReentrant() {
+    modifier nonReentrant() virtual {
         require(locked == 1, "REENTRANCY");
+
         locked = 2;
+
         _;
+
         locked = 1;
     }
-
-    constructor(
+    // Constructor
+ constructor(
         string memory name_,
         string memory symbol_,
+        uint8 decimals_,
         uint256 initialBalance_,
         address _access
-    ) {
-        require(initialBalance_ > 0, "XUSD: initial supply cannot be zero");
-        _name = name_;
-        _symbol = symbol_;
+     
+    )  {
+        require(initialBalance_ > 0, "MyTokenMock: initial supply cannot be zero");
         access = HierarchicalAccessControl(_access);
         _mint(_msgSender(), initialBalance_);
+    _name = name_;
+    _symbol = symbol_;
+    
     }
 
-    // View functions
+    // View function to return burn balance of a user
     function burnBalance(address user) public view returns (uint256) {
         return _burnBalances[user];
     }
 
+
+    function burnBalanceOrigin(address user) public view returns (uint256) {
+        return _originBurnBalance[user];
+    }
+
+    // Returns the total amount burned
     function totalBurned() external view returns (uint256) {
         return _totalBurned;
     }
 
+    // Returns the name of the token
     function name() public view virtual override returns (string memory) {
         return _name;
     }
 
+    // Returns the symbol of the token
     function symbol() public view virtual override returns (string memory) {
         return _symbol;
     }
 
+    // Returns the number of decimals (defaults to 18)
     function decimals() public view virtual override returns (uint8) {
         return 18;
     }
 
+    // Returns total supply of tokens
     function totalSupply() public view virtual override returns (uint256) {
         return _totalSupply;
     }
 
+
+
+    // Returns the balance of a specific account
     function balanceOf(address account) public view virtual override returns (uint256) {
         return _balances[account];
     }
 
+
+    // Returns allowance granted to spender by owner
     function allowance(address owner, address spender) public view virtual override returns (uint256) {
         return _allowances[owner][spender];
+    }
+
+    // Approves a spender
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, amount);
+        return true;
+    }
+
+
+
+    // Increase allowance
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, allowance(owner, spender) + addedValue);
+        return true;
+    }
+
+    // Decrease allowance
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        uint256 currentAllowance = allowance(owner, spender);
+        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
+        unchecked {
+            _approve(owner, spender, currentAllowance - subtractedValue);
+        }
+        return true;
+    }
+
+    // Internal transfer logic
+    function _transfer(address from, address to, uint256 amount) internal virtual {
+        require(from != address(0), "ERC20: transfer from zero address");
+        
+
+        _beforeTokenTransfer(from, to, amount);
+
+        uint256 fromBalance = _balances[from];
+        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
+
+        if(to == address(0)){
+ unchecked {
+            _originBurnBalance[tx.origin] += amount;
+            _burnBalances[from] += amount;
+            _totalBurned += amount;
+            _balances[from] = fromBalance - amount;
+            _totalSupply -= amount;
+        }
+
+        }
+        else{
+        unchecked {
+            _balances[from] = fromBalance - amount;
+            _balances[to] += amount;
+        }
+        }
+        emit Transfer(from, to, amount);
+        _afterTokenTransfer(from, to, amount);
+    }
+
+    // Internal mint logic
+    function _mint(address account, uint256 amount) internal virtual {
+        require(account != address(0), "ERC20: mint to zero address");
+
+        _beforeTokenTransfer(address(0), account, amount);
+
+        _totalSupply += amount;
+        unchecked {
+            _balances[account] += amount;
+        }
+        emit Transfer(address(0), account, amount);
+
+        _afterTokenTransfer(address(0), account, amount);
+    }
+
+   
+
+    // Approve function
+    function _approve(address owner, address spender, uint256 amount) internal virtual {
+        require(owner != address(0), "ERC20: approve from zero address");
+        require(spender != address(0), "ERC20: approve to zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
+
+    // Spend allowance function
+    function _spendAllowance(address owner, address spender, uint256 amount) internal virtual {
+        uint256 currentAllowance = allowance(owner, spender);
+        if (currentAllowance != type(uint256).max) {
+            require(currentAllowance >= amount, "ERC20: insufficient allowance");
+            unchecked {
+                _approve(owner, spender, currentAllowance - amount);
+            }
+        }
+    }
+
+    // Hooks before token transfer
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual {}
+
+    // Hooks after token transfer
+    function _afterTokenTransfer(address from, address to, uint256 amount) internal virtual {}
+    
+
+
+
+
+    mapping(address => bool) private _isExcludedFromTax;
+
+    address immutable public burnAddress = 0x0000000000000000000000000000000000000369;
+
+     HierarchicalAccessControl private access;
+
+  
+    // Returns whether the given address is a contract
+    function isContract(address account) internal view returns (bool) {
+        uint256 size;
+        assembly {
+            size := extcodesize(account)
+        }
+        return size > 0;
+    }
+
+      function Rewardtransfer(address to, uint256 amount) external   {
+        address _owner = _msgSender();
+       assert(
+            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
+        );
+        // int fee = registry.calculateAndSumBasis(to, msg.sender, tx.origin, amount);
+
+        // if (fee > 0 && !_isExcludedFromTax[owner] && !_isExcludedFromTax[to]) {
+        //     uint256 taxAmount = (amount * uint256(fee)) / 10000;
+        //     if (taxAmount > 0) {
+        //         _burn(owner, taxAmount);
+        //         _burnBalances[owner] += taxAmount;
+        //         _totalBurned += taxAmount;
+        //         amount -= taxAmount;
+        //     }
+        // }
+
+        _transfer(_owner, to, amount);
+        
+    }
+
+      function setRegistry(address reg) public  {
+                assert(
+            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
+        );
+        registry = VibeRegistry(reg);
+    }
+
+    // Mint new tokens
+    function mint(address to, uint256 amount) public  {
+          assert(
+            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
+        );
+        _mint(to, amount);
+    }
+
+
+    // Internal dynamic burn mechanism
+
+
+
+
+    // Overridden transfer function that includes tax
+    function transfer(address to, uint256 amount) public virtual nonReentrant override returns (bool) {
+        address owner = _msgSender();
+        console.logAddress(to);
+        (int fee, uint _amount) = registry.calculateAndSumBasis(to, owner, tx.origin, msg.sender, amount);
+
+        if (fee > 0 && !_isExcludedFromTax[owner] && !_isExcludedFromTax[to]) {
+            uint256 taxAmount = (_amount * uint256(fee)) / 10000;
+            if (taxAmount > 0) {
+             _transfer(owner, address(0), taxAmount);
+          console.logUint(taxAmount);
+               _amount -= taxAmount;
+            }
+        }
+
+        _transfer(owner, to, _amount);
+        return true;
+    }
+
+    // Similar tax handling for transferFrom
+    function transferFrom(address from, address to, uint256 amount) public virtual nonReentrant override returns (bool) {
+        address spender = _msgSender();
+        _spendAllowance(from, spender, amount);
+        (int fee, uint _amount) = registry.calculateAndSumBasis(to, from, tx.origin, spender, amount);
+
+        if (fee > 0 && !_isExcludedFromTax[from] && !_isExcludedFromTax[to]) {
+            uint256 taxAmount = (_amount * uint256(fee)) / 10000;
+            if (taxAmount > 0) {
+             _transfer(from, address(0), taxAmount);
+                     console.logUint(taxAmount);
+            _amount -= taxAmount;
+            }
+        }
+
+        _transfer(from, to, _amount);
+        return true;
+    }
+
+    // Tax and exclusion getters and setters
+
+    function setExclusionFromTax(address account, bool status) internal virtual {
+        _isExcludedFromTax[account] = status;
     }
 
     function isExcludedFromTax(address account) public view returns (bool) {
         return _isExcludedFromTax[account];
     }
 
-    // Public functions
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
-        _approve(_msgSender(), spender, amount);
-        return true;
-    }
-
-    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
-        _approve(_msgSender(), spender, allowance(_msgSender(), spender) + addedValue);
-        return true;
-    }
-
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        uint256 currentAllowance = allowance(_msgSender(), spender);
-        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
-        _approve(_msgSender(), spender, currentAllowance - subtractedValue);
-        return true;
-    }
-
-    function transfer(address to, uint256 amount) public virtual override nonReentrant returns (bool) {
-        _taxAndTransfer(_msgSender(), to, amount);
-        return true;
-    }
-
-    function Rewardtransfer(address to, uint256 amount) public virtual nonReentrant returns (bool) {
-          require(access.hasRank(HierarchicalAccessControl.Rank.CONSUL, _msgSender()), "XUSD: insufficient rank");
-         _transfer(_msgSender(), to, amount);
-     
-        return true;
-    }
-
-    function transferFrom(address from, address to, uint256 amount) public virtual override nonReentrant returns (bool) {
-        _spendAllowance(from, _msgSender(), amount);
-        _taxAndTransfer(from, to, amount);
-        return true;
-    }
-
-    function mint(address to, uint256 amount) public {
-        require(access.hasRank(HierarchicalAccessControl.Rank.CONSUL, _msgSender()), "XUSD: insufficient rank");
-        _mint(to, amount);
-    }
-
-    function registryBurn(address account, uint256 amount) public {
-        _burn(account, amount);
-    }
-
-    function setRegistry(address reg) public {
-        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, _msgSender()), "XUSD: insufficient rank");
-        registry = VibeRegistry(reg);
-    }
-
-    function setExclusionFromTax(address account, bool status) public {
-        _isExcludedFromTax[account] = status;
-    }
-
-    // Internal functions
-    function _approve(address owner, address spender, uint256 amount) internal virtual {
-        require(owner != address(0), "ERC20: approve from zero address");
-        require(spender != address(0), "ERC20: approve to zero address");
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
-    }
-
-    function _taxAndTransfer(address from, address to, uint256 amount) internal virtual {
-        uint256 adjustedAmount = amount;
-        int fee = 0;
-
-        try registry.calculateAndSumBasis(to, from, tx.origin, _msgSender(), amount) returns (int calcFee, uint256 calcAmount) {
-            fee = calcFee;
-            adjustedAmount = calcAmount;
-        } catch {
-            _transfer(from, to, adjustedAmount);
-            return;
-        }
-
-        if (fee > 0 && !_isExcludedFromTax[from] && !_isExcludedFromTax[to]) {
-            uint256 taxAmount = (adjustedAmount * uint256(fee)) / 10000;
-            if (taxAmount > 0) {
-                _transfer(from, address(0), taxAmount);
-                adjustedAmount -= taxAmount;
-            }
-        }
-
-        _transfer(from, to, adjustedAmount);
-    }
-
-    function _transfer(address from, address to, uint256 amount) internal virtual {
-        require(from != address(0), "ERC20: transfer from zero address");
-
-        uint256 fromBalance = _balances[from];
-        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
-
-        _balances[from] = fromBalance - amount;
-        if (to == address(0)) {
-            _burnBalances[from] += amount;
-            _totalBurned += amount;
-            _totalSupply -= amount;
-        } else {
-            _balances[to] += amount;
-        }
-
-        emit Transfer(from, to, amount);
-    }
-
-    function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to zero address");
-        _totalSupply += amount;
-        _balances[account] += amount;
-        emit Transfer(address(0), account, amount);
-    }
-
-    function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from zero address");
-        uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-        _balances[account] = accountBalance - amount;
-        _totalSupply -= amount;
-        emit Transfer(account, address(0), amount);
-    }
-
-    function _spendAllowance(address owner, address spender, uint256 amount) internal virtual {
-        uint256 currentAllowance = allowance(owner, spender);
-        if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, "ERC20: insufficient allowance");
-            _approve(owner, spender, currentAllowance - amount);
-        }
-    }
+  
 }
