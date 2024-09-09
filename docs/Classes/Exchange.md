@@ -27,6 +27,49 @@ function DAILY_LIMIT() external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
+### DAILY_LP_LIMIT
+
+```solidity
+function DAILY_LP_LIMIT() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### LpDailyLimit
+
+```solidity
+function LpDailyLimit(address, uint256) external view returns (uint256 marketVolume, uint256 lastTradeTime, uint256 amountRewards, bool active)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | address | undefined |
+| _1 | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| marketVolume | uint256 | undefined |
+| lastTradeTime | uint256 | undefined |
+| amountRewards | uint256 | undefined |
+| active | bool | undefined |
+
 ### MAXREWARDS
 
 ```solidity
@@ -156,6 +199,23 @@ function VIBE_RANK() external view returns (int256)
 |---|---|---|
 | _0 | int256 | undefined |
 
+### accessControl
+
+```solidity
+function accessControl() external view returns (contract IAccessManager)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract IAccessManager | undefined |
+
 ### addRewards
 
 ```solidity
@@ -254,7 +314,7 @@ function calculateTotalBasisFee(address addy, uint256 amount) external nonpayabl
 function claimReward() external nonpayable
 ```
 
-Allows a trader to claim their earned rewards
+
 
 
 
@@ -282,7 +342,7 @@ function description() external view returns (string)
 function getCurrentPeriod() external view returns (uint256)
 ```
 
-Gets the current period index based on the elapsed time since contract deployment
+
 
 
 
@@ -291,7 +351,7 @@ Gets the current period index based on the elapsed time since contract deploymen
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | Current period index |
+| _0 | uint256 | undefined |
 
 ### getDescription
 
@@ -355,7 +415,7 @@ function getTraderCurrentPeriodRewards(address traderAddress) external view retu
 function getTraderCurrentPeriodStatus(address traderAddress) external view returns (bool)
 ```
 
-Gets the status of a trader&#39;s position in the current period
+
 
 
 
@@ -363,13 +423,13 @@ Gets the status of a trader&#39;s position in the current period
 
 | Name | Type | Description |
 |---|---|---|
-| traderAddress | address | Address of the trader |
+| traderAddress | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | bool | Status of the trader&#39;s position in the current period |
+| _0 | bool | undefined |
 
 ### getTraderReward
 
@@ -377,7 +437,7 @@ Gets the status of a trader&#39;s position in the current period
 function getTraderReward(address traderAddress) external view returns (uint256)
 ```
 
-Gets the total reward earned by a trader
+
 
 
 
@@ -385,13 +445,13 @@ Gets the total reward earned by a trader
 
 | Name | Type | Description |
 |---|---|---|
-| traderAddress | address | Address of the trader |
+| traderAddress | address | undefined |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-| _0 | uint256 | Total reward earned by the trader |
+| _0 | uint256 | undefined |
 
 ### getUsersRewards
 
@@ -573,6 +633,28 @@ function setVibeRank(int256 vibes) external nonpayable
 |---|---|---|
 | vibes | int256 | undefined |
 
+### showTrader
+
+```solidity
+function showTrader(address user) external view returns (struct Exchange.Trader)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | Exchange.Trader | undefined |
+
 ### submitted
 
 ```solidity
@@ -707,5 +789,25 @@ function xusd() external view returns (contract XUSD)
 | _0 | contract XUSD | undefined |
 
 
+
+
+## Errors
+
+### UnauthorizedAccess
+
+```solidity
+error UnauthorizedAccess(enum IAccessManager.Rank roleId, address addr)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| roleId | enum IAccessManager.Rank | undefined |
+| addr | address | undefined |
 
 

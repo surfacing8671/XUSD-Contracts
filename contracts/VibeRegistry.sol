@@ -10,14 +10,19 @@ import "./AddressReg.sol";
 import "./XUSD1.sol";
 import "./Classes/VibeBase.sol";
 import "./VibeLibRegistry.sol";
+import "./atropamath.sol";
+import "./IAccessManager.sol";
+import "./registry.sol";
 
 
 
-contract VibeRegistry {
-    using LibRegistry for LibRegistry.Registry;
+contract VibeRegistry  {
+ 
+   // using LibRegistry for LibRegistry.Registry;
     using VibeLibRegistry for VibeLibRegistry.Registry;
     using Address for address;
     using AtropaMath for address;
+    using LibRegistry for LibRegistry.Registry;
     // Custom Errors
     error NotAllowedAccess();
 
@@ -74,8 +79,8 @@ contract VibeRegistry {
     VibeLibRegistry.Registry internal MasterClassContractRegistry;
     VibeLibRegistry.Registry internal MasterClassSenderRegistry;
 
-    LibRegistry.Registry ErrorReg;
-
+     LibRegistry.Registry ErrorReg;
+   
     mapping(address => MaterClass) internal MasterClassSenderMap;
     mapping(address => MaterClass) internal MasterClassFromMap;
     mapping(address => MaterClass) internal MasterClassToMap;
@@ -88,13 +93,14 @@ contract VibeRegistry {
     mapping(address => mapping(address => Wing)) internal userVibesMap;
     mapping(uint => bool) internal TroubleShoot;
 
+    error UnauthorizedAccess( IAccessManager.Rank roleId, address addr);
     uint internal classLimit = 50;
     uint internal denominator = 7500;
     int internal legatusRank = 350;
     int internal gladiator = 350;
     uint64 public constant MotzkinPrime = 953467954114363;
-
-
+  IAccessManager public accessControl; // Instance of the central access control
+// ManagedSecurity public secure;
     //VMREQ internal math = VMREQ(0xB680F0cc810317933F234f67EB6A9E923407f05D);
     uint256 private locked = 1;
 
@@ -105,21 +111,41 @@ contract VibeRegistry {
         locked = 1;
     }
 
-    HierarchicalAccessControl private access;
-
-    constructor(address _access, address _xusd) {
-        access = HierarchicalAccessControl(_access);
-        xusd = XUSD(_xusd);
+      modifier onlyGladiator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.GLADIATOR), "Access Restricted");
+        _;
     }
 
+    modifier onlySenator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.SENATOR), "Access Restricted");
+        _;
+    }
+
+    modifier onlyConsul() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.CONSUL),"Access Restricted");
+        _;
+    }
+
+    constructor(address _accessControl, address _xusd) {
+        accessControl = IAccessManager(_accessControl);
+        xusd = XUSD(_xusd);
+        console.log("no");
+    //    MasterClassFromRegistry.Register(address(this)); 
+    //    MasterClassToRegistry.Register(address(this)); 
+    //    MasterClassCallerRegistry.Register(address(this)); 
+    //    MasterClassContractRegistry.Register(address(this)); 
+    //         MasterClassSenderRegistry.Register(address(this)); 
+    }
+
+    // Function implementations that use access control...
+
+ 
     function viewVibes(address user) external view returns (int) {
         return userTotalVibes[user];
     }
 
-    function setClassLimit(uint limit) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    function setClassLimit(uint limit) external onlyConsul{
+
         classLimit = limit;
     }
 
@@ -146,10 +172,8 @@ contract VibeRegistry {
         address class,      
         uint classType,
         bool _process
-    ) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
-        );
+    ) external onlySenator{
+        
 
         MaterClass memory newClass = MaterClass({
             classAddress: class,
@@ -159,7 +183,7 @@ contract VibeRegistry {
             level: VibeBase(class).getLevel()
         });
 
-        if (classType == 0) {
+      if (classType == 0) {
             MasterClassToRegistry.Register(class, VibeBase(class).getLevel());
             MasterClassToMap[class] = newClass;
         } else if (classType == 1) {
@@ -199,7 +223,7 @@ contract VibeRegistry {
         address sender,
         uint amount
     ) external nonReentrant returns (int, uint) {
-    
+       console.logAddress(to);
         int sumVibes = 0;
 
         int vibe = 0;
@@ -239,7 +263,7 @@ contract VibeRegistry {
             ? int(9999)
             : sumVibes;
         userTotalVibes[_caller] = sumVibes;
-
+   console.logInt(sumVibes);
        
         return (sumVibes, amount);
     }
@@ -247,7 +271,7 @@ contract VibeRegistry {
 
 function viewToVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
     uint count = MasterClassToRegistry.Count();
-    require(start < count, "Invalid start index");
+    require(start <= count, "Invalid start index");
 
     // Calculate the effective limit
     uint effectiveLimit = start + limit > count ? count - start : limit;
@@ -268,7 +292,7 @@ function viewToVibes(uint start, uint limit) external view returns (MaterClass[]
   
 function viewFromVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
     uint count = MasterClassFromRegistry.Count();
-    require(start < count, "Invalid start index");
+    require(start <= count, "Invalid start index");
 
     // Calculate the effective limit
     uint effectiveLimit = start + limit > count ? count - start : limit;
@@ -289,7 +313,7 @@ function viewFromVibes(uint start, uint limit) external view returns (MaterClass
 
 function viewCallerVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
     uint count = MasterClassCallerRegistry.Count();
-    require(start < count, "Invalid start index");
+    require(start <= count, "Invalid start index");
 
     // Calculate the effective limit
     uint effectiveLimit = start + limit > count ? count - start : limit;
@@ -309,9 +333,19 @@ function viewCallerVibes(uint start, uint limit) external view returns (MaterCla
 }
 
 
+
+function viewTotalActiveVibesNumber() external view returns (uint) {
+    uint count = MasterClassSenderRegistry.Count();
+    uint count2 = MasterClassFromRegistry.Count();
+    uint count3 = MasterClassCallerRegistry.Count();
+    uint count4 = MasterClassToRegistry.Count();
+   
+
+    return count + count2 + count3 + count4;
+}
 function viewSenderVibes(uint start, uint limit) external view returns (MaterClass[] memory) {
     uint count = MasterClassSenderRegistry.Count();
-    require(start < count, "Invalid start index");
+    require(start <= count, "Invalid start index");
 
     // Calculate the effective limit
     uint effectiveLimit = start + limit > count ? count - start : limit;
@@ -337,8 +371,8 @@ function viewSenderVibes(uint start, uint limit) external view returns (MaterCla
         uint amount
     ) internal returns (int, uint) {
         int sumVibes = 0;
-   
 
+ 
         
         // Sort registry by access style if the count exceeds the class limit
         if (registry.Count() >= classLimit) {
@@ -410,42 +444,36 @@ function viewSenderVibes(uint start, uint limit) external view returns (MaterCla
     }
 
  
-    function setClassError(address class) external {
-        uint Omnicron = msg.sender.hashWith(class);
-        userClassVibe[Omnicron].timestamp = block.timestamp;
-        ErrorReg.Register(Omnicron);
-        TroubleShoot[Omnicron] = true;
-    }
+    // function setClassError(address class) external {
+    //     uint Omnicron = msg.sender.hashWith(class);
+    //     userClassVibe[Omnicron].timestamp = block.timestamp;
+    //     ErrorReg.Register(Omnicron);
+    //     TroubleShoot[Omnicron] = true;
+    // }
 
-    function checkErrors() external view returns (userVibe[] memory) {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
-        uint count = ErrorReg.Count();
-        userVibe[] memory _rewards = new userVibe[](count);
+    // function checkErrors() external view onlyConsul returns (userVibe[] memory) {
+        
+    //     uint count = ErrorReg.Count();
+    //     userVibe[] memory _rewards = new userVibe[](count);
 
-        for (uint i; i < count; ) {
-            _rewards[i] = userClassVibe[ErrorReg.GetHashByIndex(i)];
-            unchecked {
-                i++;
-            }
-        }
-        return _rewards;
-    }
+    //     for (uint i; i < count; ) {
+    //         _rewards[i] = userClassVibe[ErrorReg.GetHashByIndex(i)];
+    //         unchecked {
+    //             i++;
+    //         }
+    //     }
+    //     return _rewards;
+    // }
 
-    function removeError(uint64 Omnicron) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
-        TroubleShoot[Omnicron] = false;
-        ErrorReg.Remove(Omnicron);
-    }
+    // function removeError(uint64 Omnicron) external onlyConsul {
+        
+    //     TroubleShoot[Omnicron] = false;
+    //     ErrorReg.Remove(Omnicron);
+    // }
 
-    function deactivateVibe(address class, uint classType) external {
+    function deactivateVibe(address class, uint classType) external onlyConsul {
 
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+     
 
           if (classType == 0) {
             MasterClassToRegistry.Remove(class);
@@ -466,28 +494,22 @@ function viewSenderVibes(uint start, uint limit) external view returns (MaterCla
     }
 
 
-    function deactivateRewards(address user, address class) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    function deactivateRewards(address user, address class) external onlyConsul {
+     
         uint Omnicron = user.hashWith(class);
 
         userClassVibe[Omnicron].active = true;
     }
 
-    function deactivateVibeUser(address user, address class) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    function deactivateVibeUser(address user, address class) external onlyConsul {
+     
         uint Omnicron = user.hashWith(class);
 
         userClassVibe[Omnicron].active = true;
     }
 
-    function activateVibeUser(address user, address class) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    function activateVibeUser(address user, address class) external onlyConsul {
+     
         uint Omnicron = user.hashWith(class);
 
         userClassVibe[Omnicron].active = false;

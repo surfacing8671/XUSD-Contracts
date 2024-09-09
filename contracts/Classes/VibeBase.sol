@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "./IVibeCalculator.sol";
-import "../Access.sol";
+import "../IAccessManager.sol";
 
 /**
  * @title BaseClass
@@ -10,7 +10,7 @@ import "../Access.sol";
  */
 abstract contract VibeBase is IVibeCalculator {
     mapping(uint => bool) public UserActiveList;
- HierarchicalAccessControl private accessControl;
+ IAccessManager private accessControl;
     string public description;
     enum Importance {
         Low,  // 0
@@ -26,16 +26,17 @@ abstract contract VibeBase is IVibeCalculator {
     VibeInfo public id;
 
     constructor(VibeInfo memory _id, address access) {
-    accessControl = HierarchicalAccessControl(access);
+    accessControl = IAccessManager(access);
         id = _id;
 
     }
 
     function setBaseImportance(Importance level) external {
     require(
-            accessControl.hasRank(
-                HierarchicalAccessControl.Rank.CONSUL,
-                msg.sender
+            accessControl.checkRole(
+               
+                msg.sender,
+                 IAccessManager.Rank.CONSUL
             ),
             "Caller does not have the required rank"
         );

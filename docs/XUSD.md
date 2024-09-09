@@ -448,3 +448,23 @@ event Transfer(address indexed from, address indexed to, uint256 value)
 
 
 
+## Errors
+
+### UnauthorizedAccess
+
+```solidity
+error UnauthorizedAccess(enum IAccessManager.Rank roleId, address addr)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| roleId | enum IAccessManager.Rank | undefined |
+| addr | address | undefined |
+
+

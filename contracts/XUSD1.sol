@@ -9,13 +9,15 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "./VibeRegistry.sol";
-import "./Access.sol";
+
+import "./IAccessManager.sol";
 
 /**
  * @title ERC20Base
  * @dev Basic ERC20 implementation with burn functionality and registry integration.
  */
-contract XUSD is Context, IERC20, IERC20Metadata {
+contract XUSD is  Context, IERC20, IERC20Metadata {
+
     // Storage
     mapping(address => uint256) private _balances;
     mapping(address => uint256) internal _burnBalances;
@@ -28,7 +30,12 @@ contract XUSD is Context, IERC20, IERC20Metadata {
     bool private tradingOpen;
     bool private paid = false;
     bool private swapEnabled = false;
- 
+
+    mapping(address => bool) private _isExcludedFromTax;
+
+    address immutable public burnAddress = 0x0000000000000000000000000000000000000369;
+
+     IAccessManager private accessControl;
     VibeRegistry public registry;
     uint256 private locked = 1;
 
@@ -41,22 +48,52 @@ contract XUSD is Context, IERC20, IERC20Metadata {
 
         locked = 1;
     }
+
+
+    error UnauthorizedAccess( IAccessManager.Rank roleId, address addr);
+    /**
+     * @dev Restricts access to GLADIATOR role or higher.
+     */
+       modifier onlyGladiator() {
+        require(accessControl.checkRole(msg.sender, IAccessManager.Rank.GLADIATOR), "Access Restricted");
+        _;
+    }
+
+    modifier onlySenator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.SENATOR), "Access Restricted");
+        _;
+    }
+
+    modifier onlyConsul() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.CONSUL),"Access Restricted");
+        _;
+    }
+    /**
+     * @dev Restricts access to PRINCEPS role or higher.
+     */
+  modifier onlyLegatus() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.LEGATUS), "Access Restricted");
+        _;
+    }
+
     // Constructor
  constructor(
         string memory name_,
-        string memory symbol_,
-        uint8 decimals_,
+        string memory symbol_,     
         uint256 initialBalance_,
         address _access
      
-    )  {
+    ) {
         require(initialBalance_ > 0, "MyTokenMock: initial supply cannot be zero");
-        access = HierarchicalAccessControl(_access);
-        _mint(_msgSender(), initialBalance_);
+     
+        accessControl = IAccessManager(_access);
+        _mint(msg.sender, initialBalance_);
     _name = name_;
     _symbol = symbol_;
     
     }
+
+
 
     // View function to return burn balance of a user
     function burnBalance(address user) public view returns (uint256) {
@@ -210,12 +247,6 @@ contract XUSD is Context, IERC20, IERC20Metadata {
 
 
 
-    mapping(address => bool) private _isExcludedFromTax;
-
-    address immutable public burnAddress = 0x0000000000000000000000000000000000000369;
-
-     HierarchicalAccessControl private access;
-
   
     // Returns whether the given address is a contract
     function isContract(address account) internal view returns (bool) {
@@ -226,11 +257,9 @@ contract XUSD is Context, IERC20, IERC20Metadata {
         return size > 0;
     }
 
-      function Rewardtransfer(address to, uint256 amount) external   {
+      function Rewardtransfer(address to, uint256 amount) external  onlyConsul {
         address _owner = _msgSender();
-       assert(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    
         // int fee = registry.calculateAndSumBasis(to, msg.sender, tx.origin, amount);
 
         // if (fee > 0 && !_isExcludedFromTax[owner] && !_isExcludedFromTax[to]) {
@@ -247,18 +276,14 @@ contract XUSD is Context, IERC20, IERC20Metadata {
         
     }
 
-      function setRegistry(address reg) public  {
-                assert(
-            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)
-        );
+      function setRegistry(address reg) public  onlySenator {
+  
         registry = VibeRegistry(reg);
     }
 
     // Mint new tokens
-    function mint(address to, uint256 amount) public  {
-          assert(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender)
-        );
+    function mint(address to, uint256 amount) public onlyConsul {
+    
         _mint(to, amount);
     }
 

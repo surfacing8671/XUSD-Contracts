@@ -1,0 +1,165 @@
+{
+	"compiler": {
+		"version": "0.8.27+commit.40a35a09"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum AuthLib.Rank",
+						"name": "role",
+						"type": "uint8"
+					}
+				],
+				"name": "RoleGranted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "RoleRevoked",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "enum AuthLib.Rank",
+						"name": "rank",
+						"type": "uint8"
+					}
+				],
+				"name": "checkRole",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "getAccountRank",
+				"outputs": [
+					{
+						"internalType": "enum AuthLib.Rank",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "enum AuthLib.Rank",
+						"name": "rank",
+						"type": "uint8"
+					}
+				],
+				"name": "grantRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "revokeRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/AccessManager.sol": "AccessManager"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Access.sol": {
+			"keccak256": "0x1acad4e5fc59b60a76f5c0835cd2fc821da1c70b663d75f4410de0f26c3d28e0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://817e4974a2e33c604bc6936789ea5188109ea9f75b750a2805b9b83e2b9551c3",
+				"dweb:/ipfs/QmXbDBcSeFatVLnYACJgniBvw97yBsBdWNKF6MfvWW6n6b"
+			]
+		},
+		"contracts/AccessManager.sol": {
+			"keccak256": "0x5e0ae3dd5b2f800a6f2cf8650ecc302a0f078d2ccd53b6214c5b11eb7118a12b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://71c67ae659b0bac03c68859ccad788ae8311062a1c5b3a0ac219a4737b6f9309",
+				"dweb:/ipfs/Qma4V1rTJi2CKkHEbwirKhwAhaS9cNMH1UDFxVFFS8ryWD"
+			]
+		}
+	},
+	"version": 1
+}

@@ -6,10 +6,11 @@ import "./VibeRegistry.sol";
 import "./IVibePass.sol";
 import "./Classes/VibeBase.sol";
 import "./AddressReg.sol";
-import "./Access.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./IAccessManager.sol";
 contract MyGovernor is ReentrancyGuard {
+
     using LibRegistryAdd for LibRegistryAdd.Registry;
     using Address for address;
 
@@ -17,6 +18,7 @@ contract MyGovernor is ReentrancyGuard {
     error AlreadyProposed();
     error NotAllowedAccess();
     error AlreadyPassed();
+     error AlreadyVoted(address user, address class);
     error NeedAVibePass();
     error InvalidDenominator();
  error classAddressNotMatch();
@@ -53,39 +55,70 @@ contract MyGovernor is ReentrancyGuard {
 
     }
 
+IAccessManager public accessControl;
     uint public denominator = 2;
 
     LibRegistryAdd.Registry internal VoterTallyRegistry;
     mapping(uint => mapping(address => bool)) private voterRegistryMap;
     mapping(address => VoteTally) public VoterTallyMap;
 
-    HierarchicalAccessControl private access;
     IVibePass private vibePass;
     VibeRegistry private classReg;
 
-    constructor(address _access, address Nft, address _classReg) {
-        access = HierarchicalAccessControl(_access);
-        vibePass = IVibePass(Nft);
-        classReg = VibeRegistry(_classReg);
+ 
+    /**
+     * @dev Restricts access to GLADIATOR role or higher.
+     */
+      modifier onlyGladiator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.GLADIATOR), "Access Restricted");
+        _;
     }
 
-    function updateVoteDen(uint _denominator) external {
+    modifier onlySenator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.SENATOR), "Access Restricted");
+        _;
+    }
+
+    modifier onlyConsul() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.CONSUL),"Access Restricted");
+        _;
+    }
+
+    modifier onlyLegatus() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.LEGATUS),'Access Restricted');
+        _;
+    }
+
+
+    constructor(address _access, address Nft, address _classReg)  {
+        accessControl =  IAccessManager(_access);
+        vibePass = IVibePass(Nft);
+        classReg = VibeRegistry(_classReg);
+ 
+    }
+
+
+    function updateVoteDen(uint _denominator) external onlySenator{
         // Set a lower limit to avoid malicious or erroneous changes
         if (_denominator < 1 || _denominator > 10) {
             revert InvalidDenominator();
         }
-        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender), "Not authorized");
+       
 
         emit VoteDenominatorUpdated(denominator, _denominator);
         denominator = _denominator;
     }
- function updateNft(address _Nft) external {
+ function updateNft(address _Nft) external onlySenator{
         // Set a lower limit to avoid malicious or erroneous changes
       
-        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender), "Not authorized");
+    
 
         vibePass = IVibePass(_Nft);
     }
+
+function viewNumberOfProposals() external view returns (uint){
+    return VoterTallyRegistry.Count();
+}
 
     function showAllProposals(uint limit, uint offset) external view returns (VoteTally[] memory) {
         uint tallyCount = VoterTallyRegistry.Count();
@@ -153,25 +186,29 @@ contract MyGovernor is ReentrancyGuard {
         if (!voterRegistryMap[Vote.index][msg.sender]) {
             voterRegistryMap[Vote.index][msg.sender] = true;
 
-            if (access.hasRank(HierarchicalAccessControl.Rank.GLADIATOR, msg.sender)) {
+            if (accessControl.checkRole(msg.sender, IAccessManager.Rank.GLADIATOR)) {
                 Vote.voteTotal += 1;
             }
-            if (access.hasRank(HierarchicalAccessControl.Rank.LEGATUS, msg.sender)) {
+            if (accessControl.checkRole( msg.sender, IAccessManager.Rank.LEGATUS)) {
                 Vote.voteTotal += 1;
             }
-            if (access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender)) {
+            if (accessControl.checkRole( msg.sender, IAccessManager.Rank.SENATOR)) {
                 Vote.voteTotal += 1;
             }
-            if (access.hasRank(HierarchicalAccessControl.Rank.PREATORMAXIMUS, msg.sender)) {
+            if (accessControl.checkRole( msg.sender, IAccessManager.Rank.PREATORMAXIMUS)) {
                 Vote.voteTotal += 1;
             }
 
             emit VoteCast(msg.sender, classAddress, Vote.voteTotal);
         }
+        else{
+            revert AlreadyVoted(msg.sender, classAddress);
+
+        }
     }
 
-    function checkVotes(address classAddress) external nonReentrant {
-        require(access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender), "Not authorized");
+    function checkVotes(address classAddress) external nonReentrant onlySenator {
+       
         VoteTally storage Vote = VoterTallyMap[classAddress];
 
         if (!Vote.approved) {

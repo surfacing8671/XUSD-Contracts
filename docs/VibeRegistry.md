@@ -27,6 +27,23 @@ function MotzkinPrime() external view returns (uint64)
 |---|---|---|
 | _0 | uint64 | undefined |
 
+### accessControl
+
+```solidity
+function accessControl() external view returns (contract IAccessManager)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract IAccessManager | undefined |
+
 ### activateVibeUser
 
 ```solidity
@@ -89,23 +106,6 @@ function calculateAndSumBasis(address to, address from, address _caller, address
 | _0 | int256 | undefined |
 | _1 | uint256 | undefined |
 
-### checkErrors
-
-```solidity
-function checkErrors() external view returns (struct VibeRegistry.userVibe[])
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | VibeRegistry.userVibe[] | undefined |
-
 ### deactivateRewards
 
 ```solidity
@@ -155,38 +155,6 @@ function deactivateVibeUser(address user, address class) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | user | address | undefined |
-| class | address | undefined |
-
-### removeError
-
-```solidity
-function removeError(uint64 Omnicron) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| Omnicron | uint64 | undefined |
-
-### setClassError
-
-```solidity
-function setClassError(address class) external nonpayable
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
 | class | address | undefined |
 
 ### setClassLimit
@@ -314,6 +282,23 @@ function viewToVibes(uint256 start, uint256 limit) external view returns (struct
 |---|---|---|
 | _0 | VibeRegistry.MaterClass[] | undefined |
 
+### viewTotalActiveVibesNumber
+
+```solidity
+function viewTotalActiveVibesNumber() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
 ### viewVibes
 
 ```solidity
@@ -388,5 +373,22 @@ error NotAllowedAccess()
 
 
 
+
+### UnauthorizedAccess
+
+```solidity
+error UnauthorizedAccess(enum IAccessManager.Rank roleId, address addr)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| roleId | enum IAccessManager.Rank | undefined |
+| addr | address | undefined |
 
 

@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
+
 import "../Access.sol";
-import "hardhat/console.sol";
 import "./VibeBase.sol";
+import "../AddressReg.sol";
 import "../XUSD1.sol";
+import "../IAccessManager.sol";
 import "./IPancackePair.sol";
+
 // Import the interface for the reward contract
 interface IReward {
     function distributeReward(
@@ -16,174 +19,197 @@ interface IReward {
 /// @title Exchange Contract
 /// @notice This contract facilitates trading on the exchange and distributes rewards to traders.
 contract Exchange is VibeBase {
+    using LibRegistryAdd for LibRegistryAdd.Registry;
+
     uint256 public periodStartTime;
-    uint256 public constant PERIOD_DURATION = 1 days; // 30 days in seconds
+    uint256 public constant PERIOD_DURATION = 3600; 
     int public VIBE_RANK = 2000;
-    uint256 public  MAX_AMOUNT = 1000 * 1e18;
-    uint256 public  DAILY_LIMIT = 100000 * 1e18;
+    uint256 public MAX_AMOUNT = 1000 * 1e18;
+    uint256 public DAILY_LIMIT = 5000 * 1e18;
     uint256 public TotalRewards = 0;
-        mapping(address => bool) public Rewards;
-    // Struct to store trader information
+
+    mapping(address => bool) public Rewards;
+
     struct Trader {
-        uint256 lastTradeTime; // Timestamp of the last trade
-        uint256 cumulativeTradingVolume; // Total trading volume of the trader accepted
-        uint256 totalReward; // Total reward earned by the trader
+        uint256 lastTradeTime; 
+        uint256 cumulativeTradingVolume;
+        uint256 totalReward; 
         uint256 withdrawnRewards;
     }
 
     struct Period {
-        uint256 marketVolume; // Total trading volume within the period
-        uint256 lastTradeTime; // Timestamp of the last trade within the period
+        uint256 marketVolume; 
+        uint256 lastTradeTime;
         uint256 amountRewards;
         bool active;
     }
 
-    // Mapping to store trader information
     mapping(address => Trader) public traders;
-    // Mapping to store period information
     mapping(uint256 => Period) public periods;
-    // Mapping to store the status of traders' positions per period
+    LibRegistryAdd.Registry internal LpWhitelistedReg;
     mapping(address => mapping(uint256 => bool)) public traderPeriodStatus;
+
+    uint256 public DAILY_LP_LIMIT = DAILY_LIMIT;
+    mapping(address => mapping(uint256 => Period)) public LpDailyLimit;
     mapping(address => bool) public submitted;
-    // Mapping to store the status of traders' volumes per period
     mapping(address => mapping(uint256 => uint256)) public traderPeriodVolume;
     mapping(address => mapping(uint256 => uint256)) public traderPeriodRewards;
     uint256 public MAXREWARDS;
-    // Instance of the reward contract interface
+
     IReward public rewardContract;
+    XUSD public xusd;
+  IAccessManager public accessControl;
 
+    error UnauthorizedAccess( IAccessManager.Rank roleId, address addr);
+    /**
+     * @dev Restricts access to GLADIATOR role or higher.
+     */
+      modifier onlyGladiator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.GLADIATOR), "Access Restricted");
+        _;
+    }
 
-        XUSD public xusd;
-    HierarchicalAccessControl private access;
+    modifier onlySenator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.SENATOR), "Access Restricted");
+        _;
+    }
 
-     constructor(
+    modifier onlyConsul() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.CONSUL),"Access Restricted");
+        _;
+    }
+
+    modifier onlyLegatus() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.LEGATUS),"Access Restricted");
+        _;
+    }
+    constructor(
         address _access,
         address _xusd,
         address _rewardContract,
         VibeInfo memory _description
     ) VibeBase(_description, _access) {
-        access = HierarchicalAccessControl(_access);
+        accessControl = IAccessManager(_access);
         xusd = XUSD(_xusd);
-                rewardContract = IReward(_rewardContract);
-        MAXREWARDS = xusd.balanceOf(address(rewardContract));
+        rewardContract = IReward(_rewardContract);
+  
+
         periodStartTime = block.timestamp;
     }
+   function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
 
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
 
-    function addToWhiteListAdmin(address account) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function _contextSuffixLength() internal view virtual  returns (uint256) {
+        return 0;
+    }
+    function addToWhiteListAdmin(address account) external onlyConsul{
+
         require(
             IPancakePair(account).token0() == address(xusd) || IPancakePair(account).token1() == address(xusd),
             "XUSD is not in that LP"
         );
-
+        LpWhitelistedReg.Register(account);
         Rewards[account] = true;
-       // emit AddedToWhitelist(account, msg.sender);
     }
 
-    function addToWhiteList(address account) external {
+    function addToWhiteList(address account) external onlyLegatus{
+
         require(
-            access.hasRank(HierarchicalAccessControl.Rank.LEGATUS, msg.sender),
-            "Access denied: LEGATUS rank required"
-        );
-                require(
             IPancakePair(account).token0() == address(xusd) || IPancakePair(account).token1() == address(xusd),
             "XUSD is not in that LP"
         );
         require(!submitted[msg.sender], "Only allowed to submit once");
-
+        LpWhitelistedReg.Register(account);
         Rewards[account] = true;
         submitted[msg.sender] = true;
-      //  emit AddedToWhitelist(account, msg.sender);
     }
-   
 
-    /// @notice Handles opening a trading position
-    /// @param volume Volume of the trade
-    /// @param currentPeriod Current period index
-    function handleOpenPosition(uint256 volume, uint256 currentPeriod) private {
-  
-     
-        if(!periods[currentPeriod].active){
-        calculateReward(tx.origin, volume);
+    function handleOpenPosition(uint256 volume, uint256 currentPeriod, address lp) private {
+        if(!periods[currentPeriod].active && !LpDailyLimit[lp][currentPeriod].active){
+            calculateReward(tx.origin, volume, lp);
         }
-        
     }
 
+    function showTrader(address user) external view returns(Trader memory){
+       return traders[user];
+    }
 
-
-    /// @notice Calculates the reward for a trader based on their trading activity
-    /// @param traderAddress Address of the trader
-    /// @param volume Volume of the trade
-    function calculateReward(address traderAddress, uint256 volume) private {
+    function calculateReward(address traderAddress, uint256 volume, address lp) private {
         uint256 currentPeriod = getCurrentPeriod();
         Trader storage trader = traders[traderAddress];
-       console.logUint(MAXREWARDS);
-    if(TotalRewards >= MAXREWARDS) return;
-    if(traderPeriodStatus[traderAddress][currentPeriod]) return;
-    if(periods[currentPeriod].active) return;
-   
-    uint256 rewardAmount = volume / 4;
-    if(rewardAmount > MAX_AMOUNT){
-        rewardAmount = MAX_AMOUNT;
+        if (TotalRewards >= MAXREWARDS) return;
+        if (traderPeriodStatus[traderAddress][currentPeriod]) return;
+        if (periods[currentPeriod].active) return;
+
+        uint256 rewardAmount = volume / 8;
+        if (rewardAmount > MAX_AMOUNT) {
+            rewardAmount = MAX_AMOUNT;
+        }
+
+        uint256 lpCount = LpWhitelistedReg.Count();
+        if (lpCount > 0) {
+    uint256 lpRewardLimit = DAILY_LP_LIMIT / lpCount;
+    uint256 rewardToAdd;
+
+    // Calculate reward for the LP limit
+    if (LpDailyLimit[lp][currentPeriod].amountRewards + rewardAmount >= lpRewardLimit) {
+        rewardToAdd = lpRewardLimit - LpDailyLimit[lp][currentPeriod].amountRewards;
+        LpDailyLimit[lp][currentPeriod].amountRewards += rewardToAdd;
+        LpDailyLimit[lp][currentPeriod].active = true;
+    } else {
+        rewardToAdd = rewardAmount;
+        LpDailyLimit[lp][currentPeriod].amountRewards += rewardToAdd;
     }
-           if (periods[currentPeriod].amountRewards + rewardAmount >= DAILY_LIMIT) {
-        periods[currentPeriod].amountRewards += DAILY_LIMIT - periods[currentPeriod].amountRewards;
-        rewardAmount = DAILY_LIMIT - periods[currentPeriod].amountRewards;
-        TotalRewards += rewardAmount;
+
+    // Adjust for overall period daily limit
+    if (periods[currentPeriod].amountRewards + rewardToAdd >= DAILY_LIMIT) {
+        uint256 remainingPeriodReward = DAILY_LIMIT - periods[currentPeriod].amountRewards;
+        rewardToAdd = remainingPeriodReward;
+        periods[currentPeriod].amountRewards += rewardToAdd;
         periods[currentPeriod].active = true;
-
-    }
-    else{
-        periods[currentPeriod].amountRewards += rewardAmount;
-        TotalRewards += rewardAmount;
-        console.logUint(rewardAmount);
+    } else {
+        periods[currentPeriod].amountRewards += rewardToAdd;
     }
 
-        if (traderPeriodRewards[traderAddress][currentPeriod] + rewardAmount >= MAX_AMOUNT) {
-        trader.totalReward += MAX_AMOUNT - traderPeriodRewards[traderAddress][currentPeriod];
-        traderPeriodRewards[traderAddress][currentPeriod] += MAX_AMOUNT - traderPeriodRewards[traderAddress][currentPeriod];
- 
+    // Adjust for the trader's maximum allowed reward
+    if (traderPeriodRewards[traderAddress][currentPeriod] + rewardToAdd >= MAX_AMOUNT) {
+        uint256 remainingTraderReward = MAX_AMOUNT - traderPeriodRewards[traderAddress][currentPeriod];
+        rewardToAdd = remainingTraderReward;
+        traderPeriodRewards[traderAddress][currentPeriod] += rewardToAdd;
+        trader.totalReward += rewardToAdd;
         traderPeriodStatus[traderAddress][currentPeriod] = true;
-    }
-    else{
-        traderPeriodRewards[traderAddress][currentPeriod] += rewardAmount;
-        trader.totalReward += rewardAmount;
-    }
-
-   
-
+    } else {
+        traderPeriodRewards[traderAddress][currentPeriod] += rewardToAdd;
+        trader.totalReward += rewardToAdd;
     }
 
-      function calculateRewards(
+    // Finally, update the total rewards
+    TotalRewards += rewardToAdd;
+}
+    }
+
+    function calculateRewards(
         address to,
         address from,
         address caller,
         address sender,
         uint256 amount,
         int256 vibes
-    ) external  {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    ) external onlyConsul {
+    
 
-        if (
-            (Rewards[from] || Rewards[to] ) && vibes <= VIBE_RANK
-        ) {
-            console.logAddress(from);
+        if ((Rewards[from] || Rewards[to]) && vibes <= VIBE_RANK) {
             uint256 currentPeriod = getCurrentPeriod();
-
-            handleOpenPosition(amount, currentPeriod);
+            handleOpenPosition(amount, currentPeriod, Rewards[from] ? from : to);
         }
     }
 
-
-    /// @notice Allows a trader to claim their earned rewards
-    function claimReward() external {
+    function claimReward() external nonReentrant {
         uint256 currentPeriod = getCurrentPeriod();
         uint256 reward = traders[msg.sender].totalReward;
         require(reward > 0, "Reward cannot be 0");
@@ -191,68 +217,51 @@ contract Exchange is VibeBase {
         // Set the totalReward to 0 before distributing the reward
         traders[msg.sender].totalReward = 0;
 
-      
-        // Distribute the reward
-        rewardContract.distributeReward(msg.sender, reward);
+        // Distribute the reward safely
+        (bool success, ) = address(rewardContract).call(abi.encodeWithSelector(
+            IReward.distributeReward.selector, msg.sender, reward
+        ));
+        require(success, "Reward distribution failed");
     }
 
-    function setTotalAmount(uint amounts) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function setTotalAmount(uint256 amounts) external onlyConsul {
+ 
         MAXREWARDS = amounts;
     }
 
-    function setDailyAmounts(uint amounts) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function setDailyAmounts(uint256 amounts) external onlyConsul{
+   
         DAILY_LIMIT = amounts;
     }
 
-
-    function setUserAmounts(uint amounts) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function setUserAmounts(uint256 amounts) external onlyConsul{
+ 
         MAX_AMOUNT = amounts;
     }
 
-        function setVibeRank(int vibes) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function setVibeRank(int256 vibes) external onlyConsul{
+   
         VIBE_RANK = vibes;
     }
 
-    function addRewards(uint amounts) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function addRewards(uint256 amounts) external onlyConsul{
+ 
         MAXREWARDS += amounts;
     }
 
-        function getUsersRewards(address user) external view returns(uint[] memory) {
-         uint256 currentPeriod = getCurrentPeriod();
-          uint[] memory userRewards = new uint[](currentPeriod);
-          for(uint i; i < currentPeriod; i ++){
+    function getUsersRewards(address user) external view returns (uint256[] memory) {
+        uint256 currentPeriod = getCurrentPeriod();
+        uint256[] memory userRewards = new uint256[](currentPeriod);
+        for (uint256 i = 0; i < currentPeriod; i++) {
             userRewards[i] = traderPeriodRewards[user][i];
-          }
-          return userRewards;
+        }
+        return userRewards;
     }
-    /// @notice Gets the status of a trader's position in the current period
-    /// @param traderAddress Address of the trader
-    /// @return Status of the trader's position in the current period
+
     function getTraderCurrentPeriodStatus(
         address traderAddress
     ) public view returns (bool) {
         uint256 currentPeriod = getCurrentPeriod();
-
         return traderPeriodStatus[traderAddress][currentPeriod];
     }
 
@@ -260,23 +269,15 @@ contract Exchange is VibeBase {
         address traderAddress
     ) public view returns (uint256) {
         uint256 currentPeriod = getCurrentPeriod();
-
         return traderPeriodRewards[traderAddress][currentPeriod];
     }
 
-    /// @notice Gets the total reward earned by a trader
-    /// @param traderAddress Address of the trader
-    /// @return Total reward earned by the trader
     function getTraderReward(
         address traderAddress
     ) public view returns (uint256) {
         return traders[traderAddress].totalReward;
     }
 
-
-
-    /// @notice Gets the current period index based on the elapsed time since contract deployment
-    /// @return Current period index
     function getCurrentPeriod() public view returns (uint256) {
         return (block.timestamp - periodStartTime) / PERIOD_DURATION;
     }

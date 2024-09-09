@@ -43,6 +43,23 @@ function VibReg() external view returns (contract VibeRegistry)
 |---|---|---|
 | _0 | contract VibeRegistry | undefined |
 
+### accessControl
+
+```solidity
+function accessControl() external view returns (contract IAccessManager)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract IAccessManager | undefined |
+
 ### approve
 
 ```solidity
@@ -82,22 +99,16 @@ function balanceOf(address owner) external view returns (uint256)
 |---|---|---|
 | _0 | uint256 | undefined |
 
-### getAllProtocolMessage
+### checkRank
 
 ```solidity
-function getAllProtocolMessage() external view returns (string[])
+function checkRank() external nonpayable
 ```
 
+Check if a user qualifies for the gladiator rank and update rank if needed
 
 
 
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | string[] | undefined |
 
 ### getApproved
 
@@ -164,23 +175,6 @@ function getBurnAmountsOrigin(uint256 id) external view returns (uint256)
 | Name | Type | Description |
 |---|---|---|
 | _0 | uint256 | undefined |
-
-### getProtocolMessage
-
-```solidity
-function getProtocolMessage() external view returns (string)
-```
-
-
-
-
-
-
-#### Returns
-
-| Name | Type | Description |
-|---|---|---|
-| _0 | string | undefined |
 
 ### getUsername
 
@@ -388,23 +382,7 @@ function setApprovalForAll(address operator, bool approved) external nonpayable
 function setGladiator(int256 vibes) external nonpayable
 ```
 
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| vibes | int256 | undefined |
-
-### setProtocolMessage
-
-```solidity
-function setProtocolMessage(string message) external nonpayable
-```
-
-
+Set the gladiator rank required for VibePass minting
 
 
 
@@ -412,23 +390,7 @@ function setProtocolMessage(string message) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| message | string | undefined |
-
-### setRegistry
-
-```solidity
-function setRegistry(address registry) external nonpayable
-```
-
-Set the address of the access control registry
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| registry | address | The new access control registry address |
+| vibes | int256 | Minimum vibes required for gladiator rank |
 
 ### setURI
 
@@ -436,7 +398,7 @@ Set the address of the access control registry
 function setURI(address user, string Url) external nonpayable
 ```
 
-
+Set the URI for a VibePass holder
 
 
 
@@ -444,8 +406,8 @@ function setURI(address user, string Url) external nonpayable
 
 | Name | Type | Description |
 |---|---|---|
-| user | address | undefined |
-| Url | string | undefined |
+| user | address | The address of the user whose URI is being updated |
+| Url | string | The new URI |
 
 ### setUserName
 
@@ -692,7 +654,7 @@ View the URI associated with a user&#39;s VibePass
 function withdrawOneswap() external nonpayable
 ```
 
-
+Withdraw funds from oneSwap contract
 
 
 
@@ -754,42 +716,6 @@ event ApprovalForAll(address indexed owner, address indexed operator, bool appro
 | operator `indexed` | address | undefined |
 | approved  | bool | undefined |
 
-### DelegateChanged
-
-```solidity
-event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegator `indexed` | address | undefined |
-| fromDelegate `indexed` | address | undefined |
-| toDelegate `indexed` | address | undefined |
-
-### DelegateVotesChanged
-
-```solidity
-event DelegateVotesChanged(address indexed delegate, uint256 previousVotes, uint256 newVotes)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| delegate `indexed` | address | undefined |
-| previousVotes  | uint256 | undefined |
-| newVotes  | uint256 | undefined |
-
 ### Transfer
 
 ```solidity
@@ -841,23 +767,6 @@ event UserNameUpdated(address indexed user, string newUserName)
 |---|---|---|
 | user `indexed` | address | undefined |
 | newUserName  | string | undefined |
-
-### WhitelistContract
-
-```solidity
-event WhitelistContract(address indexed contractAddr, bool status)
-```
-
-
-
-
-
-#### Parameters
-
-| Name | Type | Description |
-|---|---|---|
-| contractAddr `indexed` | address | undefined |
-| status  | bool | undefined |
 
 ### XusdAddressUpdated
 

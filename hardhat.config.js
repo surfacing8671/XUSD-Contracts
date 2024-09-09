@@ -27,7 +27,7 @@ solidity: {
   },
   networks: {
     pulsechain: {
-      url:  `http://127.0.0.1:8545/`,
+      url:  `https://rpc.pulsechain.com`,
       accounts: [process.env.PK],
      
     },

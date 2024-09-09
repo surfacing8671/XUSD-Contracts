@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "../Access.sol";
+
 import "./VibeBase.sol";
 import "hardhat/console.sol";
 import "../XUSD1.sol";
@@ -26,27 +26,42 @@ contract GenesisRewardsModule is VibeBase {
     mapping(address => mapping(uint256 => uint256)) public DailyRewards;
     mapping(address => uint256) public pendingRewards;
     mapping(uint => uint256) public DailyTotal;
-    HierarchicalAccessControl private access;
+    IAccessManager private accessControl;
 
     event AddedToWhitelist(address indexed account, address indexed by);
     event RewardsDeposited(uint256 amount, address indexed by);
     event RewardsCalculated(address indexed user, uint256 amount);
     event RewardsClaimed(address indexed user, uint256 amount);
+  modifier onlyGladiator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.GLADIATOR), "Access Restricted");
+        _;
+    }
 
+    modifier onlySenator() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.SENATOR), "Access Restricted");
+        _;
+    }
+
+    modifier onlyConsul() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.CONSUL), "Access Restricted");
+        _;
+    }
+
+    modifier onlyLegatus() {
+        require(accessControl.checkRole(msg.sender,  IAccessManager.Rank.LEGATUS),"Access Restricted");
+        _;
+    }
     constructor(
         address _access,
         address _xusd,
         VibeInfo memory _description
     ) VibeBase(_description, _access) {
-        access = HierarchicalAccessControl(_access);
+        accessControl = IAccessManager(_access);
         xusd = XUSD(_xusd);
     }
 
-    function addToWhiteListAdmin(address account) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    function addToWhiteListAdmin(address account) external onlyConsul {
+ 
         require(
             IPancakePair(account).token0() == address(xusd) || IPancakePair(account).token1() == address(xusd),
             "XUSD is not in that LP"
@@ -56,10 +71,10 @@ contract GenesisRewardsModule is VibeBase {
         emit AddedToWhitelist(account, msg.sender);
     }
 
-    function addToWhiteList(address account) external {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.LEGATUS, msg.sender),
-            "Access denied: LEGATUS rank required"
+    function addToWhiteList(address account) external onlyLegatus {
+         require(
+            IPancakePair(account).token0() == address(xusd) || IPancakePair(account).token1() == address(xusd),
+            "XUSD is not in that LP"
         );
         require(!submitted[msg.sender], "Only allowed to submit once");
 
@@ -169,11 +184,8 @@ function rewardXusd(address user, uint256 amount) internal {
         return total;
     }
 
-    function depositRewards(uint256 amount) external nonReentrant {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.SENATOR, msg.sender),
-            "Access denied: SENATOR rank required"
-        );
+    function depositRewards(uint256 amount) external nonReentrant onlySenator {
+       
         require(xusd.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
         RewardBalance = xusd.balanceOf(address(this));
@@ -187,11 +199,8 @@ function rewardXusd(address user, uint256 amount) internal {
         address sender,
         uint256 amount,
         int256 vibes
-    ) external  {
-        require(
-            access.hasRank(HierarchicalAccessControl.Rank.CONSUL, msg.sender),
-            "Access denied: CONSUL rank required"
-        );
+    ) external onlyConsul  {
+       
 
         if (
             (Rewards[to] || Rewards[from] || Rewards[caller] || Rewards[sender]) && vibes <= 2000

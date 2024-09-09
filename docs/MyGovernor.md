@@ -42,6 +42,23 @@ function VoterTallyMap(address) external view returns (address classAddress, uin
 | process | bool | undefined |
 | classType | uint256 | undefined |
 
+### accessControl
+
+```solidity
+function accessControl() external view returns (contract IAccessManager)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | contract IAccessManager | undefined |
+
 ### checkVotes
 
 ```solidity
@@ -169,6 +186,23 @@ function updateVoteDen(uint256 _denominator) external nonpayable
 | Name | Type | Description |
 |---|---|---|
 | _denominator | uint256 | undefined |
+
+### viewNumberOfProposals
+
+```solidity
+function viewNumberOfProposals() external view returns (uint256)
+```
+
+
+
+
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
 
 ### vote
 
@@ -306,6 +340,23 @@ error AlreadyProposed()
 
 
 
+
+### AlreadyVoted
+
+```solidity
+error AlreadyVoted(address user, address class)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| user | address | undefined |
+| class | address | undefined |
 
 ### InvalidDenominator
 
